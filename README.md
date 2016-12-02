@@ -91,13 +91,13 @@ programs as well.
 * Hashes can be accessed by using an object as an key, unlike arrays
 * Defining a hash:
 ```ruby
-  instruments = {
-    'guitar' => 'string',
-    'trumpet' => 'brass',
-    'drum' => 'percussion',
-    'saxophone' => 'brass',
-    'violin' => 'string'
-  }
+instruments = {
+  'guitar' => 'string',
+  'trumpet' => 'brass',
+  'drum' => 'percussion',
+  'saxophone' => 'brass',
+  'violin' => 'string'
+}
 ```
 * Here, the thing to the left of the `=>` arrow is the key, and the
   thing to the right is its value, like in a dictionary or a phone book:
@@ -110,6 +110,32 @@ programs as well.
   value when creating a hash: `instruments = Hash.new("none")`
 
 
+## Symbols
+* Symbols are constant names (enums in C) that are guaranteed to be
+  unique and they don't need to be predeclared
+* The name of a symbol starts with a colon : `:cookie`
+* You don't have to assign it a value and Ruby makes sure the symbol
+  has the same value no matter where you use it
+* Frequently used with hashes, since keys must be unique:
+```ruby
+instruments = {
+  :guitar => 'string',
+  :trumpet => 'brass',
+  :drum => 'percussion',
+  :saxophone => 'brass',
+  :violin => 'string'
+}
+```
+* There is an alternative, shorthand syntax that does the same thing:
+```ruby
+instruments = {
+  guitar: 'string',
+  trumpet: 'brass',
+  drum: 'percussion',
+  saxophone: 'brass',
+  violin: 'string'
+}
+```
 Unless otherwise noted, all notes and code are copyright
 ©2016 Rendered Text and Filip Dimovski, released under the
 GNU General Public License version 3 or greater. All rights reserved.
