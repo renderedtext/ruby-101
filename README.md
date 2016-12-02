@@ -25,12 +25,12 @@ programs as well.
 
 ## Ruby syntax rules
 
-* Names in lowercase:
-  * local_variables, method_names, method_parameters
-    * They can also start with an underscore `_`
-    * Method names may end with `? ! =`
+* Names in lowercase: local_variables, method_names, method_parameters
+  * They can also start with an underscore `_`
+  * Method names may end with `? ! =`
 * Names in uppercase:
   * $global_variables, @local_variables, @@class_variables
+    * After the sign(s), they can also start with an underscore `_`
   * Class_names, Module_names, Constants - Uppercase!
 
 
@@ -68,14 +68,13 @@ programs as well.
   depending on whether the number object is odd or even
 
 
-## Arrays and hashes
+## Arrays
 
 * Arrays and hashes are indexed collections of objects
 * Arrays are more efficient to work with, and hashes provide flexibility
-* They can be accessed using a key, where:
-  * Arrays have integers as keys: `a = [3.14, 2, "lol"] ; a[0] #=>3.14`
-    * Indices start at zero, so the first element is `a[0]`!
-  * Hashes have any object as a key: `b = { 'cello' => 'string' }`
+* Arrays can be accessed using integers as keys:
+  `a = [3.14, 2, "lol"] ; a[0] #=> 3.14`
+  * Indices start at zero, so the first element is `a[0]`!
 * Arrays can be defined using two notations:
   * `a = [3.14, 2, "lol"]`
   * `b = %w{ dog cat 27 342 673.99 just\ in\ case you\ noticed }`
@@ -84,7 +83,31 @@ programs as well.
       you want them to be treated as one element of the array
     * Avoid using '' and "" quotes to surround the string or they
       will become part of it, or part of the first and last word
+* If an index does not exist, when you access it it returns `nil`
 
+
+## Hashes
+
+* Hashes can be accessed by using an object as an key, unlike arrays
+* Defining a hash:
+```ruby
+  instruments = {
+    'guitar' => 'string',
+    'trumpet' => 'brass',
+    'drum' => 'percussion',
+    'saxophone' => 'brass',
+    'violin' => 'string'
+  }
+```
+* Here, the thing to the left of the `=>` arrow is the key, and the
+  thing to the right is its value, like in a dictionary or a phone book:
+  name => prone number, English word => Serbian word, etc.
+* The keys are unique and must not repeat!
+* Accessing a value of a hash's element (indexing it) is the same as in
+  arrays: `instruments["guitar"] #=> string`
+* If you index a hash with a key that does not match any of the given
+  ones, it returns `nil`; you can avoid this by assigning a default
+  value when creating a hash: `instruments = Hash.new("none")`
 
 
 Unless otherwise noted, all notes and code are copyright
