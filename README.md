@@ -8,5 +8,6 @@ programs.
 
 Please refer to the [notes](notes/) for more details. The [code](code/) will be here. :bear:
 
-Unless otherwise noted, all notes and code are copyright ©Filip Dimovski,
-released under the GNU General Public License version 3, or greater.
+Unless otherwise noted, all notes and code are copyright
+©2016 Rendered Text and Filip Dimovski, released under the
+GNU General Public License version 3 or greater. All rights reserved.
