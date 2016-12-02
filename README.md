@@ -23,10 +23,12 @@ programs.
   expression evaluated, unless `return` is used!
 
 
-## Ruby Syntax Rules
+## Ruby syntax rules
 
 * Names in lowercase:
   * local_variables, method_names, method_parameters
+    * They can also start with an underscore `_`
+    * Method names may end with `? ! =`
 * Names in uppercase:
   * $global_variables, @local_variables, @@class_variables
   * Class_names, Module_names, Constants - Uppercase!
