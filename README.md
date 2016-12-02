@@ -3,8 +3,7 @@
 Here I will describe my journey in learning the Ruby programming language.
 The book I use is "Programming Ruby" (The Pragmatic Programmer's Guide).
 This repository will be regularly updated with personal notes and code
-from the examples, as well as my own simple (and in the future, not so simple)
-programs.
+from the examples, as well as my own programs.
 
 
 ## Ruby as an object oriented language
@@ -21,6 +20,7 @@ programs.
   they are optional, i.e. `puts "Hello"` is the same as `puts("Hello")`
 * The value returned by a Ruby method is the value of the last
   expression evaluated, unless `return` is used!
+* The `nil` object is an object that represents nothing
 
 
 ## Ruby syntax rules
@@ -59,9 +59,33 @@ programs.
 
 ## Number objects
 
+* Numbers can be whole (integers, 27) and decimal (floating point, 3.14)
+
+
+## Number object methods
+
 * Methods ".odd?" and ".even?" return a boolean value (true/false),
   depending on whether the number object is odd or even
-  
+
+
+## Arrays and hashes
+
+* Arrays and hashes are indexed collections of objects
+* Arrays are more efficient to work with, and hashes provide flexibility
+* They can be accessed using a key, where:
+  * Arrays have integers as keys: `a = [3.14, 2, "lol"] ; a[0] #=>3.14`
+    * Indices start at zero, so the first element is `a[0]`!
+  * Hashes have any object as a key: `b = { 'cello' => 'string' }`
+* Arrays can be defined using two notations:
+  * `a = [3.14, 2, "lol"]`
+  * `b = %w{ dog cat 27 342 673.99 just\ in\ case you\ noticed }`
+    * Be careful with this: all of these values will be treated as
+      strings, numbers included; spaces in strings must be escaped if
+      you want them to be treated as one element of the array
+    * Avoid using '' and "" quotes to surround the string or they
+      will become part of it
+
+
 
 Unless otherwise noted, all notes and code are copyright
 ©2016 Rendered Text and Filip Dimovski, released under the
