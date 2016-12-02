@@ -2,8 +2,8 @@
 
 Here I will describe my journey in learning the Ruby programming language.
 The book I use is "Programming Ruby" (The Pragmatic Programmer's Guide).
-This repository will be regularly updated with personal notes and code
-from the examples, as well as my own programs.
+This repository is regularly updated with personal notes and some
+programs as well.
 
 
 ## Ruby as an object oriented language
@@ -41,20 +41,20 @@ from the examples, as well as my own programs.
 * Stings surrounded with '' incur less processing than those with "",
   the latter tell Ruby to perform substitutions on escape sequences,
   so `puts '\n'` will print `\n` and `puts "\n"` will print a new line
-* Expression interpolation: "#{name}" within a string is replaced with
+* Expression interpolation: `"#{name}"` within a string is replaced with
   the value of the "name" expression, `puts "The time is #{Time.now}."`
-  * Be careful, it does not work with strings within single quotes! ''
+  * Be careful, it does not work with strings within 'single quotes'!
 
 
-## Sting objects methods
+## String objects methods
 
-* Method ".length" returns number of characters in a string array; works
+* Method `.length` returns number of characters in a string array; works
   properly with Unicode characters, tested with Cyrillic letters
-* Method ".index("char_or_string")" returns the position of the first
+* Method `.index("char_or_string")` returns the position of the first
   occurence of the parameter (a character or a string)
   * Works on arrays, too
   * Counting of position starts from 0 for the first character, like C
-* Method ".capitalize" returns the string with first letter in capital
+* Method `.capitalize` returns the string with first letter in capital
 
 
 ## Number objects
@@ -64,7 +64,7 @@ from the examples, as well as my own programs.
 
 ## Number object methods
 
-* Methods ".odd?" and ".even?" return a boolean value (true/false),
+* Methods `.odd?` and `.even?` return a boolean value (true/false),
   depending on whether the number object is odd or even
 
 
@@ -83,7 +83,7 @@ from the examples, as well as my own programs.
       strings, numbers included; spaces in strings must be escaped if
       you want them to be treated as one element of the array
     * Avoid using '' and "" quotes to surround the string or they
-      will become part of it
+      will become part of it, or part of the first and last word
 
 
 
