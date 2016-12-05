@@ -20,20 +20,21 @@ example code and programs as well.
   they are optional, i.e. `puts "Hello"` is the same as `puts("Hello")`
 * The value returned by a Ruby method is the value of the last
   expression evaluated, unless `return` is used!
-* Methods whose name ends with a question mark ? `Time.sunday?` return
+* Methods whose name ends with a question mark `?` `Time.sunday?` return
   `true` or `false`, so-called Boolean values 
 * The `nil` object is an object that represents nothing
   * `nil` and `false` are treated the same in if-conditions
-* Methods whose name ends with exclamation mark ! `String.downcase!`
+* Methods whose name ends with exclamation mark `!` `String.downcase!`
   modify the state variable of the object they are invoked from and do
-  not return the value, but `nil`, be careful!
+  not return the value, but `nil`, so be careful!
 
 ## Ruby syntax rules
 
-* Names in lowercase: local_variables, method_names, method_parameters
+* Names in **lowercase**:
+  * local_variables, method_names, method_parameters
   * They can also start with an underscore `_`
   * Method names may end with `? ! =`
-* Names in uppercase:
+* Names in **uppercase**:
   * $global_variables, @local_variables, @@class_variables
     * After the sign(s), they can also start with an underscore `_`
   * Class_names, Module_names, Constants - Uppercase!
@@ -43,8 +44,8 @@ example code and programs as well.
 
 ## Using the Ruby interpreter
 
-* Invoke it by issuing `irb` in your terminal emulator; you can test
-  some code in it, but you cannot save it to a file
+* Invoked by issuing `irb` in your terminal emulator; you can test some
+  code in it, but you cannot save it to a file
 * Don't know what that class/method does? Try `ri method` for detailed
   explanations; if you do `ri class` it will show you all class methods
 * Ruby programs should have `#!/usr/bin/env ruby` as a first line in
@@ -54,7 +55,7 @@ example code and programs as well.
 
 ## Some basic text input/output methods
 
-* In UNIX-like systems (Linux), standard input (stdin) is the keyboard,
+* In UNIX-like systems and Linux, standard input (stdin) is the keyboard,
   standard output (stdout) is the console/terminal screen, and standard
   error output (stderr) is usually the same as the standard output; all
   of them can be redefined to read and write to a file, for example
@@ -72,15 +73,15 @@ example code and programs as well.
 * Stings surrounded with '' incur less processing than those with "",
   the latter tell Ruby to perform substitutions on escape sequences,
   so `puts '\n'` will print `\n` and `puts "\n"` will print a new line
-* Expression interpolation: `"#{name}"` within a string is replaced with
-  the value of the "name" expression, `puts "The time is #{Time.now}."`
-  * Be careful, it does not work with strings within 'single quotes'!
+* *Expression interpolation*: `"#{name}"` in a string is replaced with
+  the value of the `name` expression: `puts "The time is #{Time.now}."`
+  * Be careful, it does not work in strings with 'single quotes'!
 
 
-## String objects methods
+## String objects' methods
 
 * Method `.length` returns number of characters in a string array; works
-  properly with Unicode characters, tested with Cyrillic letters
+  properly with Unicode characters (tested with Cyrillic letters)
 * Method `.index("char_or_string")` returns the position of the first
   occurence of the parameter (a character or a string)
   * Works on arrays, too
@@ -90,10 +91,11 @@ example code and programs as well.
 
 ## Number objects
 
+* Numbers are objects whose values are - you guessed right, numbers :)
 * Numbers can be whole (integers, 27) and decimal (floating point, 3.14)
 
 
-## Number object methods
+## Number objects' methods
 
 * Methods `.odd?` and `.even?` return a boolean value (true/false),
   depending on whether the number object is odd or even
@@ -105,16 +107,16 @@ example code and programs as well.
 * Arrays are more efficient to work with, and hashes provide flexibility
 * Arrays can be accessed using integers as keys:
   `a = [3.14, 2, "lol"] ; a[0] #=> 3.14`
-  * Indices start at zero, so the first element is `a[0]`!
+  * Indices start at zero, so the first element is `a[0]`, like in C
 * Arrays can be defined using two notations:
   * `a = [3.14, 2, "lol"]`
   * `b = %w{ dog cat 27 342 673.99 just\ in\ case you\ noticed }`
     * Be careful with this: all of these values will be treated as
       strings, numbers included; spaces in strings must be escaped if
-      you want them to be treated as part of an element of the array
+      you want them to be treated as part of an element of the array!
     * Avoid using '' and "" quotes to surround the string or they
       will become part of it, or part of the first and last word
-* If an index does not exist, when you access it it returns `nil`
+* If an index does not exist, when you access it, it returns `nil`
 
 
 ## Hashes
@@ -138,7 +140,7 @@ instruments = {
   arrays: `instruments["guitar"] #=> string`
 * If you index a hash with a key that does not match any of the given
   ones, it returns `nil`; you can avoid this by assigning a default
-  value when creating a hash: `instruments = Hash.new("none")`
+  value when creating a hash: `instruments = Hash.new("default_value")`
 
 
 ## Symbols
@@ -158,7 +160,7 @@ instruments = {
   :violin => 'string'
 }
 ```
-* There is an alternative, shorthand syntax that does the same thing:
+* There is a shorthand, a syntactic sugar that does the same thing:
 ```ruby
 instruments = {
   guitar: 'string',
@@ -267,9 +269,9 @@ end
 ```
 * Method `.sub(/regexp/, 'text')` will replace the first occurence of
   the matched 'text' according to the regexp pattern from a given string
-  and return a new string as result
+  and return a new string result
 * Method `.gsub(/regexp/, 'text')` will replace all occurences of
-  the matched 'text' from a given string and return a new string as result
+  the matched 'text' from a given string and return a new string result
 * Lots of details about regular expressions can be found in the
   [Ruby's documentation](https://ruby-doc.org/core-2.3.1/Regexp.html)
 
@@ -292,13 +294,16 @@ end
   parameters; usually used to implement callbacks, to pass around
   chunks of code, or to implement iterators
 * They are attached after a defined method's call, after the given
-  parameters, if any: `play_songs("We Are The Champions") {puts "Queen rule! :D"}`
+  parameters, if any:
+```ruby
+play_songs("We Are The Champions") {puts "Queen rule! :D"}
+```
 * Invoke the code block using `yield` within the method's code
 * You can provide arguments to the code block by adding them between
   two pipe characters `|` after the opening brace:
-  `{|param1, param2| puts param1 + param2}`
-* Here's an example of calling a method, providing the code block and
-  calling it from within the method:
+  `{ |param1, param2| puts param1 + param2 }`
+* Example of calling a method, providing the code block and calling it
+  from within the method:
 ```ruby
 def say_something
   puts "Executing the method. Will yield next."
@@ -307,7 +312,7 @@ def say_something
   puts "Finished yielding."
 end
 
-say_something {|person, text| puts "#{person} says '#{text}'."}
+say_something { |person, text| puts "#{person} says '#{text}'." }
 
 ```
 * Code blocks are frequently used as iterators, methods that return
