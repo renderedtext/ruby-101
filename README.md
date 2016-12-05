@@ -151,6 +151,8 @@ puts "It's not Munchkin." if dog != "Munchkin"
     * Avoid using '' and "" quotes to surround the string or they
       will become part of it, or part of the first and last word
 * If an index does not exist, when you access it, it returns `nil`
+* Method `.size` returns number of elements in array
+* Method `.inspect` and `p` let you see all the elements of the array
 
 
 ## Hashes
@@ -371,6 +373,29 @@ puts "\b\b."
 ```ruby
 (1..20).each { |digit| print digit, " " }  # Prints numbers from 1 to 20
 puts
+```
+
+
+## Command Line arguments
+
+* When we start a program from the command line, we can provide it with
+  arguments (parameters) we can use in our Ruby program
+* For example, you want to let the program have switches that can modify
+  its behavior, so if it is an editor, if you give it a file name as an
+  argument, it can open it for editing, otherwise it will create a new
+  file and asko you to save it
+```sh
+rex@ultrabok ~ $ ./my_program.rb doge 42 "cabbage rolls"
+```
+* We can use the `ARGV` array to get all the provided command line
+  arguments and use them in our program
+* `ARGV.size` returns the total number of arguments
+* Start the program from the command line, give it some arguments, and
+  it will print out the number of arguments and an array of them:
+```ruby
+puts "You provided #{ARGV.size} arguments from the command line."
+print "Those are: "
+p ARGV  # It means: 'ARGV.inspect ; puts'
 ```
 
 
