@@ -330,7 +330,7 @@ puts "\b\b."
 ```
 * Provide a character/number range `(a..z).each` to iterate over it:
 ```ruby
-(1..20).each { |digit| print digit, " " }
+(1..20).each { |digit| print digit, " " }  # Prints numbers from 1 to 20
 puts
 ```
 

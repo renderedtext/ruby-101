@@ -36,5 +36,5 @@ print "Here are the lowercase letters of the Latin alphabet: "
 ('a'..'z').each { |letter| print letter, ', ' }
 puts "\b\b."
 
-(1..20).each { |digit| print digit, " " }
+(1..20).each { |digit| print digit, " " }  # Prints numbers from 1 to 20
 puts
