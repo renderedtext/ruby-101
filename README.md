@@ -233,10 +233,11 @@ end
 
 ## Regular expressions
 
-* A *regular expression* is a way of specifying a pattern of characters
-  to be matched in a given string; it is put between slashes: `/regexp/`
+* A *regular expression* (regexp) is a way of specifying a pattern of
+  characters   to be matched in a given string; it is put between
+  slashes: `/regexp/`
 * Match Perl or Python (the pipe | means 'or'): `/Perl|Python/`
-  * Another way, using parentheses (): `P(erl|ython)`
+  * Another way, using parentheses (): `/P(erl|ython)/`
 * We can also specify *repetition* in patterns:
   * `/ab+c/` - match string with `a`, followed by one or more `b`,
     followed by `c`
