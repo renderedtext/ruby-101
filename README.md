@@ -3,14 +3,14 @@
 Here I will describe my journey in learning the Ruby programming language.
 The book I use is "Programming Ruby" (The Pragmatic Programmer's Guide).
 This repository is regularly updated with personal notes and some
-programs as well.
+example code and programs as well.
 
 
 ## Ruby as an object oriented language
 
 * Unlike other languages, everything in Ruby is an object, including
   return values of methods
-* Class is a comnination of state (variables) and functions that use
+* Class is a combnination of state (variables) and functions that use
   that state (methods)
 * **Object = class instance**, created using a constructor method (.new)
 * Every object has unique ID, state is held by instance variables,
@@ -20,8 +20,13 @@ programs as well.
   they are optional, i.e. `puts "Hello"` is the same as `puts("Hello")`
 * The value returned by a Ruby method is the value of the last
   expression evaluated, unless `return` is used!
+* Methods whose name ends with a question mark ? `Time.sunday?` return
+  `true` or `false`, so-called Boolean values 
 * The `nil` object is an object that represents nothing
-
+  * `nil` and `false` are treated the same in if-conditions
+* Methods whose name ends with exclamation mark ! `String.downcase!`
+  modify the state variable of the object they are invoked from and do
+  not return the value, but `nil`, be careful!
 
 ## Ruby syntax rules
 
@@ -32,6 +37,19 @@ programs as well.
   * $global_variables, @local_variables, @@class_variables
     * After the sign(s), they can also start with an underscore `_`
   * Class_names, Module_names, Constants - Uppercase!
+* Lines that start with an octothorpe # are comments
+  * Comments can appear after code: `puts 'Hello!'  # Prints 'Hello!'`
+
+
+## Using the Ruby interpreter
+
+* Invoke it by issuing `irb` in your terminal emulator; you can test
+  some code in it, but you cannot save it to a file
+* Don't know what that class/method does? Try `ri method` for detailed
+  explanations; if you do `ri class` it will show you all class methods
+* Ruby programs should have `#!/usr/bin/env ruby` as a first line in
+  every Ruby file that is part of the program
+* The name of a Ruby program has the ending/extension `.rb`
 
 
 ## String objects
@@ -80,7 +98,7 @@ programs as well.
   * `b = %w{ dog cat 27 342 673.99 just\ in\ case you\ noticed }`
     * Be careful with this: all of these values will be treated as
       strings, numbers included; spaces in strings must be escaped if
-      you want them to be treated as one element of the array
+      you want them to be treated as part of an element of the array
     * Avoid using '' and "" quotes to surround the string or they
       will become part of it, or part of the first and last word
 * If an index does not exist, when you access it it returns `nil`
@@ -111,6 +129,7 @@ instruments = {
 
 
 ## Symbols
+
 * Symbols are constant names (enums in C) that are guaranteed to be
   unique and they don't need to be predeclared
 * The name of a symbol starts with a colon : `:cookie`
@@ -136,6 +155,69 @@ instruments = {
   violin: 'string'
 }
 ```
-Unless otherwise noted, all notes and code are copyright
-©2016 Rendered Text and Filip Dimovski, released under the
+
+
+## Control structures
+
+* Similar to most programming languages, Ruby provides the `if`, `while`
+  and `do` control structures
+* All of the control structures must be terminated with `end`
+* The `if` control structure executes code if the given condition
+  evaluates to `true`, `elsif` gives another condition if the previous
+  is false, and `else` executes if the conditions of `if` and `elsif`
+  are not fulfilled:
+```ruby
+today = Time.now
+
+if today.saturday?
+  puts "Let me remind you, you should clean around the house."
+elsif today.sunday?
+  puts "It is time to relax. Get some good rest."
+else
+  puts "Get ready for work."
+end
+```
+* There is an alternative form of `if`, called *statement modifier*,
+  used for a single expression:
+```ruby
+# The alternative form:
+puts "Party time! =]" if Time.now.friday?
+
+# In other words, same as:
+if Time.now.friday?
+  puts "Party time! =]"
+end
+
+```
+* The `while` control structure executes a block of commands as long as
+  the given condition is true:
+```ruby
+counter = 2
+
+print "The even numbers from 2 to 10 are: "
+
+while counter <= 10
+  print "#{counter}, "
+  counter += 2  # It means just like in C: counter = counter + 2
+end
+
+puts "\b\b."  # Two backspaces, and a dot, to finish the sentence.
+```
+* Just like `if`, you can use a *statement modifier* for a single
+  expression with `while`:
+```ruby
+# The alternative form:
+square = 10
+square = square ** 2 while square < 1000
+
+# The typical form:
+square = 1000
+while square < 1000
+  square = square ** 2
+end
+```
+
+
+Unless otherwise noted, the texts and code are copyright
+© 2016 Rendered Text and Filip Dimovski, released under the
 GNU General Public License version 3 or greater. All rights reserved.
