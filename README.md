@@ -10,7 +10,7 @@ example code and programs as well.
 
 * Unlike other languages, everything in Ruby is an object, including
   return values of methods
-* Class is a combnination of state (variables) and functions that use
+* Class is a combination of state (variables) and functions that use
   that state (methods)
 * **Object = class instance**, created using a constructor method (.new)
 * Every object has unique ID, state is held by instance variables,
@@ -50,6 +50,19 @@ example code and programs as well.
 * Ruby programs should have `#!/usr/bin/env ruby` as a first line in
   every Ruby file that is part of the program
 * The name of a Ruby program has the ending/extension `.rb`
+
+
+## Some basic text input/output methods
+
+* In UNIX-like systems (Linux), standard input (stdin) is the keyboard,
+  standard output (stdout) is the console/terminal screen, and standard
+  error output (stderr) is usually the same as the standard output; all
+  of them can be redefined to read and write to a file, for example
+* Method `puts` displays the result of an expression or a string on the
+  standard output and adds a new line: `puts "Hello world!"`
+  * If you want to stay on the same line, use `print` instead
+* Method `gets` returns a string by reading from the standard input
+  * Get the result in a variable to use it: `line = gets`
 
 
 ## String objects
@@ -216,6 +229,49 @@ while square < 1000
   square = square ** 2
 end
 ```
+
+
+## Regular expressions
+
+* A *regular expression* (regexp) is a way of specifying a pattern of
+  characters   to be matched in a given string; it is put between
+  slashes: `/regexp/`
+* Match Perl or Python (the pipe | means 'or'): `/Perl|Python/`
+  * Another way, using parentheses (): `/P(erl|ython)/`
+* We can also specify *repetition* in patterns:
+  * `/ab+c/` - match string with `a`, followed by one or more `b`,
+    followed by `c`
+  * `/ab*c/` - match string with `a`, followed by zero or more `b`,
+    followed by `c`
+* We can specify *character classes* to match a group of characters:
+  * `\s` - match whitespace (space, tab, new line)
+  * `\d` - match any digit (0-9)
+  * `\w` - match anything which can be a part of a word (letters,
+    numbers, and an underscore `_`)
+  * `.` - match any character except a new line
+* A `^` before an expression means don't match: `/^\d\d/` will not match
+  any two digits one after another
+* Putting brackets `[]` and a dash `-` between modifiers creates ranges:
+  `/[a-z0-9]/` means match one lowercase letter or a digit
+* To match a string against a regular expression, use `=~`, it returns
+  a string from the first occurence of the expression:
+```ruby
+line = gets.downcase
+
+if line =~ /ruby/
+  puts "It's Ruby! =]"
+else
+  puts "It's something else: #{line}."
+end
+
+```
+* Method `.sub(/regexp/, 'text')` will replace the first occurence of
+  the matched 'text' according to the regexp pattern from a given string
+  and return a new string as result
+* Method `.gsub(/regexp/, 'text')` will replace all occurences of
+  the matched 'text' from a given string and return a new string as result
+* Lots of details about regular expressions can be found in the
+  [Ruby's documentation](https://ruby-doc.org/core-2.3.1/Regexp.html)
 
 
 Unless otherwise noted, the texts and code are copyright
