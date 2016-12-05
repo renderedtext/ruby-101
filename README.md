@@ -53,7 +53,7 @@ example code and programs as well.
 * The name of a Ruby program has the ending/extension `.rb`
 
 
-## Some basic text input/output methods
+## Input/output (I/O) methods
 
 * In UNIX-like systems and Linux, standard input (stdin) is the keyboard,
   standard output (stdout) is the console/terminal screen, and standard
@@ -62,6 +62,23 @@ example code and programs as well.
 * Method `puts` displays the result of an expression or a string on the
   standard output and adds a new line: `puts "Hello world!"`
   * If you want to stay on the same line, use `print` instead
+* Method `printf` outputs text under the control of *format strings*,
+  like in C, which get replaced with values under specific rules
+  * First parameter is the string for output, containing the
+  formatting strings, like `%5.2f` - substituted with a decimal number,
+  minimum 5 digits before, and two after the decimal point; `%s` -
+  substituted with a string, etc.
+  * The rest of the method parameters are the values that will replace
+    the formatting strings in the first parameter
+```ruby
+printf("Decimal number: %5.2f\nString: %s\n", 726.975, "doge")
+
+# Outputs the following:
+# Decimal number: 726.98  <= it got rounded, from .975 -> .98
+# String: doge            <= :)
+```
+* [Ruby's documentation](https://ruby-doc.org/core-2.2.0/String.html)
+  about String objects covers all about formattings strings as well
 * Method `gets` returns a string by reading from the standard input
   * Get the result in a variable to use it: `line = gets`
 
@@ -76,6 +93,23 @@ example code and programs as well.
 * *Expression interpolation*: `"#{name}"` in a string is replaced with
   the value of the `name` expression: `puts "The time is #{Time.now}."`
   * Be careful, it does not work in strings with 'single quotes'!
+* Concatenating strings (adding one to another) using plus sign `+`:
+  `hello = "Hello " + "world!"  # 'puts hello' gives 'Hello world!'"`
+* Multiplying a string with a number X returns new string with given
+  string repeated X times:
+  `print "Hey! " * 5  # Prints "Hey! " five times in the same line`
+* Comparing strings: `puts "cats" <=> "crocodiles"`'
+  * Returns -1 if the first one has less characters than the second one,
+  0 if they have the same length, or 1 if the first one has more
+  characters than the second one
+* Also, comparing strings using `==` or `!=` in `if` conditions is
+  possible, too:
+```ruby
+dog = "Toby"
+
+puts "It's Toby." if dog == "Toby"
+puts "It's not Munchkin." if dog != "Munchkin"
+```
 
 
 ## String objects' methods
