@@ -274,6 +274,67 @@ end
   [Ruby's documentation](https://ruby-doc.org/core-2.3.1/Regexp.html)
 
 
+## Blocks and iterators
+
+* Code blocks are one or more lines of code between braces `{}` or
+  between `do` and `end`
+```ruby
+{ puts "Hello!" }  # Braces are usually used for a single line of code
+
+# A code block of many lines of code
+do
+  print "What's your name? "
+  name = gets
+  puts "Hello, #{name.capitalize}! Glad to meet you!"
+end
+```
+* They can be associated with method invocations, as if they are
+  parameters; usually used to implement callbacks, to pass around
+  chunks of code, or to implement iterators
+* They are attached after a defined method's call, after the given
+  parameters, if any: `play_songs("We Are The Champions") {puts "Queen rule! :D"}`
+* Invoke the code block using `yield` within the method's code
+* You can provide arguments to the code block by adding them between
+  two pipe characters `|` after the opening brace:
+  `{|param1, param2| puts param1 + param2}`
+* Here's an example of calling a method, providing the code block and
+  calling it from within the method:
+```ruby
+def say_something
+  puts "Executing the method. Will yield next."
+  yield("Pete", "Hello!")
+  yield("Sally", "Woot!")
+  puts "Finished yielding."
+end
+
+say_something {|person, text| puts "#{person} says '#{text}'."}
+
+```
+* Code blocks are frequently used as iterators, methods that return
+  successive elements of some kind of collection, using `each` method:
+```ruby
+animals = [ "dog", "cat", "mouse", "duck", "lizzard" ]
+animals.each {|animal| print animal, ', '}  # Interation over an array
+puts "\b\b."
+```
+* There are methods such as `Number.times` and `Number.upto(Num)` to
+  loop several given times, or until a certain number, incrementing it
+  on each turn:
+```ruby
+20.times { print '* ' }  # Prints 20 stars :)
+puts
+
+print "Let's count to 10: "
+1.upto(10) { |num| print num, ', ' }
+puts "\b\b."
+```
+* Provide a character/number range `(a..z).each` to iterate over it:
+```ruby
+(1..20).each { |digit| print digit, " " }  # Prints numbers from 1 to 20
+puts
+```
+
+
 Unless otherwise noted, the texts and code are copyright
 © 2016 Rendered Text and Filip Dimovski, released under the
 GNU General Public License version 3 or greater. All rights reserved.
