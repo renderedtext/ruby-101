@@ -28,6 +28,7 @@ example code and programs as well.
   modify the state variable of the object they are invoked from and do
   not return the value, but `nil`, so be careful!
 
+
 ## Ruby syntax rules
 
 * Names in **lowercase**:
@@ -370,6 +371,8 @@ print "Let's count to 10: "
 puts "\b\b."
 ```
 * Provide a character/number range `(a..z).each` to iterate over it:
+  * `(0..10).each` returns the numbers from 0 to 10, but `(0...10).each`
+    returns numbers from 0 to 9, 10 excluded - be careful!
 ```ruby
 (1..20).each { |digit| print digit, " " }  # Prints numbers from 1 to 20
 puts
@@ -397,6 +400,150 @@ puts "You provided #{ARGV.size} arguments from the command line."
 print "Those are: "
 p ARGV  # It means: 'ARGV.inspect ; puts'
 ```
+
+
+## Classes and instantiation
+
+* Whenever we design systems using object oriented programming, it is
+  a good practice to identify the things we need; they typically become
+  classes, and the things themselves become instances of these classes
+* Class is defined with the keyword `class`, the name of the class, and
+  terminated with `end`
+```ruby
+class Book
+end
+```
+* An object is an instance of a class, it is created by calling the
+  `new` method of the class: `textbook = Book.new`
+* We can define some default values when we create an object from a
+  class, by defining an `.initialize(vars_values)` method which gets
+  called when we call `.new()`, the *constructor* method:
+```ruby
+# Define a class
+class Book
+  def initialize(isbn, title, author)
+    @isbn = isbn
+    @title = title
+    @author = author
+  end
+  def to_s
+    "ISBN: #{@isbn}; Title: #{@title}; Author: #{@author}."
+  end
+end
+
+# Instantiate an object
+cool_book = Book.new("8690215913",
+                     "Da li postoje stvari koje ne postoje",
+                     "Voja Antonić")
+
+# Inspect what the object contains
+# It should print something like: #<Book:0x00000000b3c9a0
+# @isbn="8690215913", @title="Da li postoje stvari koje ne postoje",
+# @author="Voja Antonić">
+# The hexadecimal number is the memory address of the object
+p cool_book
+```
+* Remember, `@var` is an instance variable, and they are part of the
+  object; **only the object's methods can access instance variables!**
+  * That means, in the example, `@isbn` is an instance variable, and
+    it is NOT the same as `isbn`, whose value is passed to `@isbn`
+* Whenever you use the object's return value with a method that expects
+  a string, Ruby will call the `.to_s` method of the object, so we
+  can override it and return our own message
+    * Remember, the last result is returned, unless we use `return`
+* If we want to get the values of instance variables, we need to define
+  some *accessors*; the instance variables that are accessible to other
+  objects through the accessor methods are called *attributes*
+* Setting an object's attribute can be done by writing a method whose
+  name ends with an equals sign `=`, and with a variable in parentheses:
+```ruby
+# Define the class and constructor
+class Book
+  # Method to instantiate an object
+  def initialize(isbn, title, author)
+    @isbn = isbn
+    @title = title
+    @author = author
+  end
+
+  # Method to return a string that represents the instance variables
+  # in a pretty format, called by using '.to_s' or by using the object
+  # as a string
+  def to_s
+    "ISBN: #{@isbn}; Title: #{@title}; Author: #{@author}."
+  end
+
+  # Accessor, returns ISBN number/code
+  def isbn
+    @isbn
+  end
+
+  # Accessor, returns title
+  def title
+    @title
+  end
+
+  # Accessor, returns author
+  def author
+    @author
+  end
+
+    # Accessor, sets ISBN number/code
+  def isbn=(isbn)
+    @isbn = isbn
+  end
+
+  # Accessor, sets title
+  def title=(title)
+    @title = title
+  end
+
+  # Accessor, returns author
+  def author=(author)
+    @author = author
+  end
+
+end
+```
+* Since this requires lots of repetition, for our convenience Ruby
+  provides shorthands that use symbols for instance variables' names:
+  * `attr_reader` for read-only access:
+    `attr_reader :isbn, :title, :author`
+  * `attr_writer` for write-only access, used very rarely
+  * `attr_accessor` for read/write access - very commonly used
+    
+```ruby
+# Define the class, accessors and constructor
+class Book
+
+  # Attribute accessor
+  attr_accessor :isbn, :title, :author
+
+  # Method to instantiate an object
+  def initialize(isbn, title, author)
+    @isbn = isbn
+    @title = title
+    @author = author
+  end
+
+end
+
+# 
+book = Book.new("none", "Textbook", "me")
+puts "ISBN: #{book.isbn}"
+puts "Title: #{book.title}"
+puts "Author: #{book.author}"
+
+book.isbn = "42-9876-1234-05"
+book.author = "Битлси"
+book.title = "Нешто"
+
+puts "ISBN: #{book.isbn}"
+puts "Title: #{book.title}"
+puts "Author: #{book.author}"
+
+```
+
 
 
 Unless otherwise noted, the texts and code are copyright
