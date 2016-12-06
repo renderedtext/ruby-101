@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+# Example of working with hashes, alternative syntax
+
 # Define a hash of musical instruments and types - alternative notation
 instruments = {
   :guitar => 'string',

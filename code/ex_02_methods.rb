@@ -1,13 +1,15 @@
 #!/usr/bin/env ruby
 
-# Define simple method that returns a good ngiht wish :)
+# Example of working with methods
+
+# Define simple method that returns a good night wish :)
 def say_goodnight(name)
-    result = "Good night, " + name
+    result = "Good night, " + name + "."
     return result
 end
 
-puts say_goodnight("John-boy")
-puts say_goodnight("Mary-Ellen")
+puts say_goodnight("Michaella")
+puts say_goodnight("Susan")
 
 
 # Define another, slimmer method doing the same with less code

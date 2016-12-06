@@ -1,5 +1,10 @@
 #!/usr/bin/env ruby
 
+# Example of working with strings/numbers
+
+puts "Hello world! :)"
+puts "The time is: #{Time.now}"
+
 # Print the length (number of characters)
 puts "gin joint".length
 

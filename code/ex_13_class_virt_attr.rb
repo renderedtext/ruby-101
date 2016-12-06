@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-# Using virtual attributes in an object
+# Example of using virtual attributes in an object
 
 class Fruit
 
@@ -37,7 +37,7 @@ fruits = Array.new(fruits_names.length)
 0.upto(fruits_names.length-1) do |x|
   
   # Instantiate objects automagically and keep them in array...
-  fruits[x] = Fruit.new(fruits_names[x], 60 * x + 27)
+  fruits[x] = Fruit.new(fruits_names[x], 60 * x + 27)  # Price is w/e :)
 
   # Tell us about the new object...
   puts
@@ -49,7 +49,8 @@ fruits = Array.new(fruits_names.length)
 end
 
 
-# Let's give another price in EUR for a fruit of our choice and check
+# Let's give another price in EUR for a fruit of our choice
+# and check how things changed for the fruit
 y = 2 # We want the third fruit - be careful, it's an array, starts at 0
 fruits[y].price_in_eur = 4
 

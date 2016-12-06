@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+# Example of working with arrays
+
 # Define an array
 a = [17, 3.14, "shoes", "nevertheless", 42]
 
