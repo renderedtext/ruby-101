@@ -79,7 +79,7 @@ printf("Decimal number: %5.2f\nString: %s\n", 726.975, "doge")
 # String: doge            <= :)
 ```
 * [Ruby's documentation](https://ruby-doc.org/core-2.2.0/String.html)
-  about String objects covers all about formattings strings as well
+  about String objects covers all about formatting strings as well
 * Method `gets` returns a string by reading from the standard input
   * Get the result in a variable to use it: `line = gets`
 
@@ -656,6 +656,36 @@ class SugarCube
   end
 end
 ```
+
+
+## Variables
+
+* Variables are a reference to an object, they're not objects themselves
+* Objects are kept in a memory pool called *heap*
+```ruby
+# 'dog' has the reference to the String object "Toby"
+dog = "Toby"
+puts "Variable name: dog"
+# Refer to the String object and show its value
+puts "Value: #{dog}"
+# Show what class of object does the variable refer to
+puts "Type of object: #{dog.class}"
+# The ID of the object
+puts "Object ID: #{dog.object_id}"
+```
+* If you put `hound = dog` in this example, they will refer to the same
+  object, so:
+```ruby
+dog = "Toby"
+hound = dog
+dog[0] = 'R'
+
+puts hound  # Will show "Roby"!
+```
+* To avoid this, duplicate the former string: `hound = dog.dup`
+* To prevent an object from being modified, use method `.freeze`, any
+  attempt to modify the frozen object will result with RuntimeError
+  being raised
 
 
 Unless otherwise noted, the texts and code are copyright
