@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+# Example of working with if-conditions and time
+
 # Get the current date and time, use the Time class
 today = Time.now
 

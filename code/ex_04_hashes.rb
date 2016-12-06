@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+# Example of working with hashes
+
 # Define a hash of musical instruments and their type
 instruments = Hash.new
 instruments = {

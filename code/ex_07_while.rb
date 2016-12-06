@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+# Example of working with while-loops
+
 square = 2
 
 while square < 100000

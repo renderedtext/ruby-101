@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-# Code block, iterators, and yielding (code block invocation)
+# Example of working with code blocks, iterators, and yielding
 
 # Define a simple method to test yielding
 def say_something
