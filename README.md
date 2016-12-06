@@ -379,14 +379,14 @@ puts
 ```
 
 
-## Command Line arguments
+## Command line arguments
 
 * When we start a program from the command line, we can provide it with
   arguments (parameters) we can use in our Ruby program
 * For example, you want to let the program have switches that can modify
   its behavior, so if it is an editor, if you give it a file name as an
   argument, it can open it for editing, otherwise it will create a new
-  file and asko you to save it
+  file and ask you to save it
 ```sh
 rex@ultrabok ~ $ ./my_program.rb doge 42 "cabbage rolls"
 ```
