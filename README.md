@@ -592,6 +592,72 @@ puts "Price in EUR: #{apple.price_in_eur}"
   affect the code that uses your class
 
 
+## Good programming practices with classes
+
+* It is useful to separate chunks of code with common meaning into
+  separate files, and then use `require_relative 'my_ruby_file'` to
+  import it for use in the code from the same directory where the file is
+  * Keep class definitions and logic in separate files, then import them
+    where you need to use them using `require_relative`
+  * This is how we import libraries, collections of code we can use:
+    `require 'csv'`
+* Keeping everything in one file may be convenient at first, but it
+  limits flexibility; it's hard to debug, and it's hard to reuse code -
+  avoid it as much as possible and keep things in separate files
+
+
+## Class method access control
+
+* When designing a class interface, it's important to know how much of
+  your class you'll expose to other code for use
+  * Do not expose too much, otherwise external code will depend on your
+    class's implementation instead of its interface, in which case any
+    change to your class will break external code that depends on it
+* Never expose methods that can leave an object in an invalid state
+* Levels of protection Ruby provides for class methods:
+  * *Public methods* can be called by anyone, no access control,
+    default: `public`
+  * *Protected methods* can be called only by object of the defining
+    class and its subclasses, withing the family: `protected`
+  * *Private methods* are only called within the context of the same
+    object - methods of the same object can invoke these, but no other
+    method outside the object can call them, including objects of the
+    same class: `private`
+    * Method `.initialize` is always private, that is why we instantiate
+      an object by calling `.new`
+```ruby
+class SugarCube
+  # Default access is public
+  def method1
+    # public method
+  end
+
+  # Methods from this one onwards will be 'protected',
+  # until we change it to 'public' or 'private'
+  protected
+  def method2
+    # protected method
+  end
+
+  def method3
+    # again, protected method
+  end
+
+  # Methods from here onwards will be 'private'
+  private
+  def method4
+    # private method
+  end
+
+  # Back to making methods 'public'
+  public
+  def method5
+    # public method
+  end
+end
+```
+
+
 Unless otherwise noted, the texts and code are copyright
 © 2016 Rendered Text and Filip Dimovski, released under the
 GNU General Public License version 3 or greater. All rights reserved.
