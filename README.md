@@ -417,7 +417,9 @@ end
   `new` method of the class: `textbook = Book.new`
 * We can define some default values when we create an object from a
   class, by defining an `.initialize(vars_values)` method which gets
-  called when we call `.new()`, the *constructor* method:
+  called when we call `.new()`, the *constructor* method
+* `.initialize` is used to set up an environment for the object, so it
+  can be in a usable state
 ```ruby
 # Define a class
 class Book
@@ -511,7 +513,6 @@ end
     `attr_reader :isbn, :title, :author`
   * `attr_writer` for write-only access, used very rarely
   * `attr_accessor` for read/write access - very commonly used
-    
 ```ruby
 # Define the class, accessors and constructor
 class Book
@@ -543,7 +544,52 @@ puts "Title: #{book.title}"
 puts "Author: #{book.author}"
 
 ```
+* We can treat some instance methods like attributes, even though they
+  do not have any instance variables with their name they work with the
+  object's instance variables; we call the methods *virtual attributes*:
+```ruby
+class Fruit
 
+  attr_accessor :kind, :price
+
+  # Initialize the class
+  def initialize(kind, price)
+    @kind = kind
+    @price = price
+  end
+
+  # Virtual attribute to get price in Euros
+  def price_in_eur
+    price / 122
+  end
+
+  # Virtual attribute to set price in Euros
+  def price_in_eur=(price)
+    @price = price * 122
+  end
+
+  # Tell us about the fruit when we do 'puts fruit'
+  def to_s
+    "Fruit kind: #{@kind}\nPrice in local currency per kg: #{@price} RSD"
+  end
+end
+
+apple = Fruit.new('apple', 24)
+
+# Show the price before the change
+puts apple
+puts "Price in EUR: #{apple.price_in_eur}"
+
+# Show the price after the change
+apple.price_in_eur = 7
+puts apple
+puts "Price in EUR: #{apple.price_in_eur}"
+```
+* Virtual attributes are useful if you isolate the implementation of
+  your class from those who use it, by hiding the difference between
+  instance variables and calculated values; this is good if you plan to
+  refactor and change the way the class works, because it will not
+  affect the code that uses your class
 
 
 Unless otherwise noted, the texts and code are copyright
