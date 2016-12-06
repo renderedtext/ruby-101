@@ -674,7 +674,7 @@ puts "Type of object: #{dog.class}"
 puts "Object ID: #{dog.object_id}"
 ```
 * If you put `hound = dog` in this example, they will refer to the same
-  object, so:
+  object; this is *aliasing*:
 ```ruby
 dog = "Toby"
 hound = dog
