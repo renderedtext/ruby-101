@@ -50,10 +50,8 @@ $ sudo apt update && sudo apt install vim
 * It is useful to separate chunks of code with common meaning into
   separate Ruby files, then use `require_relative 'my_ruby_file'` to
   import them into our code (from the same directory where our code is),
-  to ensure *code reuse* and *modularity*
-  * Keep class definitions and logic in separate files, then import them
-    where you need to use them using `require_relative`
-  * To use Ruby-provided libraries, use `require`, e.g. `require 'csv'`
+  to ensure *code reuse* and *modularity*`
+* To use Ruby-provided libraries, use `require`, e.g. `require 'csv'`
 * Keeping everything in one file may be convenient at first, but:
   * it severely limits flexibility
   * it makes the code hard to debug, and difficult to reuse
@@ -64,9 +62,9 @@ $ sudo apt update && sudo apt install vim
 
 * Unlike most other programming languages, *everything is an object* in
   Ruby, including the return values of methods
-* Variables are references that point to objects
+* Variables are references that point to objects in memory
 * *Class* is a combination of state kept in memory and referred to using 
-  *variables*, and *methods* are functions that use that state
+  *variables*, and *methods* - functions that use that state
 * *Object* is an instance of a class, created by calling a constructor
   method called `#new`, e.g. `doge = Dog.new("Shiba Inu", "Toby")`,
   which in turn calls that class's method `.initialize`
