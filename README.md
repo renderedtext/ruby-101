@@ -70,27 +70,6 @@ $ sudo apt update && sudo apt install vim
   which in turn calls that class's method `.initialize`
 * Object's state is held in *instance variables* `@variable`, and the
   *instance methods* work on the object's instance variables `#method`
-* Each object has an unique ID, so if a variable refers to an object and
-  you assign it to another variable, then both of them will refer to
-  the same object
-  * It's called *aliasing* and can be a source of major bugs
-  * To avoid it, duplicate the object and then assign it to the other
-  variable, e.g.:
-```ruby
-dog = "Toby"
-hound = dog     # Aliasing!
-dog[0] = "R"
-
-puts dog        # Prints "Roby"
-puts hound      # Prints "Roby", too!
-
-hound = dog.dup # Duplicate the string
-hound = "Pete"
-dog[0] = "T"
-
-puts dog        # Prints "Toby"
-puts hound      # Prints "Pete"
-```
 * Variables defined outside classes are *global variables*, e.g.
   `$Variable`, and methods defined outside classes are *global methods*,
   e.g. `method(parameter)`
@@ -235,6 +214,7 @@ puts hello  # Prints "Hello world!"`
 * Method `.capitalize` returns the string with first letter in capital
 * Method `.upcase` returns the string with all letters in upper case
 * Method `.downcase` returns the string with all letters in lower case
+* Method `.dup` returns a duplicate of the string
 
 
 ## Numbers
@@ -732,7 +712,7 @@ puts "Price in EUR: #{apple.price_in_eur}"
     object - methods of the same object can invoke these, but no other
     method outside the object can call them, including objects of the
     same class: `private`
-    * Method `.initialize` is always private, that is why we instantiate
+  * Method `.initialize` is always private, that is why we instantiate
       an object by calling `.new`
 ```ruby
 class SugarCube
@@ -767,33 +747,34 @@ end
 ```
 
 
-## Variables
+## Variables, aliasing, freezing objects
 
-* Variables are a reference to an object, they're not objects themselves
-* Objects are kept in a memory pool called *heap*
-```ruby
-# 'dog' has the reference to the String object "Toby"
-dog = "Toby"
-puts "Variable name: dog"
-# Refer to the String object and show its value
-puts "Value: #{dog}"
-# Show what class of object does the variable refer to
-puts "Type of object: #{dog.class}"
-# The ID of the object
-puts "Object ID: #{dog.object_id}"
-```
-* If you put `hound = dog` in this example, they will refer to the same
-  object; this is *aliasing*:
+* *Variable* is a reference to an object kept in a memory pool called
+  *heap*; each object has its own unique ID, which variables refer to
+* If you assign a variable to an object, and then assign the variable
+  to another variable, then both of them will refer to the same object,
+  until one of them is assigned to another object
+* Then, if you modify the object, it will reflect on both of variables
+  when you try and access it - this is called *aliasing* and can be a
+  major source of bugs, e.g.:
 ```ruby
 dog = "Toby"
-hound = dog
-dog[0] = 'R'
+hound = dog     # Aliasing! Now they refer to the same object
+dog[0] = "R"
 
-puts hound  # Will show "Roby"!
+puts dog        # Prints "Roby"
+puts hound      # Prints "Roby", too!
+
+hound = dog.dup # Duplicate the string to avoid aliasing
+hound = "Pete"
+dog[0] = "T"
+
+puts dog        # Prints "Toby"
+puts hound      # Prints "Pete"
 ```
-* To avoid this, duplicate the former string: `hound = dog.dup`
-* To prevent an object from being modified, use method `.freeze`, any
-  attempt to modify the frozen object will result with RuntimeError
+* To avoid this, duplicate the string assigned: `hound = dog.dup`
+* To prevent an object from being modified, use method `.freeze`, so any
+  attempt to modify the frozen object will result in RuntimeError
   being raised
 
 
