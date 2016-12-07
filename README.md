@@ -1,76 +1,157 @@
-# Notes on programming using Ruby
+# Ruby 101: Learning the Ruby Programming Language
 
-Here I will describe my journey in learning the Ruby programming language.
-The book I use is "Programming Ruby" (The Pragmatic Programmer's Guide).
-This repository is regularly updated with personal notes and some
-example code and programs as well.
+Here I describe my journey in learning Ruby, a very cool and fast object
+oriented interpreted programming language.
+Having some basic knowledge of programming concepts is good for start.
+This document is regularly updated, and I will provide lots of example
+example code and programs, too. - Filip (a.k.a. rexich)
 
-
-## Ruby as an object oriented language
-
-* Unlike other languages, everything in Ruby is an object, including
-  return values of methods
-* Class is a combination of state (variables) and functions that use
-  that state (methods)
-* **Object = class instance**, created using a constructor method (.new)
-* Every object has unique ID, state is held by instance variables,
-  instance methods work on instance variables
-* Methods are invoked by sending a message to the receiver object
-  (method name, parameters); using parentheses() is a good idea, though
-  they are optional, i.e. `puts "Hello"` is the same as `puts("Hello")`
-* The value returned by a Ruby method is the value of the last
-  expression evaluated, unless `return` is used!
-* Methods whose name ends with a question mark `?` `Time.sunday?` return
-  `true` or `false`, so-called Boolean values 
-* The `nil` object is an object that represents nothing
-  * `nil` and `false` are treated the same in if-conditions
-* Methods whose name ends with exclamation mark `!` `String.downcase!`
-  modify the state variable of the object they are invoked from and do
-  not return the value, but `nil`, so be careful!
+* Book used as a learning reference: "Programming Ruby (The Pragmatic
+  Programmer's Guide)", by Dave Thomas, with Chad Fowler and Andy Hunt
+* Ruby version: `ruby 2.3.1p112 (2016-04-26) [x86_64-linux-gnu]`
+* Operating system: Ubuntu Linux 16.04.1 LTS, 64-bit
 
 
-## Ruby syntax rules
+## Getting Ruby and necessary tools, some programming tips
 
-* Names in **lowercase**:
-  * local_variables, method_names, method_parameters
-  * They can also start with an underscore `_`
-  * Method names may end with `? ! =`
-* Names in **uppercase**:
-  * $global_variables, @local_variables, @@class_variables
-    * After the sign(s), they can also start with an underscore `_`
-  * Class_names, Module_names, Constants - Uppercase!
-* Lines that start with an octothorpe # are comments
-  * Comments can appear after code: `puts 'Hello!'  # Prints 'Hello!'`
+* You can use your favorite UNIX-like operating system, Ubuntu Linux is
+  used throughout this manual
+* You should be comfortable with using the terminal, and a knowledge of
+  Git basics is useful and recommended for maintaining your code
+* In your favorite terminal emulator, install Ruby and its documentation
+  utility, as well as Git (recommended):
+```bash
+$ sudo apt update && sudo apt install ruby ri git
+```
+* Use a good code editor that will perform syntax coloring on your code;
+  my recommendations are [Geany](https://www.geany.org/), or
+  [Vim](http://www.vim.org/):
+```bash
+# Install Geany:
+$ sudo apt update && sudo apt install geany
 
-
-## Using the Ruby interpreter
-
-* Invoked by issuing `irb` in your terminal emulator; you can test some
-  code in it, but you cannot save it to a file
-* Don't know what that class/method does? Try `ri method` for detailed
-  explanations; if you do `ri class` it will show you all class methods
+# Or, install Vim:
+$ sudo apt update && sudo apt install vim
+```
+* The Ruby interpreter is a great way to test code and see what it does,
+  try it by entering `irb` in the terminal's command line
+* Don't know what a class/method does? Try `ri method` in the terminal's
+  command line to get detailed explanations
+  * If you enter `ri Class` it will show you all class methods as well
 * Ruby programs should have `#!/usr/bin/env ruby` as a first line in
   every Ruby file that is part of the program
+* Since version 2, Ruby uses the Unicode (UTF-8) encoding when working
+  with files; you can specify `#encoding: utf-8` as a second line if you
+  intend to write programs for Ruby versions less than 1.9 (not
+  recommended), otherwise it is unnecessary
 * The name of a Ruby program has the ending/extension `.rb`
+* Make sure the files are executable, `chmod +x my_program.rb` will do,
+  so you can execute your program by typing `./my_program.rb`
+* It is useful to separate chunks of code with common meaning into
+  separate Ruby files, then use `require_relative 'my_ruby_file'` to
+  import them into our code (from the same directory where our code is),
+  to ensure *code reuse* and *modularity*
+* To use Ruby-provided libraries, use `require`, e.g. `require 'csv'`
+* Keeping everything in one file may be convenient at first, but:
+  * it severely limits flexibility
+  * it makes the code hard to debug, and difficult to reuse
+  * Avoid it as much as possible and keep things in separate files
+
+
+## Ruby as an Object Oriented language
+
+* Unlike most other programming languages, *everything is an object* in
+  Ruby, including the return values of methods
+* Variables are references that point to objects in memory
+* *Class* is a combination of state kept in memory and referred to using 
+  *variables*, and *methods* - functions that use that state
+* *Object* is an instance of a class, created by calling a constructor
+  method called `#new`, e.g. `doge = Dog.new("Shiba Inu", "Toby")`,
+  which in turn calls that class's method `.initialize`
+* Object's state is held in *instance variables* `@variable`, and the
+  *instance methods* work on the object's instance variables `#method`
+* Each object has an unique ID, so if a variable refers to an object and
+  you assign it to another variable, then both of them will refer to
+  the same object
+  * It's called *aliasing* and can be a source of major bugs
+  * To avoid it, duplicate the object and then assign it to the other
+  variable, e.g.:
+```ruby
+dog = "Toby"
+hound = dog     # Aliasing!
+dog[0] = "R"
+
+puts dog        # Prints "Roby"
+puts hound      # Prints "Roby", too!
+
+hound = dog.dup # Duplicate the string
+hound = "Pete"
+dog[0] = "T"
+
+puts dog        # Prints "Toby"
+puts hound      # Prints "Pete"
+```
+* Variables defined outside classes are *global variables*, e.g.
+  `$Variable`, and methods defined outside classes are *global methods*,
+  e.g. `method(parameter)`
+  * They are accessible by any method within or outside an object
+* Methods are invoked (called) by sending a message to the receiver
+  object, containing the method name, and zero or more *parameters*
+  * Using parentheses `()` is a good idea, though they are optional, so
+    `puts "Hello"` is the same as `puts("Hello")`
+* Value returned by a method is the value of the last evaluated
+  expression evaluated, unless `return` is used
+* Method whose name ends with a question mark `?`, e.g. `Time.sunday?`,
+  returns a Boolean value, `true` or `false`
+  * They are very useful for if-conditions
+* Object `nil` is an object that represents nothing; `nil` and `false`
+  are treated the same in if-conditions
+* Method whose name ends with an exclamation mark `!`, e.g.
+  `String.downcase!`, modifies the state variables of the object and
+  returns `nil`, be careful!
+
+
+## Syntax rules
+
+* Names in **lowercase**:
+  * `local_variables`, `method_names`, `method_parameters`
+  * `:symbols` (usually)
+  * Method names may end with `? ! =`
+* Names in **uppercase**:
+  * `$Global_variables`, `@Local_variables`, `@@Class_variables`
+  * `Class_names`, `Module_names`, `CONSTANTS`
+* Variable names can start with an underscore `_`, e.g. `_rocket`, or
+  `$_Candy`
+* Lines that start with an octothorpe `#` are comments and are not
+  executed, so you can use them to disable lines of code, or to write
+  some text about what the code is doing
+  * Comments can appear after code: `puts 'Hello!' # Prints 'Hello!'`
+* When talking about methods, I'll prefix class method's name with a
+  period `.`, e.g. `.method`, and prefix object method's name with an
+  octothorpe `#`, e.g. `#method` - in real code though there are no
+  such prefixes, but I'll use them here for our convenience
 
 
 ## Input/output (I/O) methods
 
-* In UNIX-like systems and Linux, standard input (stdin) is the keyboard,
-  standard output (stdout) is the console/terminal screen, and standard
-  error output (stderr) is usually the same as the standard output; all
-  of them can be redefined to read and write to a file, for example
-* Method `puts` displays the result of an expression or a string on the
-  standard output and adds a new line: `puts "Hello world!"`
-  * If you want to stay on the same line, use `print` instead
-* Method `printf` outputs text under the control of *format strings*,
-  like in C, which get replaced with values under specific rules
-  * First parameter is the string for output, containing the
-  formatting strings, like `%5.2f` - substituted with a decimal number,
-  minimum 5 digits before, and two after the decimal point; `%s` -
-  substituted with a string, etc.
+* In Linux and UNIX-like operating systems, standard input `stdin` is
+  the keyboard, standard output `stdout` is the console/terminal screen,
+  and standard error output `stderr` is usually the same as the standard
+  output and is used to provide error or diagnostic messages while a
+  program is running (to keep them in a log file, for example)
+  * They can be redirected to read or write from/to a file, for example
+* Method `puts` displays the result of an expression, or a string on the
+  standard output, and adds a new line: `puts "Hello world!"`
+  * If you want the output to stay on the same line, use `print` instead
+* Method `printf` outputs text under the control of *format strings*
+  * Just like in C, format strings are pieces of text that get replaced
+    with values under specific rules
+  * First parameter of the method is the double-quoted string for
+    output, containing the formatting strings, like `%5.2f`, substituted
+    with a decimal number, minimum 5 digits before, and two after the
+    decimal point; `%s` - substituted with a string, etc.
   * The rest of the method parameters are the values that will replace
-    the formatting strings in the first parameter
+    the formatting strings in the first parameter, e.g.:
 ```ruby
 printf("Decimal number: %5.2f\nString: %s\n", 726.975, "doge")
 
@@ -78,90 +159,137 @@ printf("Decimal number: %5.2f\nString: %s\n", 726.975, "doge")
 # Decimal number: 726.98  <= it got rounded, from .975 -> .98
 # String: doge            <= :)
 ```
-* [Ruby's documentation](https://ruby-doc.org/core-2.2.0/String.html)
-  about String objects covers all about formatting strings as well
-* Method `gets` returns a string by reading from the standard input
-  * Get the result in a variable to use it: `line = gets`
+* [Ruby's documentation](https://ruby-doc.org/core-2.3.1/String.html)
+  about String class has lots of information about formatting strings
+* Method `gets` returns a string by reading text from the standard input
+* Get the result in a variable to use it: `line = gets`
 
 
-## String objects
+## Strings
 
-* Strings are objects whose value is an array of characters; since they
-  are objects, they have methods
-* Stings surrounded with '' incur less processing than those with "",
-  the latter tell Ruby to perform substitutions on escape sequences,
-  so `puts '\n'` will print `\n` and `puts "\n"` will print a new line
-* *Expression interpolation*: `"#{name}"` in a string is replaced with
-  the value of the `name` expression: `puts "The time is #{Time.now}."`
-  * Be careful, it does not work in strings with 'single quotes'!
-* Concatenating strings (adding one to another) using plus sign `+`:
-  `hello = "Hello " + "world!"  # 'puts hello' gives 'Hello world!'"`
-* Multiplying a string with a number X returns new string with given
-  string repeated X times:
-  `print "Hey! " * 5  # Prints "Hey! " five times in the same line`
-* Comparing strings: `puts "cats" <=> "crocodiles"`'
-  * Returns -1 if the first one has less characters than the second one,
-  0 if they have the same length, or 1 if the first one has more
-  characters than the second one
-* Also, comparing strings using `==` or `!=` in `if` conditions is
-  possible, too:
+* Strings are objects whose value is an array of Unicode characters
+* You can create them in several ways:
+  * By simply putting them between quotes: `'string'`, `"string"`
+  * By using single-quoted `%q{}` and double-quoted `%Q{}` delimiters:
 ```ruby
-dog = "Toby"
+# These are the same as 'Hello'
+%q/Hello/
+%q{Hello}
+%q!Hello!
 
-puts "It's Toby." if dog == "Toby"
-puts "It's not Munchkin." if dog != "Munchkin"
+# These are the same as "Hello"
+%Q/Hello/
+%Q{Hello}
+%Q!Hello!
 ```
+  * As a *here document*:
+```ruby
+story = <<END_OF_STRING
+  Everything between these two same words, the one after the '<<'
+  and the one at the end, will be part of the string, without these
+  two same words. You can use any word you like. By convention, they
+  are written with capital letters, so you can notice them easily.
+END_OF_STRING
+```
+* If we need to include a single quote `'` or a backslash `\` in a
+  single-quoted string, we have to use *escape sequences* - a symbol
+  prefixed with `\` that is used to enter characters that cannot be
+  typed easily with a keyboard
+* Double-quoted strings allow us to use more escape sequences and
+  require more processing than single-quoted strings
+  * Useful escape sequences: `\\` for a backslash `\`, `\n` for a new
+    line, `\b` for a backspace, `\'` for a single quote `'`, `\"` for a
+    double quote `"`
+  so `puts '\n'` will print `\n` and `puts "\n"` will print a new line
+* Double-quoted strings also have  *expression interpolation*:
+  text inside `#{expression}` in these strings is evaluated and the
+  return value of the `expression` is shown instead, e.g. `puts "The time is #{Time.now}."`
+  * Be careful, it does *not* work in single-quoted strings!
+* Adding one string to another will return a new *concatenated* string,
+  do it by putting a plus sign `+` between them, e.g.:
+```ruby
+hello = "Hello " + "world!"
+puts hello  # Prints "Hello world!"`
+```
+* Multiplying a string by a number `x` returns a new string with former
+  string repeated `x` times, e.g.:
+  `print "Hey! " * 5  # Prints "Hey! Hey! Hey! Hey! Hey! "`
+* Strings can be compared by length (number of characters) using
+  mathematical operators, such as `<` for lesser, `>` for greater, `==`
+  for equal, `!=` for not equal; they return `true` or `false`
+  * This is used a lot in if-conditions
+* Another way of comparing strings, `"cats" <=> "crocodiles"`, returns:
+  * -1 if the first one has less characters than the second one
+  * 0 if they have the same length
+  * 1 if the first one has more characters than the second one
 
 
-## String objects' methods
+## String methods
 
-* Method `.length` returns number of characters in a string array; works
-  properly with Unicode characters (tested with Cyrillic letters)
+* Methods `.length` or `.size` return number of characters in a string,
+  e.g. `"doge".length  # => 4`, `"пас".size  # => 3`
 * Method `.index("char_or_string")` returns the position of the first
-  occurence of the parameter (a character or a string)
-  * Works on arrays, too
-  * Counting of position starts from 0 for the first character, like C
+  occurence of a character/string given as parameter
+  * Works on arrays, as well - strings are arrays of characters
+  * Counting of position starts from 0 for the first character
 * Method `.capitalize` returns the string with first letter in capital
+* Method `.upcase` returns the string with all letters in upper case
+* Method `.downcase` returns the string with all letters in lower case
 
 
-## Number objects
+## Numbers
 
 * Numbers are objects whose values are - you guessed right, numbers :)
 * Numbers can be whole (integers, 27) and decimal (floating point, 3.14)
 
 
-## Number objects' methods
+## Number methods
 
 * Methods `.odd?` and `.even?` return a boolean value (true/false),
-  depending on whether the number object is odd or even
+  depending on whether the number is odd or even
 
 
 ## Arrays
 
-* Arrays and hashes are indexed collections of objects
+* *Arrays* and *hashes* are indexed collections of object references
 * Arrays are more efficient to work with, and hashes provide flexibility
-* Arrays can be accessed using integers as keys:
+* Each element in the array occupies a position in the array that is
+  identified by a positive integer number or zero
+* Arrays can be created like this:
+  * By creating one from the `Array` class: `things = Array.new`
+  * By simply providing zero or more elements between brackets `[]`,
+    separated by commas `,`, e.g.
+    `fruits = ['banana', 'orange', 'mango']`, `array = []`
+  * By using the `%w{ }` delimiter, e.g. `b = %w{ dog cat 27 342 673.99
+    just\ in\ case you\ noticed }`
+  * Be careful with this one, spaces in strings must be escaped with
+    a backslash `\` if you want them to be treated as one array element!
+  * Avoid using '' and "" quotes to surround the string element, or they
+    will become part of it, or part of the first and last word
+* Array elements can be accessed (indexed) using integers as keys put
+  between the brackets, after the array's name:
   `a = [3.14, 2, "lol"] ; a[0] #=> 3.14`
-  * Indices start at zero, so the first element is `a[0]`, like in C
-* Arrays can be defined using two notations:
-  * `a = [3.14, 2, "lol"]`
-  * `b = %w{ dog cat 27 342 673.99 just\ in\ case you\ noticed }`
-    * Be careful with this: all of these values will be treated as
-      strings, numbers included; spaces in strings must be escaped if
-      you want them to be treated as part of an element of the array!
-    * Avoid using '' and "" quotes to surround the string or they
-      will become part of it, or part of the first and last word
-* If an index does not exist, when you access it, it returns `nil`
+  * Indices start at zero, so the first element is `a[0]`
+  * You can access elements backwards: `a[-1]` is last element of array,
+    `a[-2]` is before-last one, and so on
+* If you try to access an element of the array that does not exist, the
+  return value will be `nil`
 * Method `.size` returns number of elements in array
-* Method `.inspect` and `p` let you see all the elements of the array
+* Method `.inspect` and `p` prints all the elements of the array
 
 
 ## Hashes
 
-* Hashes can be accessed by using an object as an key, unlike arrays
-* Defining a hash:
+* Hashes (also called *dictionaries* or *associative arrays*) are
+  collections where each element is accessed by using an object as a
+  *key*, associated with a certain *value* (another object)
+* Remember, keys are unique and **must not** repeat!
+* Hashes can be created like this:
+  * By creating one from the `Hash` class: `veggies = Hash.new`
+  * Putting key-value associations joined by `=>`, each separated by
+    commas `,`, between braces `{ }`:
 ```ruby
-instruments = {
+instruments = { 
   'guitar' => 'string',
   'trumpet' => 'brass',
   'drum' => 'percussion',
@@ -169,35 +297,12 @@ instruments = {
   'violin' => 'string'
 }
 ```
-* Here, the thing to the left of the `=>` arrow is the key, and the
-  thing to the right is its value, like in a dictionary or a phone book:
-  name => prone number, English word => Serbian word, etc.
-* The keys are unique and must not repeat!
-* Accessing a value of a hash's element (indexing it) is the same as in
-  arrays: `instruments["guitar"] #=> string`
-* If you index a hash with a key that does not match any of the given
-  ones, it returns `nil`; you can avoid this by assigning a default
-  value when creating a hash: `instruments = Hash.new("default_value")`
-
-
-## Symbols
-
-* Symbols are constant names (enums in C) that are guaranteed to be
-  unique and they don't need to be predeclared
-* The name of a symbol starts with a colon : `:cookie`
-* You don't have to assign it a value and Ruby makes sure the symbol
-  has the same value no matter where you use it
-* Frequently used with hashes, since keys must be unique:
-```ruby
-instruments = {
-  :guitar => 'string',
-  :trumpet => 'brass',
-  :drum => 'percussion',
-  :saxophone => 'brass',
-  :violin => 'string'
-}
-```
-* There is a shorthand, a syntactic sugar that does the same thing:
+  * Here, an object left of `=>` arrow is a key, and an object right of
+    the arrow is its value, like in a dictionary or a phone book, e.g.:
+  name => prone number, English word => Serbian word, and so on
+* If the keys are *symbols* (see below), then besides the first way,
+  there is a second way by using syntactic sugar (shorthand): put the
+  colon in `:symbol` name last, omit the `=>` arrow and specify value:
 ```ruby
 instruments = {
   guitar: 'string',
@@ -207,12 +312,30 @@ instruments = {
   violin: 'string'
 }
 ```
+* Accessing (indexing) a value of a hash's element is similar to arrays,
+  just provide the key between the brackets `[]`, e.g.:
+  `instruments["guitar"] #=> string`
+* If you try to access an element of the hash that does not exist, it
+  returns `nil`; you can avoid this by assigning a default value when
+  creating a hash: `instruments = Hash.new("default_value")`
+* Method `.size` returns number of elements in hash
+* Method `.inspect` and `p` prints all the elements of the hash
 
 
-## Control structures
+## Symbols
 
-* Similar to most programming languages, Ruby provides the `if`, `while`
-  and `do` control structures
+* Symbols are constant names (enums in C) that are guaranteed to be
+  unique, so they don't need to be predeclared
+* The name of a symbol starts with a colon : `:cookie`
+* You don't have to assign it a value and Ruby makes sure the symbol
+  has the same value no matter where you use it
+* Frequently used with hashes, since keys must be unique
+
+
+## Control structures (if, for, while)
+
+* Similar to most programming languages, Ruby provides the `if`, `for`,
+  and `while`control structures
 * All of the control structures must be terminated with `end`
 * The `if` control structure executes code if the given condition
   evaluates to `true`, `elsif` gives another condition if the previous
@@ -590,20 +713,6 @@ puts "Price in EUR: #{apple.price_in_eur}"
   instance variables and calculated values; this is good if you plan to
   refactor and change the way the class works, because it will not
   affect the code that uses your class
-
-
-## Good programming practices with classes
-
-* It is useful to separate chunks of code with common meaning into
-  separate files, and then use `require_relative 'my_ruby_file'` to
-  import it for use in the code from the same directory where the file is
-  * Keep class definitions and logic in separate files, then import them
-    where you need to use them using `require_relative`
-  * This is how we import libraries, collections of code we can use:
-    `require 'csv'`
-* Keeping everything in one file may be convenient at first, but it
-  limits flexibility; it's hard to debug, and it's hard to reuse code -
-  avoid it as much as possible and keep things in separate files
 
 
 ## Class method access control
