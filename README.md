@@ -40,6 +40,10 @@ $ sudo apt update && sudo apt install vim
   * If you enter `ri Class` it will show you all class methods as well
 * Ruby programs should have `#!/usr/bin/env ruby` as a first line in
   every Ruby file that is part of the program
+* Since version 2, Ruby uses the Unicode (UTF-8) encoding when working
+  with files; you can specify `#encoding: utf-8` as a second line if you
+  intend to write programs for Ruby versions less than 1.9 (not
+  recommended), otherwise it is unnecessary
 * The name of a Ruby program has the ending/extension `.rb`
 * Make sure the files are executable, `chmod +x my_program.rb` will do,
   so you can execute your program by typing `./my_program.rb`
@@ -88,13 +92,13 @@ puts hound      # Prints "Pete"
 * Value returned by a method is the value of the last evaluated
   expression evaluated, unless `return` is used
 * Method whose name ends with a question mark `?`, e.g. `Time.sunday?`,
-  return a Boolean value, `true` or `false`
+  returns a Boolean value, `true` or `false`
   * They are very useful for if-conditions
-* Object `nil` is an object that represents nothing
-  * `nil` and `false` are treated the same in if-conditions
-* Methods whose name ends with an exclamation mark `!`, e.g.
-  `String.downcase!`, modify the state variables of the object and
-  return `nil`, so be careful!
+* Object `nil` is an object that represents nothing; `nil` and `false`
+  are treated the same in if-conditions
+* Method whose name ends with an exclamation mark `!`, e.g.
+  `String.downcase!`, modifies the state variables of the object and
+  returns `nil`, be careful!
 
 
 ## Syntax rules
@@ -104,14 +108,18 @@ puts hound      # Prints "Pete"
   * `:symbols` (usually)
   * Method names may end with `? ! =`
 * Names in **uppercase**:
-  * `$Global_variables, @Local_variables, @@Class_variables`
-  * `Class_names, Module_names, Constants`
+  * `$Global_variables`, `@Local_variables`, `@@Class_variables`
+  * `Class_names`, `Module_names`, `Constants`
 * Variable names can start with an underscore `_`, e.g. `_rocket`, or
   `$_CANDY`
 * Lines that start with an octothorpe `#` are comments and are not
   executed, so you can use them to disable lines of code, or to write
-  what the code is doing
+  some text about what the code is doing
   * Comments can appear after code: `puts 'Hello!' # Prints 'Hello!'`
+* When talking about methods, I'll prefix class method's name with a
+  period `.`, e.g. `.method`, and prefix object method's name with an
+  octothorpe `#`, e.g. `#method` - in real code, though there are no
+  such prefixes, I'll use them here for our convenience
 
 
 ## Input/output (I/O) methods
@@ -119,7 +127,8 @@ puts hound      # Prints "Pete"
 * In Linux and UNIX-like operating systems, standard input `stdin` is
   the keyboard, standard output `stdout` is the console/terminal screen,
   and standard error output `stderr` is usually the same as the standard
-  output
+  output and is used to provide error or diagnostic messages while a
+  program is running (to keep them in a log file, for example)
   * They can be redirected to read or write from/to a file, for example
 * Method `puts` displays the result of an expression, or a string on the
   standard output, and adds a new line: `puts "Hello world!"`
@@ -148,42 +157,74 @@ printf("Decimal number: %5.2f\nString: %s\n", 726.975, "doge")
 
 ## String objects
 
-* Strings are objects whose value is an array of characters; since they
-  are objects, they have methods
-* Stings surrounded with '' incur less processing than those with "",
-  the latter tell Ruby to perform substitutions on escape sequences,
-  so `puts '\n'` will print `\n` and `puts "\n"` will print a new line
-* *Expression interpolation*: `"#{name}"` in a string is replaced with
-  the value of the `name` expression: `puts "The time is #{Time.now}."`
-  * Be careful, it does not work in strings with 'single quotes'!
-* Concatenating strings (adding one to another) using plus sign `+`:
-  `hello = "Hello " + "world!"  # 'puts hello' gives 'Hello world!'"`
-* Multiplying a string with a number X returns new string with given
-  string repeated X times:
-  `print "Hey! " * 5  # Prints "Hey! " five times in the same line`
-* Comparing strings: `puts "cats" <=> "crocodiles"`'
-  * Returns -1 if the first one has less characters than the second one,
-  0 if they have the same length, or 1 if the first one has more
-  characters than the second one
-* Also, comparing strings using `==` or `!=` in `if` conditions is
-  possible, too:
+* Strings are objects whose value is an array of Unicode characters
+* You can create them in several ways:
+  * By simply putting them between quotes: `'string'`, `"string"`
+  * By using single-quoted `%q{}` and double-quoted `%Q{}` delimiters:
 ```ruby
-dog = "Toby"
+# These are the same as 'Hello'
+%q/Hello/
+%q{Hello}
+%q!Hello!
 
-puts "It's Toby." if dog == "Toby"
-puts "It's not Munchkin." if dog != "Munchkin"
+# These are the same as "Hello"
+%Q/Hello/
+%Q{Hello}
+%Q!Hello!
 ```
+  * As a *here document*:
+```ruby
+story = <<END_OF_STRING
+  Everything between these two same words, the one after the '<<'
+  and the one at the end, will be part of the string, without these
+  two same words. You can use any word you like. By convention, they
+  are written with capital letters, so you can notice them easily.
+END_OF_STRING
+```
+* If we need to include a single quote `'` or a backslash `\` in a
+  single-quoted string, we have to use *escape sequences* - a symbol
+  prefixed with `\` that is used to enter characters that cannot be
+  typed easily with a keyboard
+* Double-quoted strings allow us to use more escape sequences and
+  require more processing than single-quoted strings
+  * Useful escape sequences: `\\` for a backslash `\`, `\n` for a new
+    line, `\b` for a backspace, `\'` for a single quote `'`, `\"` for a
+    double quote `"`
+  so `puts '\n'` will print `\n` and `puts "\n"` will print a new line
+* Double-quoted strings also have  *expression interpolation*:
+  text inside `#{expression}` in these strings is evaluated and the
+  return value of the `expression` is shown instead, e.g. `puts "The time is #{Time.now}."`
+  * Be careful, it does *not* work in single-quoted strings!
+* Adding one string to another will return a new *concatenated* string,
+  do it by putting a plus sign `+` between them, e.g.:
+```ruby
+hello = "Hello " + "world!"
+puts hello  # Prints "Hello world!"`
+```
+* Multiplying a string by a number `x` returns a new string with former
+  string repeated `x` times, e.g.:
+  `print "Hey! " * 5  # Prints "Hey! Hey! Hey! Hey! Hey! "`
+* Strings can be compared by length (number of characters) using
+  mathematical operators, such as `<` for lesser, `>` for greater, `==`
+  for equal, `!=` for not equal; they return `true` or `false`
+  * This is used a lot in if-conditions
+* Another way of comparing strings, `"cats" <=> "crocodiles"`, returns:
+  * -1 if the first one has less characters than the second one
+  * 0 if they have the same length
+  * 1 if the first one has more characters than the second one
 
 
-## String objects' methods
+## String class methods
 
-* Method `.length` returns number of characters in a string array; works
-  properly with Unicode characters (tested with Cyrillic letters)
+* Methods `.length` or `.size` return number of characters in a string,
+  e.g. `"doge".length  # => 4`, `"пас".size  # => 3`
 * Method `.index("char_or_string")` returns the position of the first
-  occurence of the parameter (a character or a string)
-  * Works on arrays, too
-  * Counting of position starts from 0 for the first character, like C
+  occurence of a character/string given as parameter
+  * Works on arrays, as well - strings are arrays of characters
+  * Counting of position starts from 0 for the first character
 * Method `.capitalize` returns the string with first letter in capital
+* Method `.upcase` returns the string with all letters in upper case
+* Method `.downcase` returns the string with all letters in lower case
 
 
 ## Number objects
@@ -192,7 +233,7 @@ puts "It's not Munchkin." if dog != "Munchkin"
 * Numbers can be whole (integers, 27) and decimal (floating point, 3.14)
 
 
-## Number objects' methods
+## Number class methods
 
 * Methods `.odd?` and `.even?` return a boolean value (true/false),
   depending on whether the number object is odd or even
