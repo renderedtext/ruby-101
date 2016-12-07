@@ -50,7 +50,7 @@ $ sudo apt update && sudo apt install vim
 * It is useful to separate chunks of code with common meaning into
   separate Ruby files, then use `require_relative 'my_ruby_file'` to
   import them into our code (from the same directory where our code is),
-  to ensure *code reuse* and *modularity*`
+  to ensure *code reuse* and *modularity*
 * To use Ruby-provided libraries, use `require`, e.g. `require 'csv'`
 * Keeping everything in one file may be convenient at first, but:
   * it severely limits flexibility
@@ -146,10 +146,10 @@ puts hound      # Prints "Pete"
 * Method `printf` outputs text under the control of *format strings*
   * Just like in C, format strings are pieces of text that get replaced
     with values under specific rules
-  * First parameter of the method is the string for output, containing
-    the formatting strings, like `"%5.2f"` - substituted with a decimal
-    number, minimum 5 digits before, and two after the decimal point;
-    `%s` - substituted with a string, etc.
+  * First parameter of the method is the double-quoted string for
+    output, containing the formatting strings, like `%5.2f`, substituted
+    with a decimal number, minimum 5 digits before, and two after the
+    decimal point; `%s` - substituted with a string, etc.
   * The rest of the method parameters are the values that will replace
     the formatting strings in the first parameter, e.g.:
 ```ruby
@@ -159,10 +159,10 @@ printf("Decimal number: %5.2f\nString: %s\n", 726.975, "doge")
 # Decimal number: 726.98  <= it got rounded, from .975 -> .98
 # String: doge            <= :)
 ```
-* [Ruby's documentation](https://ruby-doc.org/core-2.2.0/String.html)
+* [Ruby's documentation](https://ruby-doc.org/core-2.3.1/String.html)
   about String class has lots of information about formatting strings
 * Method `gets` returns a string by reading text from the standard input
-  * Get the result in a variable to use it: `line = gets`
+* Get the result in a variable to use it: `line = gets`
 
 
 ## Strings
