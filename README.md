@@ -62,7 +62,7 @@ $ sudo apt update && sudo apt install vim
 
 * Unlike most other programming languages, *everything is an object* in
   Ruby, including the return values of methods
-* Variables are references that point to objects in memory
+* *Variables* are references that point to objects in memory
 * *Class* is a combination of state kept in memory and referred to using 
   *variables*, and *methods* - functions that use that state
 * *Object* is an instance of a class, created by calling a constructor
