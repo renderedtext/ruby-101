@@ -1,32 +1,89 @@
-# Notes on programming using Ruby
+# Ruby 101: Learning the Ruby Programming Language
 
-Here I will describe my journey in learning the Ruby programming language.
-The book I use is "Programming Ruby" (The Pragmatic Programmer's Guide).
-This repository is regularly updated with personal notes and some
-example code and programs as well.
+Here I describe my journey in learning the Ruby programming language.
+Some basic knowledge of programming concepts is good for start.
+This document is regularly updated, and I will provide lots of example
+example code and programs, too. - Filip (a.k.a. rexich)
+
+* Book used as a learning reference: `"Programming Ruby (The Pragmatic
+  Programmer's Guide)", by Dave Thomas, with Chad Fowler and Andy Hunt`
+* Ruby version: `ruby 2.3.1p112 (2016-04-26) [x86_64-linux-gnu]`
+* Operating system: `Ubuntu Linux 16.04.1 LTS, 64-bit`
 
 
-## Ruby as an object oriented language
+## Getting Ruby and necessary tools
 
-* Unlike other languages, everything in Ruby is an object, including
-  return values of methods
-* Class is a combination of state (variables) and functions that use
-  that state (methods)
-* **Object = class instance**, created using a constructor method (.new)
-* Every object has unique ID, state is held by instance variables,
-  instance methods work on instance variables
-* Methods are invoked by sending a message to the receiver object
-  (method name, parameters); using parentheses() is a good idea, though
-  they are optional, i.e. `puts "Hello"` is the same as `puts("Hello")`
-* The value returned by a Ruby method is the value of the last
-  expression evaluated, unless `return` is used!
-* Methods whose name ends with a question mark `?` `Time.sunday?` return
-  `true` or `false`, so-called Boolean values 
-* The `nil` object is an object that represents nothing
+* You can use your favorite UNIX-like operating system; Ubuntu Linux is
+  used throughout this manual
+* You should be comfortable with using the terminal, and a knowledge of
+  Git basics is useful and recommended for maintaining your code
+* In your favorite terminal emulator, install Ruby and its documentation
+  utility, as well as Git (provide your password when necessary):
+```bash
+$ sudo apt update && sudo apt install ruby ri git
+```
+* Use a good code editor that will perform syntax coloring on your code;
+  my recommendations are [Geany](https://www.geany.org/), and of course
+  [Vim](http://www.vim.org/):
+```bash
+# Install Geany:
+$ sudo apt update && sudo apt install geany
+
+# Or, install Vim:
+$ sudo apt update && sudo apt install vim
+```
+
+
+## Ruby as an Object Oriented language
+
+* Unlike most other programming languages, *everything is an object* in
+  Ruby, including the return values of methods
+* *Class* is a combination of state kept in memory and referred to using 
+  *variables*, and *methods* are functions that use that state
+* *Object* is an instance of a class, created by calling a constructor
+  method called `#new`, e.g. `doge = Dog.new("Shiba Inu", "Toby")`,
+  which in turn calls that class's method `.initialize`
+* Object's state is held in *instance variables* `@variable`, and the
+  *instance methods* work on the object's instance variables `#method`
+* Each object has an unique ID, so if a variable refers to an object and
+  you assign it to another variable, then both of them will refer to
+  the same object
+  * It's called *aliasing* and can be a source of major bugs
+  * To avoid it, duplicate the object and then assign it to the other
+  variable, e.g.:
+```ruby
+dog = "Toby"
+hound = dog     # Aliasing
+dog[0] = "R"
+
+puts dog        # Prints "Roby"
+puts hound      # Prints "Roby", too!
+
+hound = dog.dup # Duplicate the string
+hound = "Pete"
+dog[0] = "T"
+
+puts dog        # Prints "Toby"
+puts hound      # Prints "Pete"
+```
+* Variables defined outside classes are *global variables*, e.g.
+  `$Variable`, and methods defined outside classes are *global methods*,
+  e.g. `method(parameter)`
+  * They are accessible by any method within or outside an object
+* Methods are invoked (called) by sending a message to the receiver
+  object, containing the method name, and zero or more *parameters*
+  * Using parentheses `()` is a good idea, though they are optional, so
+    `puts "Hello"` is the same as `puts("Hello")`
+* Value returned by a method is the value of the last evaluated
+  expression evaluated, unless `return` is used
+* Method whose name ends with a question mark `?`, e.g. `Time.sunday?`,
+  return a Boolean value, `true` or `false`
+  * They are very useful for if-conditions
+* Object `nil` is an object that represents nothing
   * `nil` and `false` are treated the same in if-conditions
-* Methods whose name ends with exclamation mark `!` `String.downcase!`
-  modify the state variable of the object they are invoked from and do
-  not return the value, but `nil`, so be careful!
+* Methods whose name ends with an exclamation mark `!`, e.g.
+  `String.downcase!`, modify the state variables of the object and
+  return `nil`, so be careful!
 
 
 ## Ruby syntax rules
@@ -39,7 +96,7 @@ example code and programs as well.
   * $global_variables, @local_variables, @@class_variables
     * After the sign(s), they can also start with an underscore `_`
   * Class_names, Module_names, Constants - Uppercase!
-* Lines that start with an octothorpe # are comments
+* Lines that start with an octothorpe `#` are comments
   * Comments can appear after code: `puts 'Hello!'  # Prints 'Hello!'`
 
 
