@@ -1,29 +1,30 @@
 # Ruby 101: Learning the Ruby Programming Language
 
-Here I describe my journey in learning the Ruby programming language.
-Some basic knowledge of programming concepts is good for start.
+Here I describe my journey in learning Ruby, a very cool and fast object
+oriented interpreted programming language.
+Having some basic knowledge of programming concepts is good for start.
 This document is regularly updated, and I will provide lots of example
 example code and programs, too. - Filip (a.k.a. rexich)
 
-* Book used as a learning reference: `"Programming Ruby (The Pragmatic
-  Programmer's Guide)", by Dave Thomas, with Chad Fowler and Andy Hunt`
+* Book used as a learning reference: "Programming Ruby (The Pragmatic
+  Programmer's Guide)", by Dave Thomas, with Chad Fowler and Andy Hunt
 * Ruby version: `ruby 2.3.1p112 (2016-04-26) [x86_64-linux-gnu]`
-* Operating system: `Ubuntu Linux 16.04.1 LTS, 64-bit`
+* Operating system: Ubuntu Linux 16.04.1 LTS, 64-bit
 
 
 ## Getting Ruby and necessary tools
 
-* You can use your favorite UNIX-like operating system; Ubuntu Linux is
+* You can use your favorite UNIX-like operating system, Ubuntu Linux is
   used throughout this manual
 * You should be comfortable with using the terminal, and a knowledge of
   Git basics is useful and recommended for maintaining your code
 * In your favorite terminal emulator, install Ruby and its documentation
-  utility, as well as Git (provide your password when necessary):
+  utility, as well as Git (recommended):
 ```bash
 $ sudo apt update && sudo apt install ruby ri git
 ```
 * Use a good code editor that will perform syntax coloring on your code;
-  my recommendations are [Geany](https://www.geany.org/), and of course
+  my recommendations are [Geany](https://www.geany.org/), or
   [Vim](http://www.vim.org/):
 ```bash
 # Install Geany:
@@ -32,6 +33,16 @@ $ sudo apt update && sudo apt install geany
 # Or, install Vim:
 $ sudo apt update && sudo apt install vim
 ```
+* The Ruby interpreter is a great way to test code and see what it does,
+  try it by entering `irb` in the terminal's command line
+* Don't know what a class/method does? Try `ri method` in the terminal's
+  command line to get detailed explanations
+  * If you enter `ri Class` it will show you all class methods as well
+* Ruby programs should have `#!/usr/bin/env ruby` as a first line in
+  every Ruby file that is part of the program
+* The name of a Ruby program has the ending/extension `.rb`
+* Make sure the files are executable, `chmod +x my_program.rb` will do,
+  so you can execute your program by typing `./my_program.rb`
 
 
 ## Ruby as an Object Oriented language
@@ -86,48 +97,42 @@ puts hound      # Prints "Pete"
   return `nil`, so be careful!
 
 
-## Ruby syntax rules
+## Syntax rules
 
 * Names in **lowercase**:
-  * local_variables, method_names, method_parameters
-  * They can also start with an underscore `_`
+  * `local_variables`, `method_names`, `method_parameters`
+  * `:symbols` (usually)
   * Method names may end with `? ! =`
 * Names in **uppercase**:
-  * $global_variables, @local_variables, @@class_variables
-    * After the sign(s), they can also start with an underscore `_`
-  * Class_names, Module_names, Constants - Uppercase!
-* Lines that start with an octothorpe `#` are comments
-  * Comments can appear after code: `puts 'Hello!'  # Prints 'Hello!'`
-
-
-## Using the Ruby interpreter
-
-* Invoked by issuing `irb` in your terminal emulator; you can test some
-  code in it, but you cannot save it to a file
-* Don't know what that class/method does? Try `ri method` for detailed
-  explanations; if you do `ri class` it will show you all class methods
-* Ruby programs should have `#!/usr/bin/env ruby` as a first line in
-  every Ruby file that is part of the program
-* The name of a Ruby program has the ending/extension `.rb`
+  * `$Global_variables, @Local_variables, @@Class_variables`
+  * `Class_names, Module_names, Constants`
+* Variable names can start with an underscore `_`, e.g. `_rocket`, or
+  `$_CANDY`
+* Lines that start with an octothorpe `#` are comments and are not
+  executed, so you can use them to disable lines of code, or to write
+  what the code is doing
+  * Comments can appear after code: `puts 'Hello!' # Prints 'Hello!'`
 
 
 ## Input/output (I/O) methods
 
-* In UNIX-like systems and Linux, standard input (stdin) is the keyboard,
-  standard output (stdout) is the console/terminal screen, and standard
-  error output (stderr) is usually the same as the standard output; all
-  of them can be redefined to read and write to a file, for example
-* Method `puts` displays the result of an expression or a string on the
-  standard output and adds a new line: `puts "Hello world!"`
-  * If you want to stay on the same line, use `print` instead
-* Method `printf` outputs text under the control of *format strings*,
-  like in C, which get replaced with values under specific rules
-  * First parameter is the string for output, containing the
-  formatting strings, like `%5.2f` - substituted with a decimal number,
-  minimum 5 digits before, and two after the decimal point; `%s` -
-  substituted with a string, etc.
+* In Linux and UNIX-like operating systems, standard input `stdin` is
+  the keyboard, standard output `stdout` is the console/terminal screen,
+  and standard error output `stderr` is usually the same as the standard
+  output
+  * They can be redirected to read or write from/to a file, for example
+* Method `puts` displays the result of an expression, or a string on the
+  standard output, and adds a new line: `puts "Hello world!"`
+  * If you want the output to stay on the same line, use `print` instead
+* Method `printf` outputs text under the control of *format strings*
+  * Just like in C, format strings are pieces of text that get replaced
+    with values under specific rules
+  * First parameter of the method is the string for output, containing
+    the formatting strings, like `"%5.2f"` - substituted with a decimal
+    number, minimum 5 digits before, and two after the decimal point;
+    `%s` - substituted with a string, etc.
   * The rest of the method parameters are the values that will replace
-    the formatting strings in the first parameter
+    the formatting strings in the first parameter, e.g.:
 ```ruby
 printf("Decimal number: %5.2f\nString: %s\n", 726.975, "doge")
 
@@ -136,8 +141,8 @@ printf("Decimal number: %5.2f\nString: %s\n", 726.975, "doge")
 # String: doge            <= :)
 ```
 * [Ruby's documentation](https://ruby-doc.org/core-2.2.0/String.html)
-  about String objects covers all about formatting strings as well
-* Method `gets` returns a string by reading from the standard input
+  about String class has lots of information about formatting strings
+* Method `gets` returns a string by reading text from the standard input
   * Get the result in a variable to use it: `line = gets`
 
 
