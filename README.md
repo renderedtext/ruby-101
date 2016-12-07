@@ -201,6 +201,13 @@ puts hello  # Prints "Hello world!"`
   * -1 if the first one has less characters than the second one
   * 0 if they have the same length
   * 1 if the first one has more characters than the second one
+* Method `.scan(/regexp/)` returns an array of substrings from the
+  given string that match the regular expression, e.g.:
+  `"It's your thing?".scan(/[\w']+/) # => ["It's", "your", "thing"]`
+  * It returns an array with all the words in one sentence as elements
+  * The regular expression matches one or more word characters one
+    after another, not separated by spaces, and also words with single
+    quotes, like `It's`
 
 
 ## String methods
@@ -252,10 +259,84 @@ puts hello  # Prints "Hello world!"`
   * Indices start at zero, so the first element is `a[0]`
   * You can access elements backwards: `a[-1]` is last element of array,
     `a[-2]` is before-last one, and so on
+  * You can also use the notation `array[start, count]`, where `start`
+    is from which element to start, and `count` is the number of
+    elements to return; it returns an array with the elements, e.g.:
+```ruby
+x = [2, 4, 6, 8, 10]
+
+x[1, 2]   # => [4, 6]
+x[2, 1]   # => [6]
+x[-4, 3]  # => [4, 6, 8]
+```
+  * You can use ranges to access array values, by providing two or three
+    periods between number values: `[1..4]` returns array with elements
+    from second until (and including) fifth position, and `[1...4]`
+    returns array with elements from second until (and excluding) fifth
+    position (same as `[1..3]`), e.g.:
+```ruby
+x = [2, 4, 6, 8, 10]
+
+x[1..4]   # => [4, 6, 8, 10]
+x[1...4]  # => [4, 6, 8]
+x[-4..-2] # => [4, 6, 8]
+```
 * If you try to access an element of the array that does not exist, the
   return value will be `nil`
+* Assigning a value to an array is easy, use the `=` operator, e.g.:
+  `x[0] = 42`
+* To assign more than one value at once, you can use the notation
+  `array[start, count] = [el1, el2, el3]`, where start is the starting
+  location to add to, and count is the number of elements to be added;
+  also, you can use ranges:
+```ruby
+x = [2, 4, 6, 8, 10]
+
+# Replaces the 3rd element, does nothing to 4th because none is provided
+x[2, 2] = "doge"    # => [2, 4, "doge", 10]
+# Adds this as 3rd element, moves the rest forward, none is replaced
+x[2, 0] = "cate"    # => [2, 4, "cate", "doge", 10]
+# 5th element '10' replaced with '3', '6' and '9' appended
+x[4, 1] = [3, 6, 9] # => [2, 4, "cate", "doge", 3, 6, 9]
+# Removes 1st-4th elements
+x[0..3] = []        # => [3, 6, 9]
+# Adds two elements at positions 6 and 7, positions 3 and 4 are empty
+# so their values are 'nil'
+x[5..6] = [24, 48] # => [3, 6, 9, nil, nil, 24, 48]
+```
 * Method `.size` returns number of elements in array
-* Method `.inspect` and `p` prints all the elements of the array
+* Method `.inspect` and `p array` prints all the elements of the array
+* Arrays can be used as stacks, using method `.push element` to add
+  element to end of array and method `.pop` to remove last element of
+  stack and return it :
+```ruby
+stack = []
+
+stack.push "book"   # => ["book"]
+stack.push "pencil" # => ["book", "pencil"]
+stack.push "eraser" # => ["book", "pencil", "eraser"]
+
+stack.pop           # => "eraser"
+stack.pop           # => "pencil"
+stack.pop           # => "book"
+stack               # => []
+```
+* To use an array as a FIFO (first-in first-on) queue, use `.shift` to
+  remove and return the first element of array, and `.push element` to
+  add element to the end of the array:
+```ruby
+queue = []
+
+queue.push "dog"    # => ["dog"]
+queue.push "cat"    # => ["dog", "cat"]
+queue.push "mouse"  # => ["dog", "cat", "mouse"]
+
+queue.shift         # => "dog"
+queue.shift         # => "cat"
+queue.shift         # => "mouse"
+```
+* Methods `.first(x)` and `.last(x)` return first or last `x` number of
+  elements from an array, but they don't remove them
 
 
 ## Hashes
@@ -298,8 +379,8 @@ instruments = {
 * If you try to access an element of the hash that does not exist, it
   returns `nil`; you can avoid this by assigning a default value when
   creating a hash: `instruments = Hash.new("default_value")`
-* Method `.size` returns number of elements in hash
-* Method `.inspect` and `p` prints all the elements of the hash
+* Method `.size` returns number of associations in hash
+* Method `.inspect` and `p hash` prints all the associations of the hash
 
 
 ## Symbols
