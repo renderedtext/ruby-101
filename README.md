@@ -12,7 +12,7 @@ example code and programs, too. - Filip (a.k.a. rexich)
 * Operating system: Ubuntu Linux 16.04.1 LTS, 64-bit
 
 
-## Getting Ruby and necessary tools
+## Getting Ruby and necessary tools, some programming tips
 
 * You can use your favorite UNIX-like operating system, Ubuntu Linux is
   used throughout this manual
@@ -47,12 +47,24 @@ $ sudo apt update && sudo apt install vim
 * The name of a Ruby program has the ending/extension `.rb`
 * Make sure the files are executable, `chmod +x my_program.rb` will do,
   so you can execute your program by typing `./my_program.rb`
+* It is useful to separate chunks of code with common meaning into
+  separate Ruby files, then use `require_relative 'my_ruby_file'` to
+  import them into our code (from the same directory where our code is),
+  to ensure *code reuse* and *modularity*
+  * Keep class definitions and logic in separate files, then import them
+    where you need to use them using `require_relative`
+  * To use Ruby-provided libraries, use `require`, e.g. `require 'csv'`
+* Keeping everything in one file may be convenient at first, but:
+  * it severely limits flexibility
+  * it makes the code hard to debug, and difficult to reuse
+  * Avoid it as much as possible and keep things in separate files
 
 
 ## Ruby as an Object Oriented language
 
 * Unlike most other programming languages, *everything is an object* in
   Ruby, including the return values of methods
+* Variables are references that point to objects
 * *Class* is a combination of state kept in memory and referred to using 
   *variables*, and *methods* are functions that use that state
 * *Object* is an instance of a class, created by calling a constructor
@@ -68,7 +80,7 @@ $ sudo apt update && sudo apt install vim
   variable, e.g.:
 ```ruby
 dog = "Toby"
-hound = dog     # Aliasing
+hound = dog     # Aliasing!
 dog[0] = "R"
 
 puts dog        # Prints "Roby"
@@ -109,17 +121,17 @@ puts hound      # Prints "Pete"
   * Method names may end with `? ! =`
 * Names in **uppercase**:
   * `$Global_variables`, `@Local_variables`, `@@Class_variables`
-  * `Class_names`, `Module_names`, `Constants`
+  * `Class_names`, `Module_names`, `CONSTANTS`
 * Variable names can start with an underscore `_`, e.g. `_rocket`, or
-  `$_CANDY`
+  `$_Candy`
 * Lines that start with an octothorpe `#` are comments and are not
   executed, so you can use them to disable lines of code, or to write
   some text about what the code is doing
   * Comments can appear after code: `puts 'Hello!' # Prints 'Hello!'`
 * When talking about methods, I'll prefix class method's name with a
   period `.`, e.g. `.method`, and prefix object method's name with an
-  octothorpe `#`, e.g. `#method` - in real code, though there are no
-  such prefixes, I'll use them here for our convenience
+  octothorpe `#`, e.g. `#method` - in real code though there are no
+  such prefixes, but I'll use them here for our convenience
 
 
 ## Input/output (I/O) methods
@@ -155,7 +167,7 @@ printf("Decimal number: %5.2f\nString: %s\n", 726.975, "doge")
   * Get the result in a variable to use it: `line = gets`
 
 
-## String objects
+## Strings
 
 * Strings are objects whose value is an array of Unicode characters
 * You can create them in several ways:
@@ -214,7 +226,7 @@ puts hello  # Prints "Hello world!"`
   * 1 if the first one has more characters than the second one
 
 
-## String class methods
+## String methods
 
 * Methods `.length` or `.size` return number of characters in a string,
   e.g. `"doge".length  # => 4`, `"пас".size  # => 3`
@@ -227,44 +239,59 @@ puts hello  # Prints "Hello world!"`
 * Method `.downcase` returns the string with all letters in lower case
 
 
-## Number objects
+## Numbers
 
 * Numbers are objects whose values are - you guessed right, numbers :)
 * Numbers can be whole (integers, 27) and decimal (floating point, 3.14)
 
 
-## Number class methods
+## Number methods
 
 * Methods `.odd?` and `.even?` return a boolean value (true/false),
-  depending on whether the number object is odd or even
+  depending on whether the number is odd or even
 
 
 ## Arrays
 
-* Arrays and hashes are indexed collections of objects
+* *Arrays* and *hashes* are indexed collections of object references
 * Arrays are more efficient to work with, and hashes provide flexibility
-* Arrays can be accessed using integers as keys:
+* Each element in the array occupies a position in the array that is
+  identified by a positive integer number or zero
+* Arrays can be created like this:
+  * By creating one from the `Array` class: `things = Array.new`
+  * By simply providing zero or more elements between brackets `[]`,
+    separated by commas `,`, e.g.
+    `fruits = ['banana', 'orange', 'mango']`, `array = []`
+  * By using the `%w{ }` delimiter, e.g. `b = %w{ dog cat 27 342 673.99
+    just\ in\ case you\ noticed }`
+  * Be careful with this one, spaces in strings must be escaped with
+    a backslash `\` if you want them to be treated as one array element!
+  * Avoid using '' and "" quotes to surround the string element, or they
+    will become part of it, or part of the first and last word
+* Array elements can be accessed (indexed) using integers as keys put
+  between the brackets, after the array's name:
   `a = [3.14, 2, "lol"] ; a[0] #=> 3.14`
-  * Indices start at zero, so the first element is `a[0]`, like in C
-* Arrays can be defined using two notations:
-  * `a = [3.14, 2, "lol"]`
-  * `b = %w{ dog cat 27 342 673.99 just\ in\ case you\ noticed }`
-    * Be careful with this: all of these values will be treated as
-      strings, numbers included; spaces in strings must be escaped if
-      you want them to be treated as part of an element of the array!
-    * Avoid using '' and "" quotes to surround the string or they
-      will become part of it, or part of the first and last word
-* If an index does not exist, when you access it, it returns `nil`
+  * Indices start at zero, so the first element is `a[0]`
+  * You can access elements backwards: `a[-1]` is last element of array,
+    `a[-2]` is before-last one, and so on
+* If you try to access an element of the array that does not exist, the
+  return value will be `nil`
 * Method `.size` returns number of elements in array
-* Method `.inspect` and `p` let you see all the elements of the array
+* Method `.inspect` and `p` prints all the elements of the array
 
 
 ## Hashes
 
-* Hashes can be accessed by using an object as an key, unlike arrays
-* Defining a hash:
+* Hashes (also called *dictionaries* or *associative arrays*) are
+  collections where each element is accessed by using an object as a
+  *key*, associated with a certain *value* (another object)
+* Remember, keys are unique and **must not** repeat!
+* Hashes can be created like this:
+  * By creating one from the `Hash` class: `veggies = Hash.new`
+  * Putting key-value associations joined by `=>`, each separated by
+    commas `,`, between braces `{ }`:
 ```ruby
-instruments = {
+instruments = { 
   'guitar' => 'string',
   'trumpet' => 'brass',
   'drum' => 'percussion',
@@ -272,35 +299,12 @@ instruments = {
   'violin' => 'string'
 }
 ```
-* Here, the thing to the left of the `=>` arrow is the key, and the
-  thing to the right is its value, like in a dictionary or a phone book:
-  name => prone number, English word => Serbian word, etc.
-* The keys are unique and must not repeat!
-* Accessing a value of a hash's element (indexing it) is the same as in
-  arrays: `instruments["guitar"] #=> string`
-* If you index a hash with a key that does not match any of the given
-  ones, it returns `nil`; you can avoid this by assigning a default
-  value when creating a hash: `instruments = Hash.new("default_value")`
-
-
-## Symbols
-
-* Symbols are constant names (enums in C) that are guaranteed to be
-  unique and they don't need to be predeclared
-* The name of a symbol starts with a colon : `:cookie`
-* You don't have to assign it a value and Ruby makes sure the symbol
-  has the same value no matter where you use it
-* Frequently used with hashes, since keys must be unique:
-```ruby
-instruments = {
-  :guitar => 'string',
-  :trumpet => 'brass',
-  :drum => 'percussion',
-  :saxophone => 'brass',
-  :violin => 'string'
-}
-```
-* There is a shorthand, a syntactic sugar that does the same thing:
+  * Here, an object left of `=>` arrow is a key, and an object right of
+    the arrow is its value, like in a dictionary or a phone book, e.g.:
+  name => prone number, English word => Serbian word, and so on
+* If the keys are *symbols* (see below), then besides the first way,
+  there is a second way by using syntactic sugar (shorthand): put the
+  colon in `:symbol` name last, omit the `=>` arrow and specify value:
 ```ruby
 instruments = {
   guitar: 'string',
@@ -310,12 +314,30 @@ instruments = {
   violin: 'string'
 }
 ```
+* Accessing (indexing) a value of a hash's element is similar to arrays,
+  just provide the key between the brackets `[]`, e.g.:
+  `instruments["guitar"] #=> string`
+* If you try to access an element of the hash that does not exist, it
+  returns `nil`; you can avoid this by assigning a default value when
+  creating a hash: `instruments = Hash.new("default_value")`
+* Method `.size` returns number of elements in hash
+* Method `.inspect` and `p` prints all the elements of the hash
 
 
-## Control structures
+## Symbols
 
-* Similar to most programming languages, Ruby provides the `if`, `while`
-  and `do` control structures
+* Symbols are constant names (enums in C) that are guaranteed to be
+  unique, so they don't need to be predeclared
+* The name of a symbol starts with a colon : `:cookie`
+* You don't have to assign it a value and Ruby makes sure the symbol
+  has the same value no matter where you use it
+* Frequently used with hashes, since keys must be unique
+
+
+## Control structures (if, for, while)
+
+* Similar to most programming languages, Ruby provides the `if`, `for`,
+  and `while`control structures
 * All of the control structures must be terminated with `end`
 * The `if` control structure executes code if the given condition
   evaluates to `true`, `elsif` gives another condition if the previous
@@ -693,20 +715,6 @@ puts "Price in EUR: #{apple.price_in_eur}"
   instance variables and calculated values; this is good if you plan to
   refactor and change the way the class works, because it will not
   affect the code that uses your class
-
-
-## Good programming practices with classes
-
-* It is useful to separate chunks of code with common meaning into
-  separate files, and then use `require_relative 'my_ruby_file'` to
-  import it for use in the code from the same directory where the file is
-  * Keep class definitions and logic in separate files, then import them
-    where you need to use them using `require_relative`
-  * This is how we import libraries, collections of code we can use:
-    `require 'csv'`
-* Keeping everything in one file may be convenient at first, but it
-  limits flexibility; it's hard to debug, and it's hard to reuse code -
-  avoid it as much as possible and keep things in separate files
 
 
 ## Class method access control
