@@ -24,7 +24,7 @@ example code and programs, too. - Filip (a.k.a. rexich)
 $ sudo apt update && sudo apt install ruby ri git
 ```
 * Use a good code editor that will perform syntax coloring on your code;
-  my recommendations are [Geany](https://www.geany.org/), or
+  my recommendations are [Geany](https://www.geany.org/) or
   [Vim](http://www.vim.org/):
 ```bash
 # Install Geany:
@@ -55,7 +55,8 @@ $ sudo apt update && sudo apt install vim
 * Keeping everything in one file may be convenient at first, but:
   * it severely limits flexibility
   * it makes the code hard to debug, and difficult to reuse
-  * Avoid it as much as possible and keep things in separate files
+* Write each statement in a separate line, if you need to write two or
+  more on the same line, separate them with a semicolon `;`
 
 
 ## Ruby as an Object Oriented language
@@ -222,6 +223,10 @@ puts hello  # Prints "Hello world!"`
 * Method `.upcase` returns the string with all letters in upper case
 * Method `.downcase` returns the string with all letters in lower case
 * Method `.dup` returns a duplicate of the string
+* Method `.succ` called on one-character string returns a string with
+  the next letter in alphabetic order
+* Method `.chomp` will return a string without new lines at the end
+  * There is a `.chomp!` method that will modify the string itself
 
 
 ## Numbers
@@ -234,6 +239,7 @@ puts hello  # Prints "Hello world!"`
 
 * Methods `.odd?` and `.even?` return a boolean value (true/false),
   depending on whether the number is odd or even
+* Method `.next` or `.succ` returns the next number (number+1)
 
 
 ## Arrays
@@ -381,6 +387,8 @@ instruments = {
   creating a hash: `instruments = Hash.new("default_value")`
 * Method `.size` returns number of associations in hash
 * Method `.inspect` and `p hash` prints all the associations of the hash
+* Storing a value in the hash can be done with `.store(key, value`, or
+  with the operator `[]=`, e.g. `food['apple'] = 'sweet'`
 
 
 ## Symbols
@@ -967,8 +975,8 @@ puts hound      # Prints "Pete"
 * To get the value(s) the iterator returns, grab them into variables by
   putting them after `do` of `{` of the block, between pipes `||`, like
   this: `hash.each { |key, value| puts key, value }`
-* Method `.map` does the same, it is usually used with hashes, it
-  returns an array of all resulting elements from the block
+* Methods `.map` and `.collect` do the same, are usually used with
+  hashes, return an array of all resulting elements from the block
 * When you have arrays, combine `.each` or `.map` with `.with_index` to
   get the index of iteration (not of array element!), e.g.:
 ```ruby
@@ -980,6 +988,67 @@ end
 # apples, 0
 # pears, 1
 # mangoes, 2
+```
+* Method `.inject` is used to accumulate a value across the members of a
+  collection, while yielding the code block attached after it, providing
+  it with two values, first being the inject's parameter, second being
+  current element from the iteration; observe this example:
+  `[2, 4, 6, 8].inject(0) { |sum, element| sum+element } # => 20`
+  * First time it is called, first variable `sum` will have value
+    provided as inject method's parameter (0), second variable `element`
+    will have value of the first element of the array (2)
+  * `sum+element` will be evaluated (2 + 0 = 2) and value goes in `sum`
+  * On the next iteration, `sum` is 2, and `element` is 4, `sum+element`
+    is 6 and goes in `sum`
+  * Once the last iteration on the last element is finished, `.inject`
+    returns the value `sum`
+  * If no parameter provided, first element of the collection is taken
+    as parameter, and iteration starts with the second element, so in
+    this case this code means the same:
+    `[2, 4, 6, 8].inject { |sum, element| sum+element } # => 20`
+  * You can also provide an operator as a symbol, instead of a code
+    block, and that operation will apply to all the elements, e.g.:
+    `[2, 4, 6, 8].inject(:+) # => 20`
+
+
+## Enumerators
+
+* When you need to iterate over two collections in parallel, or if you
+  need to treat the iterator as an object, to pass it to a method that
+  needs access to all the values returned by that iterator, you need to
+  use *external iterators*, called *enumerators*
+* Method `.to_enum` will create an enumerator object when called on
+  a collection (array or hash)
+* Another way of creating an enumerator is `enum_a = array.each` for an
+  array, or `enum_h = hash.each` for a hash
+```ruby
+array = [2, 4, 6, 8, "doge", "cate", "mouse"]
+hash = { dog: "Toby", cat: "Munchkin", mouse: "Tutchell" }
+
+enum_a = array.to_enum
+enum_h = hash.to_enum
+
+enum_a.next   # => 2
+enum_h.next   # => [:dog, "Toby"]
+```
+* There is a special method `loop` that loops on enumerators within a
+  code block until one of them runs out of elements first, useful for
+  calling two or more enumerators in parallel, e.g.:
+```ruby
+fruits = [ 'apple', 'orange', 'banana', 'kiwi' ]
+colors = [ 'red', 'orange', 'yellow', 'brown', 'green', 'white']
+fruits_enum = fruits.to_enum
+colors_enum = colors.to_enum
+
+loop do
+  puts "#{fruits_enum.next} - #{colors_enum.next}"
+end
+
+# Output:
+# apple - red
+# orange - orange
+# banana - yellow
+# kiwi - brown
 ```
 
 
