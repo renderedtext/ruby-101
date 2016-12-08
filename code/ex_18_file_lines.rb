@@ -11,4 +11,5 @@ ARGV.each do |filename|
   puts "Showing file #{filename}:"
   file = File.open(filename)
   file.each.with_index { |line, num| puts "#{num}:\t#{line}" }
+  file.close
 end
