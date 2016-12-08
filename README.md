@@ -500,9 +500,10 @@ end
 ## Blocks and iterators
 
 * Code blocks are one or more lines of code between braces `{}` or
-  between `do` and `end`
+  between `do` and `end`, e.g.:
 ```ruby
-{ puts "Hello!" }  # Braces are usually used for a single line of code
+# Braces are usually used for a single line of code
+{ puts "Hello!" }
 
 # A code block of many lines of code
 do
@@ -511,13 +512,29 @@ do
   puts "Hello, #{name.capitalize}! Glad to meet you!"
 end
 ```
-* They can be associated with method invocations, as if they are
-  parameters; usually used to implement callbacks, to pass around
-  chunks of code, or to implement iterators
-* They are attached after a defined method's call, after the given
-  parameters, if any:
+* They are associated with method invocations, as if they are
+  parameters, and must appear right after a method invocation and its
+  parameters, e.g: `play_songs("We Are The Champions")
+  { puts "Queen rule! :D" }`
+* Usually used to implement callbacks, to pass around chunks of code, or
+  especially to implement iterators
+* If there is a variable defined outside the block, it can be accessed
+  from within the block (like a global variable) using the same name
+* This can be a source of bugs, to avoid it declare the block-local
+  variable within the pipes `||` after a semicolon `;`, e.g.:
 ```ruby
-play_songs("We Are The Champions") {puts "Queen rule! :D"}
+# This variable will be accessed and modified from within the block
+sum = 0
+# However, this will not!
+the_answer = 42
+
+[1, 2, 3, 4, 5].each do |value; the_answer|
+  sum += value ** 2
+  the_answer += sum # Block-local variable
+end
+
+puts sum          # Prints "55"
+puts the_answer   # Prints "42" - the variable did not change
 ```
 * Invoke the code block using `yield` within the method's code
 * You can provide arguments to the code block by adding them between
