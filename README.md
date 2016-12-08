@@ -856,6 +856,15 @@ end
 
 * *Variable* is a reference to an object kept in a memory pool called
   *heap*; each object has its own unique ID, which variables refer to
+* There are three kinds of variables:
+  * Global variables `$GlobalVar`, accessible from all classes and
+    namespaces
+  * Class variables `@@ClassVar`, accessible to methods of all objects
+    that are instances of the same class
+  * Local variables `@Localvar`, accessible to the methods of one
+    object only
+  * Block-local variables `var`, accessible only to the code block or
+    within the method where they are declared (assigned with a value)
 * If you assign a variable to an object, and then assign the variable
   to another variable, then both of them will refer to the same object,
   until one of them is assigned to another object
