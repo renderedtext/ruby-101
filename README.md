@@ -385,12 +385,22 @@ instruments = {
 
 ## Symbols
 
-* Symbols are constant names (enums in C) that are guaranteed to be
-  unique, so they don't need to be predeclared
+* Symbols are constant names that are guaranteed to be unique, so they
+  don't need to be predeclared
 * The name of a symbol starts with a colon : `:cookie`
 * You don't have to assign it a value and Ruby makes sure the symbol
   has the same value no matter where you use it
 * Frequently used with hashes, since keys must be unique
+
+
+## Constants
+
+* Constants are named values that never change throughout the program
+* Their names are written in capital letters, e.g. `ANSWER = 42`
+* They cannot be declared within methods, only in a class or globally
+* You can access their values using the double colon `::` from outside
+  a class, e.g. `Dogs::KIND # => "canine"`, or `::KIND = "feline"` if
+  inside a module/method
 
 
 ## Control structures (if, for, while)
@@ -495,6 +505,69 @@ end
   the matched 'text' from a given string and return a new string result
 * Lots of details about regular expressions can be found in the
   [Ruby's documentation](https://ruby-doc.org/core-2.3.1/Regexp.html)
+
+
+## Operators
+
+* *Operator* is actually a method in form of symbol(s), which takes a
+  value from the object on its right, and uses it as a parameter to call
+  a method to the object on its left
+* They are present in all programming languages and are similar to
+  mathematical operators
+* An expression will consist of objects with operators between thems
+* *Arithmetical operators* include: addition `+`, subtraction `-`,
+  multiplication `*`, division `/`, modulus (division remainder) `%`,
+  exponent (on power of) `**`, simple assignment of values `=`
+```ruby
+# Parallel assignment: a = 10, b = 20
+a, b = 10, 20
+
+a + b    # => 30
+a - b    # => -10
+a * b    # => 200
+a / b    # => 0
+a % b    # => 10
+a ** b   # => 100000000000000000000
+```
+* The `+` operator is also used to concatenate two or more strings
+* Why did `a / b` return `0`? Because we were dividing two *integer*
+  numbers, so the result is an integer, too; surround at least one
+  number/variable with `Float()` to get `0.5`, the decimal answer
+* *Comparison operators* include: equal values `==`,  not equal values
+  `!=`, greater than `>`, less than `<`, greater or equal `>=`, less or
+  equal `<=`, when-case equality `===`, same type and values `.eql?`,
+  same object ID `.equal?`
+  * Result is Boolean value `true` or `false`, useful in `if`-conditions
+* Combined comparison `<=>`, e.g. `a <=> b`, returns -1 if `a < b`, 0 if
+  `a = b`, and 1 if `a > b` - usually used for comparing strings
+```ruby
+a, b = 10, 20
+
+a == b    # => false
+a != b    # => true
+a > b     # => false
+a < b     # => true
+a >= b    # => false
+a <= b    # => true
+```
+* Besides the simple assignment operator, there are shorthand operators
+  that perform the operation with values from the left and right side of
+  the operator, and assign the result to the object on the left of the
+  operator: add and assign `+=`, subtract and assign `-=`, multiply and
+  assign `*=`, divide and assign `/=`, modulus and assign `%=`, exponent
+  and assign `**=`, e.g. `a += 2` means `a = a + 2`
+* *Bitwise operators* work on the binary bits of a value: AND `a & b`,
+  OR `a | b`, XOR `a ^ b`, bit-flip unary complement `~a`, left shift
+  `a << 2`, right shift `a >> 2`
+* Refer to these [truth tables](https://en.wikipedia.org/wiki/Truth_table#Truth_table_for_all_binary_logical_operators) for details
+* Logical operators are used in `if`-statements; return `true` or
+  `false`:
+  * `and`/`&&` - `true` if both operands are true/non-zero, `false`
+    otherwise
+  * `or`/`||` - `true` if one or both operands are true/non-zero,
+    `false` otherwise
+  * `not`/`!` - `true` if condition is false, `false` if condition is
+    true - reverses the logical state of a given statement
 
 
 ## Blocks and iterators
@@ -849,6 +922,15 @@ end
 
 * *Variable* is a reference to an object kept in a memory pool called
   *heap*; each object has its own unique ID, which variables refer to
+* There are three kinds of variables:
+  * Global variables `$GlobalVar`, accessible from all classes and
+    namespaces
+  * Class variables `@@ClassVar`, accessible to methods of all objects
+    that are instances of the same class
+  * Local variables `@Localvar`, accessible to the methods of one
+    object only
+  * Block-local variables `var`, accessible only to the code block or
+    within the method where they are declared (assigned with a value)
 * If you assign a variable to an object, and then assign the variable
   to another variable, then both of them will refer to the same object,
   until one of them is assigned to another object
