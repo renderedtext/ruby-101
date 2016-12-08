@@ -393,6 +393,13 @@ instruments = {
 * Frequently used with hashes, since keys must be unique
 
 
+## Constants
+
+* Constants are named values that never change throughout the program
+* Their names are written in capital letters, e.g. `ANSWER = 42`
+* They cannot be declared within methods, only in a class or globally
+
+
 ## Control structures (if, for, while)
 
 * Similar to most programming languages, Ruby provides the `if`, `for`,
