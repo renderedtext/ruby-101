@@ -222,6 +222,10 @@ puts hello  # Prints "Hello world!"`
 * Method `.upcase` returns the string with all letters in upper case
 * Method `.downcase` returns the string with all letters in lower case
 * Method `.dup` returns a duplicate of the string
+* Method `.succ` called on one-character string returns a string with
+  the next letter in alphabetic order
+* Method `.chomp` will return a string without new lines at the end
+  * There is a `.chomp!` method that will modify the string itself
 
 
 ## Numbers
@@ -234,6 +238,7 @@ puts hello  # Prints "Hello world!"`
 
 * Methods `.odd?` and `.even?` return a boolean value (true/false),
   depending on whether the number is odd or even
+* Method `.next` or `.succ` returns the next number (number+1)
 
 
 ## Arrays
@@ -967,8 +972,8 @@ puts hound      # Prints "Pete"
 * To get the value(s) the iterator returns, grab them into variables by
   putting them after `do` of `{` of the block, between pipes `||`, like
   this: `hash.each { |key, value| puts key, value }`
-* Method `.map` does the same, it is usually used with hashes, it
-  returns an array of all resulting elements from the block
+* Methods `.map` and `.collect` do the same, are usually used with
+  hashes, return an array of all resulting elements from the block
 * When you have arrays, combine `.each` or `.map` with `.with_index` to
   get the index of iteration (not of array element!), e.g.:
 ```ruby
