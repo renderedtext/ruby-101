@@ -859,6 +859,31 @@ puts hound      # Prints "Pete"
   being raised
 
 
+## Iterators
+
+* *Iterator* is a method that invokes a block of code repeatedly
+* Method `.each` returns value (from array) or key-value (from hash)
+  to a block and executes this block repeatedly for each element, e.g.:
+  `['apples', 'pears', 'mangoes'].each { |fruit| puts fruit }`
+* To get the value(s) the iterator returns, grab them into variables by
+  putting them after `do` of `{` of the block, between pipes `|`, like
+  this: `hash.each { |key, value| puts key, value }`
+* Method `.map` does the same, it is usually used with hashes, and it
+  returns an array of all elements resulting from the block
+* When you have arrays, combine `.each` or `.map` with `.with_index` to
+  get the index of iteration (not of array element!), e.g.:
+```ruby
+['apples', 'pears', 'mangoes'].map.with_index do |word, index|
+  puts "#{word}, #{index}"
+end
+
+# Prints the following:
+# apples, 0
+# pears, 1
+# mangoes, 2
+```
+
+
 Unless otherwise noted, the texts and code are copyright
 © 2016 Rendered Text and Filip Dimovski, released under the
 GNU General Public License version 3 or greater. All rights reserved.
