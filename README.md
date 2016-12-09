@@ -785,33 +785,14 @@ end
 say_something { |person, text| puts "#{person} says '#{text}'." }
 
 ```
-* Code blocks are frequently used as iterators, methods that return
-  successive elements of some kind of collection, using `each` method:
-```ruby
-animals = [ "dog", "cat", "mouse", "duck", "lizzard" ]
-animals.each {|animal| print animal, ', '}  # Interation over an array
-puts "\b\b."
-```
-* There are methods such as `Number.times` and `Number.upto(Num)` to
-  loop several given times, or until a certain number, incrementing it
-  on each turn:
-```ruby
-20.times { print '* ' }  # Prints 20 stars :)
-puts
-
-print "Let's count to 10: "
-1.upto(10) { |num| print num, ', ' }
-puts "\b\b."
-```
-* Provide a character/number range `(a..z).each` to iterate over it:
-  * `(0..10).each` returns the numbers from 0 to 10, but `(0...10).each`
-    returns numbers from 0 to 9, 10 excluded - be careful!
-```ruby
-(1..20).each { |digit| print digit, " " }  # Prints numbers from 1 to 20
-puts
-```
-* You can pass the code block as a method parameter using ampersand `&`
-  before the name, and then call it using `.call(parameters)`, e.g.:
+* Code blocks are *anonymous methods* (without a name) and can be used
+  as objects, stored in variables, passed as arguments, and called
+  * Their state is preserved while the program is running
+* When the last parameter of a method definition is prefixed with an
+  ampersand `&`, the code block associated with the method call will be
+  converted as an object of class Proc and assigned to the parameter
+  * You can treat is as a variable, pass it to other methods, call it
+    using `.call(parameters)`, e.g.:
 ```ruby
 def say_hello(name, &block)
   print "Hey, it's me! "
@@ -822,6 +803,76 @@ say_hello('Mark') do |name|
   print "Hello, #{name}!"
   puts
 end
+```
+* Another example using the Proc class:
+```ruby
+class ProcBlock
+  def store_block(&block)
+    @block = block
+  end
+  def use_block(parameter)
+    @block.call(parameter)
+  end
+end
+
+pinky = ProcBlock.new
+
+# Store the code block after the method call
+pinky.store_block do |param|
+  puts "Code block called with parameter: #{param}"
+end
+
+# Call the stored code block and pass a parameter
+pinky.use_block('testing')
+pinky.use_block(42)
+```
+* Another way of creating objects out of code blocks is by using
+  `lambda`, e.g.:
+```ruby
+cody = lambda { |n| puts "Hello to #{n}!" }
+
+cody.call 'Rex'
+cody.call 123
+```
+* Blocks can also behave like *closures* - variables in the scope of a
+  method, where the block code is located, can be accessed by that
+  block code as long as it exists, and as long as any Proc object
+  created by that block code exists, e.g.:
+```ruby
+def powerof2_generator
+  # This variable will be accessed by the lambda block code
+  # and its value will be preserved as long as the block code exists,
+  # even though it is not inside the block code
+  value = 1
+  lambda { value += value }
+end
+
+powerof2 = powerof2_generator
+
+print "Generating some powers of 2: "
+10.times { print powerof2.call, " " }
+```
+* Alternative syntax for creating Proc objects: `-> param { }`, e.g.:
+```ruby
+randy = -> name { puts "Hello, #{name}!" }
+
+randy.call "Jack"
+randy.call "Stella"
+```
+* Passing arguments to a block code using new notation:
+```ruby
+block2 = -> name, *things, &block do
+  print "Hey, #{name}! This is yours: "
+  things.each { |x| print x, ", "}
+  puts "\b\b."
+  block.call(name)
+end
+
+block2.call('Theodore', 'books', 'cheesecake') { puts "That's all!" }
+
+# Output:
+# Hey, Theodore! This is yours: books, cheesecake. 
+# That's all!
 ```
 
 
@@ -1133,10 +1184,15 @@ puts hound      # Prints "Pete"
 
 ## Iterators
 
-* *Iterator* is a method that invokes a block of code repeatedly
+* *Iterator* is a method that invokes a block of code repeatedly, and
+  gives it values from a collection
 * Method `.each` returns value (from array) or key-value (from hash)
   to a block and executes this block repeatedly for each element, e.g.:
-  `['apples', 'pears', 'mangoes'].each { |fruit| puts fruit }`
+```ruby
+animals = [ "dog", "cat", "mouse", "duck", "lizzard" ]
+animals.each {|animal| print animal, ', '}  # Interation over an array
+puts "\b\b."
+```
 * To get the value(s) the iterator returns, grab them into variables by
   putting them after `do` of `{` of the block, between pipes `||`, like
   this: `hash.each { |key, value| puts key, value }`
@@ -1153,6 +1209,24 @@ end
 # apples, 0
 # pears, 1
 # mangoes, 2
+```
+* You can attach method `.times` to a number to loop the code block
+  the given number of times, and method `.upto(x)` to iterate over it
+  from the give number until the value given as the parameter, e.g.:
+```ruby
+20.times { print '* ' }  # Prints 20 stars :)
+puts
+
+print "Let's count to 10: "
+1.upto(10) { |num| print num, ', ' }
+puts "\b\b."
+```
+* Provide a character/number range `(a..z).each` to iterate over it:
+  * `(0..10).each` returns the numbers from 0 to 10, but `(0...10).each`
+    returns numbers from 0 to 9, 10 excluded - be careful!
+```ruby
+(1..20).each { |digit| print digit, " " }  # Prints numbers from 1 to 20
+puts
 ```
 * Method `.inject` is used to accumulate a value across the members of a
   collection, while yielding the code block attached after it, providing
