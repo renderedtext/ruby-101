@@ -75,15 +75,69 @@ $ sudo apt update && sudo apt install vim
   `$Variable`, and methods defined outside classes are *global methods*,
   e.g. `method(parameter)`
   * They are accessible by any method within or outside an object
+
+
+## Methods
+
+* *Methods* are same as functions in other programming languages, they
+  are a collection of one or more stetements/expressions that are given
+  a name, so we can call them more than once throughout the code
+* Methods are defined using the keyword `def`, a name, and optionally
+  one or more variable names between parentheses `()` - *parameters*,
+  statements in separate lines, and the definition terminates with `end`
+* Parameters are local variables who will get their values once we call
+  the method and provide expressions between parentheses who will be evaluated before the method call
 * Methods are invoked (called) by sending a message to the receiver
-  object, containing the method name, and zero or more *parameters*
+  object, containing the method name, and zero or more parameters
   * Using parentheses `()` is a good idea, though they are optional, so
     `puts "Hello"` is the same as `puts("Hello")`
+  * You can provide default values for parameters in a method definition
+    which are used in case none is provided, e.g.:
+```ruby
+def hello(name='Rex')   # 'Rex' is the default value
+  puts "Hello, #{name}!"
+end
+
+hello           # Prints: "Hello, Rex!"
+hello('Alex')   # Prints: "Hello, Alex!"
+```
+* When you call a method, you have to provide the exact number of
+  necessary parameters, otherwise error will occur
+* If you want to provide zero or more parameters, and you do not know
+  their exact number, you can use an asterisk `*` before an argument's
+  name and then use `for` to get each value from that array, e.g.:
+```ruby
+def say_hello(*names)
+  # 'names' will be an array holding zero or more parameters
+
+  # Complain about no names given
+  if names.length == 0
+    puts "Give me a name first!"
+    return
+  end
+
+  print "Hello to "
+  for i in 0...names.length   # Last array element = length - 1
+    print "#{names[i]}, "
+  end
+  puts "\b\b."
+end
+
+# Prints: "Give me a name first!"
+say_hello
+# Prints: "Hello to Rex."
+say_hello('Rex')
+# Prints: "Hello to Rex, Alex, Martha, Samanta."
+say_hello('Rex', 'Alex', 'Martha', 'Samanta')
+
+```
 * Value returned by a method is the value of the last evaluated
-  expression evaluated, unless `return` is used
+  expression evaluated, unless `return` is used to return a value, or
+  more values from expressions separated by commas, e.g.
+  `return 'lol', 42, Array.new`
 * Method whose name ends with a question mark `?`, e.g. `Time.sunday?`,
   returns a Boolean value, `true` or `false`
-  * They are very useful for if-conditions
+  * They are very useful for providing conditions to `if` and loops
 * Object `nil` is an object that represents nothing; `nil` and `false`
   are treated the same in if-conditions
 * Method whose name ends with an exclamation mark `!`, e.g.
@@ -1224,6 +1278,7 @@ p triangluar_numbers
                     .infinite_select { |val| val.to_s =~ /7/}
                     .first(5)
 ```
+
 
 Unless otherwise noted, the texts and code are copyright
 © 2016 Rendered Text and Filip Dimovski, released under the
