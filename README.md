@@ -55,8 +55,8 @@ $ sudo apt update && sudo apt install vim
 * Keeping everything in one file may be convenient at first, but:
   * it severely limits flexibility
   * it makes the code hard to debug, and difficult to reuse
-* Write each statement in a separate line, if you need to write two or
-  more on the same line, separate them with a semicolon `;`
+* Write each statement in a separate line; if you write two or more on
+  the same line, separate them with a semicolon `;`
 
 
 ## Ruby as an Object Oriented language
@@ -75,20 +75,77 @@ $ sudo apt update && sudo apt install vim
   `$Variable`, and methods defined outside classes are *global methods*,
   e.g. `method(parameter)`
   * They are accessible by any method within or outside an object
+
+
+## Methods
+
+* *Methods* are same as functions in other programming languages, they
+  are a collection of one or more stetements/expressions that are given
+  a name, so we can call them more than once throughout the code
+* Methods are defined using the keyword `def`, a name, and optionally
+  one or more variable names between parentheses `()` - *parameters*,
+  statements in separate lines, and the definition terminates with `end`
+* Parameters are local variables who will get their values once we call
+  the method and provide expressions between parentheses who will be evaluated before the method call
 * Methods are invoked (called) by sending a message to the receiver
-  object, containing the method name, and zero or more *parameters*
+  object, containing the method name, and zero or more parameters
   * Using parentheses `()` is a good idea, though they are optional, so
     `puts "Hello"` is the same as `puts("Hello")`
+  * You can provide default values for parameters in a method definition
+    which are used in case none is provided, e.g.:
+```ruby
+def hello(name='Rex')   # 'Rex' is the default value
+  puts "Hello, #{name}!"
+end
+
+hello           # Prints: "Hello, Rex!"
+hello('Alex')   # Prints: "Hello, Alex!"
+```
+* When you call a method, you have to provide the exact number of
+  necessary parameters, otherwise error will occur
+* If you want to provide zero or more parameters, and you do not know
+  their exact number, you can use an asterisk `*` before an argument's
+  name and then use `for` to get each value from that array, e.g.:
+```ruby
+def say_hello(*names)
+  # 'names' will be an array holding zero or more parameters
+
+  # Complain about no names given
+  if names.length == 0
+    puts "Give me a name first!"
+    return
+  end
+
+  print "Hello to "
+  for i in 0...names.length   # Last array element = length - 1
+    print "#{names[i]}, "
+  end
+  puts "\b\b."
+end
+
+# Prints: "Give me a name first!"
+say_hello
+# Prints: "Hello to Rex."
+say_hello('Rex')
+# Prints: "Hello to Rex, Alex, Martha, Samanta."
+say_hello('Rex', 'Alex', 'Martha', 'Samanta')
+
+```
 * Value returned by a method is the value of the last evaluated
-  expression evaluated, unless `return` is used
+  expression evaluated, unless `return` is used to return a value, or
+  more values from expressions separated by commas, e.g.
+  `return 'lol', 42, Array.new`
 * Method whose name ends with a question mark `?`, e.g. `Time.sunday?`,
   returns a Boolean value, `true` or `false`
-  * They are very useful for if-conditions
+  * They are very useful for providing conditions to `if` and loops
 * Object `nil` is an object that represents nothing; `nil` and `false`
   are treated the same in if-conditions
 * Method whose name ends with an exclamation mark `!`, e.g.
   `String.downcase!`, modifies the state variables of the object and
   returns `nil`, be careful!
+* `alias` assigns another name for a method, e.g. `alias new old`, and
+  `undef` cancels a method's definition, e.g. `undef new`; these can be
+  used only outside a method's code block
 
 
 ## Syntax rules
@@ -753,6 +810,19 @@ puts "\b\b."
 (1..20).each { |digit| print digit, " " }  # Prints numbers from 1 to 20
 puts
 ```
+* You can pass the code block as a method parameter using ampersand `&`
+  before the name, and then call it using `.call(parameters)`, e.g.:
+```ruby
+def say_hello(name, &block)
+  print "Hey, it's me! "
+  block.call(name)
+end
+
+say_hello('Mark') do |name|
+  print "Hello, #{name}!"
+  puts
+end
+```
 
 
 ## Command line arguments
@@ -1018,6 +1088,7 @@ class SugarCube
   end
 end
 ```
+* Use `self` to access methods and constants of the current object only
 
 
 ## Variables, aliasing, freezing objects
@@ -1156,8 +1227,78 @@ end
   another attached block to the explicitly created enumerator; when your
   attached code block needs another value, the enumerator continues
   executing code in its code block after `yield`
-* This way, you can generate infinite sequences
+* This way, you can generate infinite sequences of numbers, for example
+* Enumerator objects are also enumerable, as arrays are, so you can use
+  methods like `.first` on them
+* Generating infinite sequences sounds great, but not if you use
+  `.count` or `.select` on them, so it is good to implement a method
+  where it takes the enumerator object and the block of code as
+  parameters, and returns values from the enumerator if the block of
+  code evaluates (returns) true
+```ruby
+# 'yielder' is a new enumerator object
+triangluar_numbers = Enumerator.new do |yielder|
+  number = 0
+  count = 1
 
+  loop do
+    number += count
+    count += 1
+
+    # Call the enumerator object and return the number
+    # It gives a value back, and when we evaluate triangular_numbers
+    # once again, execution continues after yield - the loop will repeat
+    # again and yield another value
+    yielder.yield number
+  end
+end
+
+# Using an enumerator object as a generator of numbers
+10.times { print triangluar_numbers.next, " " }
+puts
+
+# Extend the Enumerator class with a method, that returns values from
+# the enumerator object only if the code block attached to this method
+# evaluates to 'true'
+class Enumerator
+  def infinite_select(&block)
+    # Create a new Enumerator object
+    Enumerator.new do |yielder|
+      # For each value the enumerator object returns,
+      self.each do |value|
+        # Call the code block passed as a parameter,
+        # return a value if it evaluates to 'true'
+        yielder.yield(value) if block.call(value)
+      end
+    end
+  end
+end
+
+# Return first 5 triangular numbers that can be divided by 10,
+# and that contain the digit 7
+p triangluar_numbers
+                    .infinite_select { |val| val % 10 == 0 }
+                    .infinite_select { |val| val.to_s =~ /7/}
+                    .first(5)
+```
+* Working with infinite sequences can be made easier by using *Lazy
+  Enumerators*, which are enumerators with methods like `map` and
+  `select`, and they only retrieve data from collections when requested
+  * They return enumerators which apply only the logic of the method
+    used to call them
+* Creating a lazy enumerator is done by adding `.lazy` at the end of its
+  code block
+```ruby
+def Integer.all
+  Enumerator.new do |yielder, n: 0|
+    loop { yielder.yield(n += 1)}
+  end.lazy
+end
+
+print "First 7 positive integers: "
+Integer.all.first(7).each { |i| print i, " " }
+puts
+```
 
 
 Unless otherwise noted, the texts and code are copyright
