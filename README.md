@@ -417,8 +417,8 @@ instruments = {
   depending on given conditions
 * The `if` control structure executes code if the given condition
   evaluates to `true`, `elsif` gives another condition if the previous
-  is `false`, and `else` executes if the conditions of `if` and `elsif`
-  are not fulfilled:
+  is `false` (you can have more than one `elsif`), and `else` executes
+  if the conditions of `if` and all of `elsif` are not fulfilled:
 ```ruby
 today = Time.now
 
@@ -459,8 +459,8 @@ else
   puts "Weekend arrived, enjoy yourselves!"
 end
 ```
-* Instead of using `if` when you need to compare the resulting value of
-  an expression with many other values, use `case`
+* Instead of using `if` and lots of `elsif`s when you need to compare
+  the resulting value of expression with many other values, use `case`
 * After `case` specify the expression to be evaluated,
   * on the next line provide `when` and one or more expressions or
     values (separated by commas `,`) to compare using the `===` operator
@@ -562,6 +562,8 @@ end
   `redo`; it will restart the `yield` or `call` if within a block
 * In a `for` loop, `retry` will start the loop from the beginning, from
   the first value(s)
+* `loop` will simply execute a given block of code repeatedly, until
+  you `break` out of it; be careful not to go into an *infinite loop*
 
 
 ## Regular expressions
