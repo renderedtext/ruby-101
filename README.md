@@ -753,6 +753,19 @@ puts "\b\b."
 (1..20).each { |digit| print digit, " " }  # Prints numbers from 1 to 20
 puts
 ```
+* You can pass the code block as a method parameter using ampersand `&`
+  before the name, and then call it using `.call(parameters)`, e.g.:
+```ruby
+def say_hello(name, &block)
+  print "Hey, it's me! "
+  block.call(name)
+end
+
+say_hello('Mark') do |name|
+  print "Hello, #{name}!"
+  puts
+end
+```
 
 
 ## Command line arguments
@@ -1018,6 +1031,7 @@ class SugarCube
   end
 end
 ```
+* Use `self` to access methods and constants of the current object only
 
 
 ## Variables, aliasing, freezing objects
@@ -1156,9 +1170,60 @@ end
   another attached block to the explicitly created enumerator; when your
   attached code block needs another value, the enumerator continues
   executing code in its code block after `yield`
-* This way, you can generate infinite sequences
+* This way, you can generate infinite sequences of numbers, for example
+* Enumerator objects are also enumerable, as arrays are, so you can use
+  methods like `.first` on them
+* Generating infinite sequences sounds great, but not if you use
+  `.count` or `.select` on them, so it is good to implement a method
+  where it takes the enumerator object and the block of code as
+  parameters, and returns values from the enumerator if the block of
+  code evaluates (returns) true
+```ruby
+# 'yielder' is a new enumerator object
+triangluar_numbers = Enumerator.new do |yielder|
+  number = 0
+  count = 1
 
+  loop do
+    number += count
+    count += 1
 
+    # Call the enumerator object and return the number
+    # It gives a value back, and when we evaluate triangular_numbers
+    # once again, execution continues after yield - the loop will repeat
+    # again and yield another value
+    yielder.yield number
+  end
+end
+
+# Using an enumerator object as a generator of numbers
+10.times { print triangluar_numbers.next, " " }
+puts
+
+# Extend the Enumerator class with a method, that returns values from
+# the enumerator object only if the code block attached to this method
+# evaluates to 'true'
+class Enumerator
+  def infinite_select(&block)
+    # Create a new Enumerator object
+    Enumerator.new do |yielder|
+      # For each value the enumerator object returns,
+      self.each do |value|
+        # Call the code block passed as a parameter,
+        # return a value if it evaluates to 'true'
+        yielder.yield(value) if block.call(value)
+      end
+    end
+  end
+end
+
+# Return first 5 triangular numbers that can be divided by 10,
+# and that contain the digit 7
+p triangluar_numbers
+                    .infinite_select { |val| val % 10 == 0 }
+                    .infinite_select { |val| val.to_s =~ /7/}
+                    .first(5)
+```
 
 Unless otherwise noted, the texts and code are copyright
 © 2016 Rendered Text and Filip Dimovski, released under the
