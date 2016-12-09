@@ -411,15 +411,14 @@ instruments = {
   inside a module/method
 
 
-## Control structures (if, for, while)
+## Conditional structures (if, unless, case)
 
-* Similar to most programming languages, Ruby provides the `if`, `for`,
-  and `while`control structures
-* All of the control structures must be terminated with `end`
+* *Conditionals* provide us way to change the way code executes
+  depending on given conditions
 * The `if` control structure executes code if the given condition
   evaluates to `true`, `elsif` gives another condition if the previous
-  is false, and `else` executes if the conditions of `if` and `elsif`
-  are not fulfilled:
+  is `false` (you can have more than one `elsif`), and `else` executes
+  if the conditions of `if` and all of `elsif` are not fulfilled:
 ```ruby
 today = Time.now
 
@@ -431,6 +430,9 @@ else
   puts "Get ready for work."
 end
 ```
+* If you want to put the code needed to be executed at the same line as
+  the condition, put `then` after the condition:
+  `if Time.now.friday? then puts "It's friday!" ; puts "Great!" end`
 * There is an alternative form of `if`, called *statement modifier*,
   used for a single expression:
 ```ruby
@@ -443,8 +445,52 @@ if Time.now.friday?
 end
 
 ```
-* The `while` control structure executes a block of commands as long as
-  the given condition is true:
+* `unless` is similar, but executes code if the given condition
+  evaluates to `false`, otherwise code block after `else` is executed
+  if condition evaluates to `true`
+* If you want to put the code needed to be executed at the same line as
+  the condition, put `then` after the condition
+```ruby
+today = Time.now
+
+unless today.saturday?
+  puts "It's not the weekend, yet!"
+else
+  puts "Weekend arrived, enjoy yourselves!"
+end
+```
+* Instead of using `if` and lots of `elsif`s when you need to compare
+  the resulting value of expression with many other values, use `case`
+* After `case` specify the expression to be evaluated,
+  * on the next line provide `when` and one or more expressions or
+    values (separated by commas `,`) to compare using the `===` operator
+  * for each `when` expression that returns `true`, its code block will
+    be executed
+  * you can provide `else` and code block in case no `when` conditions
+    got matched
+```ruby
+temperature = 37
+
+case temperature
+when 34..36
+  puts "too cold"
+when 36, 37
+  puts "just fine"
+when 38..42
+  puts "too hot"
+else
+  puts "thermometer is broken"
+end
+```
+
+
+## Loops (while, until, for, loop)
+
+* *Loops* allow us to execute a block of code repeatedly
+* Use `while` to execute in loop a code block as long as the given
+  condition evaluates to `true`
+  * Put `do` between the condition and the first line of code if they
+    are written in the same line
 ```ruby
 counter = 2
 
@@ -470,6 +516,54 @@ while square < 1000
   square = square ** 2
 end
 ```
+* `until` is similar to while, but it executes the code block if the
+  condition evaluates to `false`
+```ruby
+count = 1
+print "Counting to 10: "
+
+until count > 10
+  print count, ", "
+  count += 1
+end
+
+puts "\b\b."
+```
+* Use `for` to execute code for each value of a given expression or
+  collection (array, hash)
+  * After `for` provide the variable (or more, separated by commas) that
+    will take values, `in` and then the expression to evaluate or the
+    array/hash to get the elements from
+  * Separate code from the expression using `do` if in the same line
+```ruby
+animals = { cat: 'black', dog: 'white', mouse: 'gray' }
+
+for animal, color in animals
+  puts "The #{animal} is #{color}"
+end
+```
+* For these loops, if you need to exit from a loop, put `break` at any
+  point within the code block
+* If you need to go to the next iteration of the loop and skip this one,
+  put `next` at any point ih the code block
+```ruby
+
+for i in 0..6
+  # Less than 2? skip it, increment 'i' and loop again
+  next if i < 2
+
+  # Greater than 4? stop looping
+  break if i > 4
+
+  puts "Counting: #{i}"
+end
+```
+* In a `for` loop, to perform the loop again with the same value(s), use
+  `redo`; it will restart the `yield` or `call` if within a block
+* In a `for` loop, `retry` will start the loop from the beginning, from
+  the first value(s)
+* `loop` will simply execute a given block of code repeatedly, until
+  you `break` out of it; be careful not to go into an *infinite loop*
 
 
 ## Regular expressions
@@ -1050,6 +1144,20 @@ end
 # banana - yellow
 # kiwi - brown
 ```
+
+
+## Enumerators as generators and filters
+
+* Enumerators can be explicitly created by adding a code block when
+  creating them, which will be called whenever the enumerator needs to
+  get another value for the program
+* This code block is executed in parallel; it starts at the top of the
+  block, pauses when the block yields a value and calls your code, i.e.
+  another attached block to the explicitly created enumerator; when your
+  attached code block needs another value, the enumerator continues
+  executing code in its code block after `yield`
+* This way, you can generate infinite sequences
+
 
 
 Unless otherwise noted, the texts and code are copyright
