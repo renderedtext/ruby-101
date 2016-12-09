@@ -868,11 +868,13 @@ block2 = -> name, *things, &block do
   block.call(name)
 end
 
-block2.call('Theodore', 'books', 'cheesecake') { puts "That's all!" }
+block2.call('Theodore', 'books', 'cheesecake') do
+  puts "That's all, #{name}!"
+end
 
 # Output:
 # Hey, Theodore! This is yours: books, cheesecake. 
-# That's all!
+# That's all, Theodore!
 ```
 
 
