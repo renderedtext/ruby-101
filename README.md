@@ -55,8 +55,8 @@ $ sudo apt update && sudo apt install vim
 * Keeping everything in one file may be convenient at first, but:
   * it severely limits flexibility
   * it makes the code hard to debug, and difficult to reuse
-* Write each statement in a separate line, if you need to write two or
-  more on the same line, separate them with a semicolon `;`
+* Write each statement in a separate line; if you write two or more on
+  the same line, separate them with a semicolon `;`
 
 
 ## Ruby as an Object Oriented language
@@ -143,6 +143,9 @@ say_hello('Rex', 'Alex', 'Martha', 'Samanta')
 * Method whose name ends with an exclamation mark `!`, e.g.
   `String.downcase!`, modifies the state variables of the object and
   returns `nil`, be careful!
+* `alias` assigns another name for a method, e.g. `alias new old`, and
+  `undef` cancels a method's definition, e.g. `undef new`; these can be
+  used only outside a method's code block
 
 
 ## Syntax rules
@@ -1277,6 +1280,24 @@ p triangluar_numbers
                     .infinite_select { |val| val % 10 == 0 }
                     .infinite_select { |val| val.to_s =~ /7/}
                     .first(5)
+```
+* Working with infinite sequences can be made easier by using *Lazy
+  Enumerators*, which are enumerators with methods like `map` and
+  `select`, and they only retrieve data from collections when requested
+  * They return enumerators which apply only the logic of the method
+    used to call them
+* Creating a lazy enumerator is done by adding `.lazy` at the end of its
+  code block
+```ruby
+def Integer.all
+  Enumerator.new do |yielder, n: 0|
+    loop { yielder.yield(n += 1)}
+  end.lazy
+end
+
+print "First 7 positive integers: "
+Integer.all.first(7).each { |i| print i, " " }
+puts
 ```
 
 
