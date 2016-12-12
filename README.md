@@ -1390,7 +1390,9 @@ puts
   behaviors to a standard library class for your application
 * The subclass inherits the methods and constants of the superclass
 * If we want to share variables, they need to be declared as *class
-  variables*, their name must start with `@@`, e.g. `@@no_of_carrots`
+  variables*, their name must start with `@@`, e.g. `@@no_of_carrots` -
+  this way all objects that are instances of the same class will have
+  access to the same variable
 * Performing inheritance is done when declaring the subclass, by putting
   the less-than sign `<`, space, and then the name of the superclass:
 ```ruby
@@ -1407,9 +1409,9 @@ end
 # This child class has Parent as its superclass, so it inherits
 # all of its methods and global variables
 class Child < Parent
-  #~ def initialize(name, thing)
-    #~ super name, thing
-  #~ end
+  def initialize(name, thing)
+    super name, thing  # Call the superclass's method with the same name
+  end
   def ownership
     puts "I have a #{@thing}."
   end
@@ -1428,6 +1430,13 @@ c.take('chalk')
 c.ownership       # Now Max will have chalk
 p.give_thing      # Rex still has a cookie
 ```
+* Use `super` within a subclass method, and provide arguments if
+  necessary, if you wish to invoke the superclass's method with the same
+  name, e.g. the subclass's method is `.play`, write `super(song)` in
+  the subclass's method definition
+* To reference the subclass's methods instead of superclass's, use
+  `self` when calling the method, followed by a period `.`, e.g.
+  `self.play(song)`
 
 
 ## Modules and mixins
