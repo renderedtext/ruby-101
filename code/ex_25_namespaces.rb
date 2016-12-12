@@ -26,6 +26,7 @@ Book.give 'The Little Prince'
 module About
   def tell_about
     puts "This is #{@name}, a #{@kind}, and it's #{@age} years old."
+    self.make_noise     # Call the object's instance method
   end
 end
 
@@ -35,6 +36,9 @@ class Cats
   def initialize(name='Toby', kind='Cheshire', age=3)
     @name, @kind, @age = name, kind, age
   end
+  def make_noise
+    puts "Meow!"
+  end
 end
 
 class Dogs
@@ -42,6 +46,9 @@ class Dogs
   attr_reader :name, :kind, :age
   def initialize(name='Rex', kind='German Shepherd', age=7)
     @name, @kind, @age = name, kind, age
+  end
+  def make_noise
+    puts "Woof!"
   end
 end
 

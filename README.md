@@ -1434,9 +1434,6 @@ p.give_thing      # Rex still has a cookie
   necessary, if you wish to invoke the superclass's method with the same
   name, e.g. the subclass's method is `.play`, write `super(song)` in
   the subclass's method definition
-* To reference the subclass's methods instead of superclass's, use
-  `self` when calling the method, followed by a period `.`, e.g.
-  `self.play(song)`
 
 
 ## Modules and mixins
@@ -1484,6 +1481,7 @@ Book.give 'The Little Prince'
 module About
   def tell_about
     puts "This is #{@name}, a #{@kind}, and it's #{@age} years old."
+    self.make_noise     # Call the object's instance method
   end
 end
 
@@ -1493,6 +1491,9 @@ class Cats
   def initialize(name='Toby', kind='Cheshire', age=3)
     @name, @kind, @age = name, kind, age
   end
+  def make_noise
+    puts "Meow!"
+  end
 end
 
 cat = Cats.new('Lynx', 'Siamese', 2)
@@ -1500,6 +1501,8 @@ cat.tell_about
 
 # Output: This is Lynx, a Siamese, and it's 2 years old.
 ```
+* Use `self` when calling the class's object instance method where the
+  mixin is included, e.g. `self.make_noise`
 
 
 Unless otherwise noted, the texts and code are copyright
