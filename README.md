@@ -288,15 +288,87 @@ puts hello  # Prints "Hello world!"`
 
 ## Numbers
 
-* Numbers are objects whose values are - you guessed right, numbers :)
-* Numbers can be whole (integers, 27) and decimal (floating point, 3.14)
+* *Numbers* are objects who return several types of numbers
+* Ruby supports integers (whole numbers), floating-point (decimal),
+  rational and complex numbers
+* Integers within the range of the CPU's bitness (32 or 64 bit) are
+  stored as their binary representations to allow fast processing and
+  avoid storage overhead, and they are of class Fixnum
+* Integers beyond these ranges are stored as variable-lenght sets of
+  shorter integers, the objects being of class Bignum, and their lenght
+  is limited to the amount of available memoryof the system
+* Ruby will do the conversion between Fixnum and Bignum as needed
+* You can separate groups of digits for avoiding ambiguity while reading
+  using underscore `_`, Ruby will ignore them
+* Writing integers in different notations:
+```
+The integer 2468 in several notations:
+Binary        (base 2)      0b100110100100
+Octal:        (base 8)      04644
+Decimal:      (base 10)     0d2468
+Hexadecimal:  (base 16)     0x9a4
+```
+* Displaying numbers in different notations can be easily achieved by
+  using the `printf` kernel method, e.g.:
+```ruby
+num = 2468
+# Print the number in several notations
+print "\nThe integer #{num} in several notations:\n"
+printf("Binary        (base 2)      0b%b\n", num)
+printf("Octal:        (base 8)      0%o\n", num)
+printf("Decimal:      (base 10)     0d%d\n", num)
+printf("Hexadecimal:  (base 16)     0x%x\n", num)
+
+# Output:
+# The integer 2468 in several notations:
+# Binary        (base 2)      0b100110100100
+# Octal:        (base 8)      04644
+# Decimal:      (base 10)     0d2468
+# Hexadecimal:  (base 16)     0x9a4
+```
+* Numbers with a decimal point are stored in objects of class Float,
+  whose value and precision are the same as the computer architecture's
+  double data type
+* Be careful, if you use the E-notation, you must write at least one
+  digit (if none, a zero) between the dot `.` and `e`, e.g. `24.0e2` is
+  okay, but `24.e2` is not, otherwise Ruby will suppose you're calling
+  a method named `e2`
+* To represent rational numbers, like 2/3, use `Rational(2, 3)`, where
+  first parameter is numerator, second is denominator and cannot be zero
+  (because we cannot divide by zero)
+  * Another syntax is by providing a string: `Rational('2/3')`
+  * You can make rationals from floating-points: `Rational('0.3')`
+* If you add a string to an integer, it will not work, so put the string
+  inside `Integer()` to convert it to a number and perform addition;
+  you can do the same to convert some string to a floating-point, or
+  any number to string
+* Complex numbers can be expressed similar to the rational ones, e.g.
+  `Complex(1, 2)`, where first parameter is the real part, second is the
+  imaginary part of the number
+  * You can also use a string instead: `Complex('1+2i')`
 
 
 ## Number methods
 
 * Methods `.odd?` and `.even?` return a boolean value (true/false),
   depending on whether the number is odd or even
-* Method `.next` or `.succ` returns the next number (number+1)
+* Method `.next` or `.succ` returns the next number (number + 1)
+* Methods `.upto(x)` and `.downto(x)` will use the value of the number
+  object they are called from, increment it or decrement it by one,
+  and execute an attached block code in a loop until the value becomes
+  as given in the parameter, e.g.:
+```ruby
+1.upto(5) { |i| print i, ", " } ; puts "\b\b."
+# Output: 1, 2, 3, 4, 5.
+```
+* Method `.step(to, step)` will start counting from the number object
+  it is called from, add `step` to it, and execute the block code in a
+  loop until it gets to the `to` value, just like in a common for-loop:
+```ruby
+11.step(99,11) { |i| print i, " " }
+# Output: 11 22 33 44 55 66 77 88 99
+```
+
 
 
 ## Arrays
@@ -1213,15 +1285,9 @@ end
 # mangoes, 2
 ```
 * You can attach method `.times` to a number to loop the code block
-  the given number of times, and method `.upto(x)` to iterate over it
-  from the give number until the value given as the parameter, e.g.:
+  the given number of times, e.g.:
 ```ruby
 20.times { print '* ' }  # Prints 20 stars :)
-puts
-
-print "Let's count to 10: "
-1.upto(10) { |num| print num, ', ' }
-puts "\b\b."
 ```
 * Provide a character/number range `(a..z).each` to iterate over it:
   * `(0..10).each` returns the numbers from 0 to 10, but `(0...10).each`
@@ -1480,7 +1546,8 @@ Book.give 'The Little Prince'
 # Mixins
 module About
   def tell_about
-    puts "This is #{@name}, a #{@kind}, and it's #{@age} years old."
+    puts "This is #{self.name}, a #{self.kind}, " +
+         "and it's #{self.age} years old."
     self.make_noise     # Call the object's instance method
   end
 end
@@ -1503,6 +1570,11 @@ cat.tell_about
 ```
 * Use `self` when calling the class's object instance method where the
   mixin is included, e.g. `self.make_noise`
+* Avoid using instance variables directly, instead use accessors to get
+  data from the object, to avoid hard to diagnose bugs
+* Avoid keeping state in a mixin, use a class instead
+* Resolving method names, in order: object's class, class's mixins,
+  superclass, superclass's mixins
 
 
 Unless otherwise noted, the texts and code are copyright

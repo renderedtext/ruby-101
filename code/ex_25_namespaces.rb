@@ -25,7 +25,8 @@ Book.give 'The Little Prince'
 # Mixins
 module About
   def tell_about
-    puts "This is #{@name}, a #{@kind}, and it's #{@age} years old."
+    puts "This is #{self.name}, a #{self.kind}, " +
+         "and it's #{self.age} years old."
     self.make_noise     # Call the object's instance method
   end
 end
