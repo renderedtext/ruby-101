@@ -1480,7 +1480,8 @@ Book.give 'The Little Prince'
 # Mixins
 module About
   def tell_about
-    puts "This is #{@name}, a #{@kind}, and it's #{@age} years old."
+    puts "This is #{self.name}, a #{self.kind}, " +
+         "and it's #{self.age} years old."
     self.make_noise     # Call the object's instance method
   end
 end
@@ -1503,6 +1504,11 @@ cat.tell_about
 ```
 * Use `self` when calling the class's object instance method where the
   mixin is included, e.g. `self.make_noise`
+* Avoid using instance variables directly, instead use accessors to get
+  data from the object, to avoid hard to diagnose bugs
+* Avoid keeping state in a mixin, use a class instead
+* Resolving method names, in order: object's class, class's mixins,
+  superclass, superclass's mixins
 
 
 Unless otherwise noted, the texts and code are copyright
