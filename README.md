@@ -1380,7 +1380,7 @@ puts
 ## Class inheritance
 
 * *Class inheritance* allows us to reuse code of another class, the
-  #superclass* or *parent* class, and have all of its methods and global
+  *superclass* or *parent* class, and have all of its methods and global
   variables available to our *subclass* or *child* class
 * If you do not define a superclass, then your class inherits from the
   Object class, which inherits from the BasicObject class, which has no
@@ -1468,6 +1468,8 @@ Book.give 'The Little Prince'
 * Since modules aren't classes, they can't have instances, but you can
   include modules in class' definitions, so modules' methods become
   available as instance methods to a class - these modules are *mixins*
+* This flexible mechanism allows classes can share methods that are
+  common to them, reusing code and avoiding duplication
 ```ruby
 # Mixins
 module About
