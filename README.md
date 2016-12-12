@@ -1377,6 +1377,120 @@ puts
 ```
 
 
+## Class inheritance
+
+* *Class inheritance* allows us to reuse code of another class, the
+  #superclass* or *parent* class, and have all of its methods and global
+  variables available to our *subclass* or *child* class
+* If you do not define a superclass, then your class inherits from the
+  Object class, which inherits from the BasicObject class, which has no
+  superclass
+* Usually class inheritance is used to create a class that is a
+  specialization, or refinement, of another class, or to add specific
+  behaviors to a standard library class for your application
+* The subclass inherits the methods and constants of the superclass
+* If we want to share variables, they need to be declared as *class
+  variables*, their name must start with `@@`, e.g. `@@no_of_carrots`
+* Performing inheritance is done when declaring the subclass, by putting
+  the less-than sign `<`, space, and then the name of the superclass:
+```ruby
+class Parent
+  def initialize(name='Rex', thing='cookie')
+    @name = name.capitalize
+    @thing = thing.downcase
+  end
+  def give_thing
+    puts "I give my #{@thing} to #{@name}."
+  end
+end
+
+# This child class has Parent as its superclass, so it inherits
+# all of its methods and global variables
+class Child < Parent
+  #~ def initialize(name, thing)
+    #~ super name, thing
+  #~ end
+  def ownership
+    puts "I have a #{@thing}."
+  end
+  def take(thing)
+    @thing = thing
+  end
+end
+
+p = Parent.new
+p.give_thing      # Output: "I give my cookie to Rex."
+
+c = Child.new('Max', 'cheesecake')
+c.give_thing      # Output: "I give my cheesecake to Max."
+c.ownership
+c.take('chalk')
+c.ownership       # Now Max will have chalk
+p.give_thing      # Rex still has a cookie
+```
+
+
+## Modules and mixins
+
+* *Modules* are a way of grouping methods, classes, and constants
+  together; they provide a *namespace* and prevent name clashes, and
+  support the mixin facility
+* Module is defined by writing `module`, then a name for the module with
+  a first capital letter, methods' and constants' code and definitions,
+  all terminated with `end`, e.g.:
+```ruby
+module Cookie
+  NUM_COOKIES = 5
+  def Cookie.give(cookie)
+    puts "I give you this tasty #{cookie.downcase}."
+  end
+end
+
+module Book
+  def Book.give(book)
+    puts "I give you this lovely book, '#{book}.'"
+    puts "Enjoy reading it! :)"
+  end
+end
+
+Cookie.give 'baklava'
+puts "Currently there are #{Cookie::NUM_COOKIES}. Enjoy!"
+puts
+Book.give 'The Little Prince'
+```
+* When defining methods that are part of a module, prefix their name
+  with module's name followed by a dot, e.g. `def Namespace.method`,
+  calling the methods that belong to a module is same as we define them:
+  `Namespace.method(parameters)`
+* Define constants in modules with all capital letters, e.g. `NUM_BOOKS`
+* To access a constant's value, write the module's name, two colons `::`
+  and then the constant's name, e.g. `Books::NUM_BOOKS`
+* Since modules aren't classes, they can't have instances, but you can
+  include modules in class' definitions, so modules' methods become
+  available as instance methods to a class - these modules are *mixins*
+```ruby
+# Mixins
+module About
+  def tell_about
+    puts "This is #{@name}, a #{@kind}, and it's #{@age} years old."
+  end
+end
+
+class Cats
+  include About
+  attr_reader :name, :kind, :age
+  def initialize(name='Toby', kind='Cheshire', age=3)
+    @name, @kind, @age = name, kind, age
+  end
+end
+
+cat = Cats.new('Lynx', 'Siamese', 2)
+cat.tell_about
+
+# Output: This is Lynx, a Siamese, and it's 2 years old.
+```
+
+
 Unless otherwise noted, the texts and code are copyright
 © 2016 Rendered Text and Filip Dimovski, released under the
 GNU General Public License version 3 or greater. All rights reserved.
