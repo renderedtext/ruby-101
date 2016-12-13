@@ -87,6 +87,13 @@ $ sudo apt update && sudo apt install vim
   statements in separate lines, and the definition terminates with `end`
 * Parameters are local variables who will get their values once we call
   the method and provide expressions between parentheses who will be evaluated before the method call
+  * You can also provide default values for the parameters with equal
+    sign `=` in the method's definition, e.g.:
+```ruby
+def hello(name='Rex')
+  puts "Hello #{name.capitalize}!"
+end
+```
 * Methods are invoked (called) by sending a message to the receiver
   object, containing the method name, and zero or more parameters
   * Using parentheses `()` is a good idea, though they are optional, so
@@ -105,7 +112,7 @@ hello('Alex')   # Prints: "Hello, Alex!"
   necessary parameters, otherwise error will occur
 * If you want to provide zero or more parameters, and you do not know
   their exact number, you can use an asterisk `*` before an argument's
-  name and then use `for` to get each value from that array, e.g.:
+  name and then use `for` `in` to get each value from that array, e.g.:
 ```ruby
 def say_hello(*names)
   # 'names' will be an array holding zero or more parameters
@@ -133,8 +140,10 @@ say_hello('Rex', 'Alex', 'Martha', 'Samanta')
 ```
 * Value returned by a method is the value of the last evaluated
   expression evaluated, unless `return` is used to return a value, or
-  more values from expressions separated by commas, e.g.
+  more values from expressions separated by commas as an array, e.g.
   `return 'lol', 42, Array.new`
+  * Use parallel assignment to collect the results from the return
+    values, e.g. `name, age = person.query`
 * Method whose name ends with a question mark `?`, e.g. `Time.sunday?`,
   returns a Boolean value, `true` or `false`
   * They are very useful for providing conditions to `if` and loops
@@ -146,7 +155,33 @@ say_hello('Rex', 'Alex', 'Martha', 'Samanta')
 * `alias` assigns another name for a method, e.g. `alias new old`, and
   `undef` cancels a method's definition, e.g. `undef new`; these can be
   used only outside a method's code block
-
+* You can also use a hash to provide parameters to a method, and use
+  double asterisk `**` for the last argument to collect any extra ones:
+```ruby
+def search(field, genre: nil, duration: 120, **rest)
+  p [field, genre, duration, rest]
+end
+```
+* You can define a method call that has square brackets `[]`, and
+  assignment with equal sign `=`:
+```ruby
+class Example
+  def [](e1, e2, e3)
+    puts e1 + e2 + e3
+  end
+  def []=(*params)
+    value = params.pop
+    puts "Index: #{params.join)', ')};"
+    puts "Value: #{value.inspect}."
+  end
+end
+```
+* You can execute an operating system (shell) command and get its
+  output and assign it to a variable; surround the shell command with
+  backticks ````, e.g.:
+```ruby
+puts `date`.chomp!
+```
 
 ## Syntax rules
 
@@ -284,6 +319,18 @@ puts hello  # Prints "Hello world!"`
   the next letter in alphabetic order
 * Method `.chomp` will return a string without new lines at the end
   * There is a `.chomp!` method that will modify the string itself
+* Method `.encoding` returns the character encoding of the string,
+  by default that is UTF-8
+* Method `.split(regexp)` will return string(s) from the string that
+  calls it, that match the regular expression provided as a parameter
+* Method `.squeeze(chars)` will find the repetitions of the character(s)
+  given as parameter in the calling string and replace them with the
+  string(s) in the parameter (e.g. to squeeze out extra spaces into one)
+  and return the resulting string
+  * Calling the method `squeeze(chars)!` will modify the calling string
+    instead of returning a new one
+* Method `.to_i` will return an integer, and is used to convert a string
+  representation of an integer number to an usable integer
 
 
 ## Numbers
@@ -369,6 +416,43 @@ printf("Hexadecimal:  (base 16)     0x%x\n", num)
 # Output: 11 22 33 44 55 66 77 88 99
 ```
 
+
+## Ranges
+
+* *Ranges* are used to express a sequence of numbers, characters, or
+  words (the last letter will change to the succeeding one)
+* We can create sequences by providing two `..` or three `...` periods
+  and putting the starting and the ending limits of the range
+  * Using `..` will include the ending limit, `...` will exclude it
+* Method `.to_a` will put the numbers/strings that belong to the calling
+  range into an array
+* Method `.to_enum` will turn the range into an enumerator, so `.next`
+  will return the successive element
+* Methods `.include?(num)` will test if the number given as a parameter
+  belongs to the range, and you can use `.inject(:+)` to get the sum
+  of all elements
+  calling range, `.max`
+```ruby
+numbers = (1..6).to_a   # => [1, 2, 3, 4, 5, 6]
+numbers.include?(5)     # => true
+numbers.max             # => 6
+numbers.inject(:+)      # => 21
+```
+* To test whether a value belongs to an interval/range, use the triple
+  equal operator `===` or `case` and `when/else`:
+```ruby
+(1..10) === 5           # => true
+(1...10) === 10         # => false
+('a'...'m') === 'f'     # => true
+('a'...'m') === 'p'     # => false
+
+case 3
+when 1..4
+  puts "Yes"
+else
+  puts "Nope"
+end
+```
 
 
 ## Arrays
@@ -522,7 +606,7 @@ instruments = {
 
 ## Symbols
 
-* Symbols are constant names that are guaranteed to be unique, so they
+* *Symbols* are constant names that are guaranteed to be unique, so they
   don't need to be predeclared
 * The name of a symbol starts with a colon : `:cookie`
 * You don't have to assign it a value and Ruby makes sure the symbol
@@ -532,7 +616,7 @@ instruments = {
 
 ## Constants
 
-* Constants are named values that never change throughout the program
+* *Constants* are named values that never change throughout the program
 * Their names are written in capital letters, e.g. `ANSWER = 42`
 * They cannot be declared within methods, only in a class or globally
 * You can access their values using the double colon `::` from outside
@@ -540,10 +624,20 @@ instruments = {
   inside a module/method
 
 
+## Structs
+
+* *Structs* are objects that contain a given set of attributes
+* Creating a struct is done by instantiating it, and providing the
+  attributes as symbols, e.g. `Song = Struct.net(:artist, :title)`
+* Keeping structs in an array is a good idea, especially if you have
+  many things of the same kind that have more than one value
+
+
 ## Conditional structures (if, unless, case)
 
 * *Conditionals* provide us way to change the way code executes
   depending on given conditions
+* Any value is considered `true`, except `nil` and `false`
 * The `if` control structure executes code if the given condition
   evaluates to `true`, `elsif` gives another condition if the previous
   is `false` (you can have more than one `elsif`), and `else` executes
@@ -611,6 +705,11 @@ else
   puts "thermometer is broken"
 end
 ```
+* For fans of the C programming language, the conditional expression
+  `variable = expression ? true_value : false_value` is also present, it
+  will evaluate the expression, and if it returns `true`, it returns the
+  value of expression `true_value`, otherwise it returns the value of
+  expression `false_value`, and it is assigned to `variable`
 
 
 ## Loops (while, until, for, loop)
@@ -707,18 +806,40 @@ end
     followed by `c`
   * `/ab*c/` - match string with `a`, followed by zero or more `b`,
     followed by `c`
+  * `/ab?c/` - match string with `a`, followed by one or one `b`,
+    followed by `c`
+  * `/ab{m,n}c/` - match string with `a`, followed by minimum `m` to
+    maximum `n` `b`'s, followed by `c`
+  * `/ab{m}c/` - match string with `a`, followed by exactly `m` `b`'s,
+    followed by `c`
 * We can specify *character classes* to match a group of characters:
   * `\s` - match whitespace (space, tab, new line)
-  * `\d` - match any digit (0-9)
+  * `\S` - match any character which is not whitespace
+  * `\d` - match any digit [0-9]
+  * `\D` - match any character which is not a digit
+  * `\h` - match any hexadecimal digit [0-9a-fA-F]
+  * `\H` - match any character which is not a hexadecimal digit
+  * `\r` - match any linebreak sequence (\n, \r, \r\n)
   * `\w` - match anything which can be a part of a word (letters,
     numbers, and an underscore `_`)
   * `.` - match any character except a new line
-* A `^` before an expression means don't match: `/^\d\d/` will not match
-  any two digits one after another
+  * `\A` - match at beginning of string
+  * `\z` - match at end of string, `\Z` same but just before newline if
+    present at the end of string
+  * `\b` - match word boundaries
+  * `\B` - match non-word boundaries
+* Group expressions using parentheses `()`, they are treated as a sub
+  regexp, and return the results as separate elements in an array
+* A `^` before a character inside `[]` means don't match: `/^\d\d/`
+  will not match any two digits one after another
 * Putting brackets `[]` and a dash `-` between modifiers creates ranges:
   `/[a-z0-9]/` means match one lowercase letter or a digit
-* To match a string against a regular expression, use `=~`, it returns
-  a string from the first occurence of the expression:
+* Use *anchors* `^word` to match only at the beginning, or `word$` to
+  match only at the end of the string
+* To match a string against a regular expression, use operator `=~`
+  * It returns a number from where the string matches the regexp, and
+    `nil` if it does not match
+  * The operator `!~` returns `true` if the regexp does not match
 ```ruby
 line = gets.downcase
 
@@ -727,13 +848,14 @@ if line =~ /ruby/
 else
   puts "It's something else: #{line}."
 end
-
 ```
 * Method `.sub(/regexp/, 'text')` will replace the first occurence of
   the matched 'text' according to the regexp pattern from a given string
   and return a new string result
 * Method `.gsub(/regexp/, 'text')` will replace all occurences of
   the matched 'text' from a given string and return a new string result
+* Add exclamation mark `!` after these methods' names to modify the
+  original string instead, and return `nil` if there s no match
 * Lots of details about regular expressions can be found in the
   [Ruby's documentation](https://ruby-doc.org/core-2.3.1/Regexp.html)
 
@@ -1254,6 +1376,10 @@ puts hound      # Prints "Pete"
 * To prevent an object from being modified, use method `.freeze`, so any
   attempt to modify the frozen object will result in RuntimeError
   being raised
+* The operator `||=` will assign a value to a variable only if it
+  doesn't already have a value set: `var ||= "default value"`
+  * Check if a value is defined using method `.defined?` on a variable,
+    it returns `true` if refine, or `false` if it's not
 
 
 ## Iterators
