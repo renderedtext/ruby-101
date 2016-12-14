@@ -331,6 +331,24 @@ puts hello  # Prints "Hello world!"`
     instead of returning a new one
 * Method `.to_i` will return an integer, and is used to convert a string
   representation of an integer number to an usable integer
+* Method `.each(separator=" ") { |x| ... }` will return words from the
+  string (separated with the optional separator parameter) and give
+  them to the attached block code as it executes for each iteration
+  * If you use `.each_line`, it will return lines
+* Method `.empty?` returns `true` if string has no characters
+* Method `.each_byte { |x| ... }` returns bytes (not characters, but
+  octets) from the string and gives them, one by one, to the attached
+  block code for each iteration
+* Method `.include? "string"` returns `true` if the given string is
+  found inside the calling string object
+* Method `.reverse` will return string with all characters in reverse
+  * Call the method with `!` to apply it to the calling string object
+* Methods `.lstrip` and `.rstrip` remove leading or trailing whitespace
+  from the return string and return the resulting string
+  * Method `.strip` will perform both
+  * Call the methods with `!` to apply them to the calling string object
+* Method `.swapcase` returns a string with upper case characters in
+  lower case, and lower case characters in upper case
 
 
 ## Numbers
@@ -523,8 +541,8 @@ x[0..3] = []        # => [3, 6, 9]
 # so their values are 'nil'
 x[5..6] = [24, 48] # => [3, 6, 9, nil, nil, 24, 48]
 ```
-* Method `.size` returns number of elements in array
-* Method `.inspect` and `p array` prints all the elements of the array
+* Methods `.size` and `.length` return number of elements in array
+* Methods `.inspect` and `p array` print all of elements of the array
 * Arrays can be used as stacks, using method `.push element` to add
   element to end of array and method `.pop` to remove last element of
   stack and return it :
@@ -556,6 +574,14 @@ queue.shift         # => "mouse"
 ```
 * Methods `.first(x)` and `.last(x)` return first or last `x` number of
   elements from an array, but they don't remove them
+* Method `.include?(object)` will return `true` if `object` is present
+  in the array, otherwise returns `false`
+* Method `.delete(object)` deletes the given object from the array if
+  present, if not present returns `false`
+  * You can attach block code to this method, that will execute it if
+    the object is not found, and return its value
+* Method `.uniq` returns the array with all duplicates removed
+
 
 
 ## Hashes
@@ -602,6 +628,24 @@ instruments = {
 * Method `.inspect` and `p hash` prints all the associations of the hash
 * Storing a value in the hash can be done with `.store(key, value`, or
   with the operator `[]=`, e.g. `food['apple'] = 'sweet'`
+* Method `.clear` will delete all key-value pairs from the hash
+* Method `.default` returns default value for new keys, if unassigned
+  returns `nil`; you can set it using `=`
+* Method `.delete(key)` will remove given key-value pair from the hash
+* Like arrays, you have `.delete_if { |key, value| ... }` to delete all
+  key-value pairs for which the block code returns `true`
+* Method `.empty?` returns `true` if hash has no elements
+* Method `.each { |key, value| ... }` iterates over the hash elements,
+  giving their values to the code block
+  * Use `.each_key { |value| ... }` to work with the values only
+* Methods `.has_key?(key)`, `.include?(key)`, and `.member?(key)` return
+  `true` if `key` is present in the hash, otherwise returns `false`
+* Method `.fetch(key)` returns the value from the hash for the given key
+  * Add a block code `{ |key| ...}` and it returns its value
+  * Provide a second parameter to the method to define a default value,
+    if the one you're searching for is not found
+* Method `.value?(value)` returns `true` if `value` is present as a
+  value in the hash, otherwise returns `false`
 
 
 ## Symbols
@@ -1760,6 +1804,14 @@ end
   * Three parameters can be provided, where first will be the exception
     class, second is the message, and third is the variable that will
     contain the stack trace
+* Sometimes it might be necessary to get out of a deeply nested loop,
+  and for that you can use `catch(label)` to mark a block of code for
+  execution, `label` being symbol or string, and then put
+  `throw(label, string)` anywhere in the block code, where label should
+  be the as the parameter of `catch`, and the optional second parameter
+  a string to return
+  * If you assign the `catch` block code to a variable, its value will
+    be the string returned by `throw`
 
 
 Unless otherwise noted, the texts and code are copyright
