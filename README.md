@@ -1703,6 +1703,65 @@ cat.tell_about
   superclass, superclass's mixins
 
 
+## Exceptions
+
+* Errors happen constantly, and it's our job to handle them gracefully
+* *Exceptions* allow us to handle errors by packaging information about
+  them and sending it to the runtime system, which will find the code
+  that handles the error and let it perform error handling
+* Information about an exception is stored in an object of Exception
+  class or its subclasses
+* To raise an exception, use one of the Exception classes, and create
+  your own class, define it as a subclass or StandardError or one of its
+  subclasses, or they will *not* be caught
+* Every Exception has a message string and a stack backtrace
+* To do exception handling, put the code that could rise an exception
+  between `begin` and `end`, and the use one or more `rescue` clauses in
+  it, with the name of the exception class specified in the same line,
+  e.g. `rescue Exception` for all exceptions
+  * After handling the exception with the rescue code, use `raise` to
+    raise it again, so if you cannot handle it another rescue code will
+  * A reference to the exception object is stored in the `$!` global
+    variable, and it will be raised when we use `rescue`
+* You can have multiple `rescue` clause in a `begin` block and each can
+  specify multiple exception classes separated by comma `,`, and also
+  you can provide a variable to hold the matched exception after `=>`:
+```ruby
+begin
+  eval string
+rescue SyntaxError, NameError => err
+  print "String does not compile: " + err
+rescue StandardError => dang
+  print "Error running script: " + dang
+end
+```
+* If an exception rises, and no `rescue` clause matches it, or it is
+  raised outside of a `begin-end` block, Ruby will go up the stack to
+  the caller method and see if there are any exception handlers there
+  for that type, and if not then go up again and search, and so on
+* System errors are raised when a call to the operating system returns
+  an error code; on POSIX systems and Linux, you can see the error
+  codes' names with the command `man errno` in your command line shell
+* They are wrapped in specific exception objects, subclasses of class
+  SystemCallError, and each defined in a module Errno
+* If you want to execute code if no exception raises, put it in an
+  `else` block, that must be after all `rescue` blocks
+* Sometimes you must guarantee that some code will execute at the end,
+  whether an exception was raised or not, and for that purpose you can
+  place an `ensure` block after all `rescue` blocks and an `else` block
+* Use `retry` within a `rescue` block if you handle the exception
+  gracefully and would like to do the `begin` block code again
+* You can raise exceptions by using `raise` method
+  * No parameters means reraise the current exception, when within a
+    `rescue` block (or RuntimeError, if no exception happened before)
+  * One string parameter means raise an RuntimeError exception, to be
+    intercepted by an exception handler and passed to the appropriate
+    one, the string being a message
+  * Three parameters can be provided, where first will be the exception
+    class, second is the message, and third is the variable that will
+    contain the stack trace
+
+
 Unless otherwise noted, the texts and code are copyright
 © 2016 Rendered Text and Filip Dimovski, released under the
 GNU General Public License version 3 or greater. All rights reserved.
