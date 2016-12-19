@@ -850,7 +850,7 @@ end
     followed by `c`
   * `/ab*c/` - match string with `a`, followed by zero or more `b`,
     followed by `c`
-  * `/ab?c/` - match string with `a`, followed by one or one `b`,
+  * `/ab?c/` - match string with `a`, followed by zero or one `b`,
     followed by `c`
   * `/ab{m,n}c/` - match string with `a`, followed by minimum `m` to
     maximum `n` `b`'s, followed by `c`
@@ -1812,6 +1812,83 @@ end
   a string to return
   * If you assign the `catch` block code to a variable, its value will
     be the string returned by `throw`
+
+
+## Files and Input/Output
+
+* Besides the basic input/output facilities provided by Ruby, we can
+  also find a base class called IO that provides a bidirectional channel
+  between a Ruby program and other resource (file, network socket)
+* This class provides two basic subclasses, File and BasicSocket, that
+  work on the same principles
+* A file is a unit in the file system whose purpose is to store data, so
+  we can store the results of our calculations and restore them later
+* The File class provides the facilities for working with files  
+* To use files, we need to open them first, and close them once we are
+  finished with them
+* When you create a new file object, you can give two parameters to the
+  `.new` method you're calling, first is the file name, and second is
+  the mode string, which tells the system you want to read a file, write
+  to it, or do both, and these are:
+  * `r` - read only, start from beginning of file (default)
+  * `r+`  - read and write, start from beginning of file
+  * `w` - write only, truncates file to zero (deletes everything!) and
+    starts writing from beginning of file, or creates a new one
+  * `w+` - read and write, truncates file to zero and starts from
+    beginning of file, or creates a new one
+  * `a` - write only, starts at the end of file if exists (append mode),
+    or creates a new one
+  * `a+` - read and write, starts at the end of file if exists, or
+    creates a new one
+  * `b` - binary mode, can be combined with any of the above, used when
+    we work with sockets and bytes (binary data, instead of text)
+  * E.g. `homework = File.new("maths.txt", "a+")`
+* You can use `.open` and associate a code block with it, it will give
+  the file as a variable, and after the code block finishes execution
+  it will automatically close the file
+  * Useful in case an exception occurs, because the file will be closed
+    automatically, else it may stay open until the program ends, using
+    unecessarily precious system resources
+* After you finish working with a file object, use `.close` to close it
+* Method `.gets` reads a line from file, method `.puts` writes a line to
+  file, the same methods we've used for text input/oputut on the console
+```ruby
+File.open("test.txt", "r") do |file|
+  while line = file.gets        # as long as there are lines in file,
+    puts line                   # show each of them on screen
+  end
+end
+```
+* You can use iterators to read file's contents and parse them:
+  * line by line by using `.gets`
+  * by bytes (octets) using `.each_byte`
+  * by lines using `.each_line(separator),` optional parameter is a
+    string that will be used as separator of lines, default is new line
+* You can also create an iterator using the `IO.foreach(file, mode)`
+  class method, each time it is called will return the next line of file
+  and close file automatically, e.g.
+  `IO.foreach("example.txt") { |line| puts line }`
+* Writing to a file can be by calling `.puts`, `.print` and `.printf`
+  from the IO object, just like writing text on the screen
+  * Use `.write(string)` method to write string in a file
+  * In all cases, file must be open for writing!
+* If you work with binary data (bytes, octets) directly, you can also
+  use `.sysread(num_bytes)` and `.syswrite(chars)`
+* There is a StringIO class that provides objects that are similar to
+  File objects, but they read and write strings and not files
+  * Use `require stringio` before you create these objects
+```ruby
+require 'stringio'
+
+str_in = StringIO.new("Lorem ipsum dolor sit amet.") # To read from
+str_out = StringIO.new("", "r+") # Empty StringIO object to write into
+
+print "\nSentence to modify: #{str_in.string}\n"
+str_in.each_line do |line|
+  str_out.puts line.reverse
+end
+puts "The sentence in reverse: #{str_out.string}"
+```
 
 
 Unless otherwise noted, the texts and code are copyright
