@@ -1891,6 +1891,40 @@ puts "The sentence in reverse: #{str_out.string}"
 ```
 
 
+## Sockets and networking
+
+* Communicating over a network is done using a sockets interface, which
+  is defined in the Socket class, a subclass of IO class
+* *Sockets* are the endpoints of a bidirectional communications channel
+  * They may communicate within a process, between processes on the same
+    machine, or between processes on different continents
+* The library provides methods for working with TCP, UDP, Unix and other
+  kinds of sockets, as well as helping us implement servers
+* To use the sockets library, add `require 'sockets'` in your code
+* There parameters describe a socket:
+  * domain - family of protocols that areused as means of data transport
+  * type - type of communication between two endpoints, `SOCK_STREAM`
+    for connection-oriented protocols (very common), and `SOCK_DGRAM`
+    for connectionless protocols
+  * protocol - usually zero, used to identify a variant of a protocol
+    within a domain and type
+  * hostname - the identifier of a network interface: host name, e.g.
+   `semaphoreci.com`, or IP address (IPv4, IPv6), e.g. `127.0.0.1`
+  * port - servers listen to one or more ports where clients call, an
+    integer number or name of service, e.g. `telnet`, `web`, etc.
+* The *server* opens one or more ports and waits for a connection from
+  a *client*, then provides data to the client and performs computations
+  for it, and returns results
+* TCPSocket and UNIXSocket are classes that provide connection-oriented
+  sockets for clients - there is retransfer of data in case of mistakes
+  in communication, by acknowledging the receival of packet data, and
+  UDPSocket is a datagram-oriented protocol - it does not check whether
+  data arrived at the other side or not
+* These classes have corresponding TCPServer, UNIXServer, and UDPServer
+  classes that are used to implement the server side of communication
+* 
+
+
 Unless otherwise noted, the texts and code are copyright
 © 2016 Rendered Text and Filip Dimovski, released under the
 GNU General Public License version 3 or greater. All rights reserved.
