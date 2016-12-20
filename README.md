@@ -86,7 +86,8 @@ $ sudo apt update && sudo apt install vim
   one or more variable names between parentheses `()` - *parameters*,
   statements in separate lines, and the definition terminates with `end`
 * Parameters are local variables who will get their values once we call
-  the method and provide expressions between parentheses who will be evaluated before the method call
+  the method and provide expressions between parentheses who will be
+  evaluated before the method call
   * You can also provide default values for the parameters with equal
     sign `=` in the method's definition, e.g.:
 ```ruby
@@ -178,7 +179,7 @@ end
 ```
 * You can execute an operating system (shell) command and get its
   output and assign it to a variable; surround the shell command with
-  backticks ````, e.g.:
+  backticks ` , e.g.:
 ```ruby
 puts `date`.chomp!
 ```
@@ -275,7 +276,8 @@ END_OF_STRING
   so `puts '\n'` will print `\n` and `puts "\n"` will print a new line
 * Double-quoted strings also have  *expression interpolation*:
   text inside `#{expression}` in these strings is evaluated and the
-  return value of the `expression` is shown instead, e.g. `puts "The time is #{Time.now}."`
+  return value of the `expression` is shown instead, e.g.
+  `puts "The time is #{Time.now}."`
   * Be careful, it does *not* work in single-quoted strings!
 * Adding one string to another will return a new *concatenated* string,
   do it by putting a plus sign `+` between them, e.g.:
@@ -956,7 +958,8 @@ a <= b    # => true
 * *Bitwise operators* work on the binary bits of a value: AND `a & b`,
   OR `a | b`, XOR `a ^ b`, bit-flip unary complement `~a`, left shift
   `a << 2`, right shift `a >> 2`
-* Refer to these [truth tables](https://en.wikipedia.org/wiki/Truth_table#Truth_table_for_all_binary_logical_operators) for details
+* Refer to these [truth tables](https://en.wikipedia.org/wiki/Truth_
+table#Truth_table_for_all_binary_logical_operators) for details
 * Logical operators are used in `if`-statements; return `true` or
   `false`:
   * `and`/`&&` - `true` if both operands are true/non-zero, `false`
@@ -1307,7 +1310,7 @@ class Fruit
 
   # Tell us about the fruit when we do 'puts fruit'
   def to_s
-    "Fruit kind: #{@kind}\nPrice in local currency per kg: #{@price} RSD"
+    "Fruit: #{@kind}\nPrice in local currency per kg: #{@price} RSD"
   end
 end
 
@@ -1958,8 +1961,134 @@ while line = server.gets
   puts line                     # Show on screen what the server sends
 end
 ```
+* Opening and using web pages and web resources directly can be done by
+  importing `require 'open-uri'` and using `open(url)` to get the file;
+  HTTP redirection and protocol necessities are handled automatically:
+```ruby
+require 'open-uri'
+
+# Opens the web page and gets index.html
+open("http://www.google.com") do |f|
+  puts f.read               # Show HTML code on screen
+end
+```
+* If you need to parse HTML, use the excellent Nokogiri library (install
+  it using `sudo gem install nokogiri` in your shell (command line), or
+  using your package manager; afterwards, use it by putting `require
+  'nokogiri` in your code:
+```ruby
+require 'open-uri'
+require 'nokogiri'
+
+doc = Nokogiri::HTML(open("http://www.google.com"))
+
+puts "Page title: " + doc.xpath("//title").inner_html
+```
 
 
-Unless otherwise noted, the texts and code are copyright
-© 2016 Rendered Text and Filip Dimovski, released under the
-GNU General Public License version 3 or greater. All rights reserved.
+## Fibers
+
+* Ruby provides facilities that allow us to execute different parts of
+  the program at the same time
+* In reality, computers switch extremely rapidly between many processes
+  and run them one-by-one in a limited time, and since this is so fast
+  we perceive it as if everything is running and the same time
+  * The kernel coordinates the execution of many processes concurrently
+* *Fibers*, so-called lightweight threads, are used to implement
+  coroutines, and are used for generating infinite sequences as well
+* Create a fiber and attach a code block to it:
+```ruby
+words = Fiber.new do
+  File.foreach("a_story.txt") do |line|
+    # Get words from the file
+    line.scan(/[\w']+/) do |word|
+      Fiber.yield word.downcase   # Yield a word and wait for .resume
+    end
+  end
+end
+
+# Yield a new word each time we resume the fiber, 10 times
+10.times do
+  puts words.resume
+end
+```
+* The fiber starts execution once you `.resume` it, and then on each
+  `.yield` will stop, return a value, and wait for you to `.resume` it
+  again; after it finishes (in this case, after it runs out of words),
+  the fiber will be terminated
+* Fibers can be resumed only in the thread that created them!
+
+
+## Threads
+* Although Ruby does use the threading mechanism of the operating
+  system it runs on, since most of the code is not thread-safe (imagine
+  accessing a file while someone is writing to it at the same time, for
+  example, data loss can occure), it executes one thread at a time
+* *Ruby Threads* can be used to achieve parallelism, and make two or
+  more code blocks execute at the same time
+```ruby
+sweets = ['cookies', 'jelly', 'chocolate', 'candy', 'cake']
+
+threads = sweets.map.with_index do |sweet, index|
+  Thread.new(sweet, index) do |piece, i|
+    print("Hey, it's thread no. #{i+1}, I have some #{sweet}!\n")
+  end
+end
+
+threads.each { |thread| thread.join }
+```
+* Since threads share all variables with the environment they are
+  created in, and we don't want to cause collision (one thread changing
+  value of a variable while another one is accessing it), we pass what
+  we need as parameters in `.new(param, param)`, since variables within
+  the code block are local to the thread
+  * Use `print("text\n")` instead of `puts("text")`, because outputting
+    the new line in `puts` is a separate step, and in the meantime
+    another thread may execute and output some other text
+* All threads are killed, regardless of their state, once a Ruby program
+  stops execution; if you want to wait until a thread finishes, on the
+  Thread object call the method `.join(timeout)`, the optional parameter
+  says how many seconds it will wait for the thread to finish before
+  terminating it and returning `nil` instead
+  * `.value` will do the same as `.join`, but it will return the last
+    result of the execution of the thread
+* Access the current thread from within it using method `Thread.current`
+  and a list of all threads is returned by method call `Thread.list`
+* `Thread.status` and `Thread.alive?` show whether a thread is running
+  or it finished and is terminated
+* If you want to store variables that will be shared among the running
+  threads, you can use the thread object's name as a hash within or
+  outside the threads, e.g. `Thread[name] = "dog"`, `puts Thread[name]`
+* If an unhandled exception happens within a thread, the thread will be
+  terminated, and the rest of threads will continue running
+  * Set `Thread.abort_on_exception = 1` to the thread object and start
+    the Ruby program with the debug flag, i.e. `ruby -d ./program.rb`
+    and the main program thread will get terminated, and RuntimeError
+    will be raised as well
+* To avoid race conditions and allow only one thread to access resource
+  at a given time, we can use a *Mutex*, and the Mutex class provides us
+  with a Mutex object that will control the threads' behavior
+* Make an instance of a mutex with `mutex = Mutex.new`, and within the
+  thread code block you can use `mutex.lock` to lock the variables for
+  exclusive access to the current thread, and then `mutex.unlock` to
+  unlock them so other threads can access them
+  * Method `.try_lock` on a mutex will return `true` if the mutex lock
+    can be activated in the thread and do the lock as well, and `false`
+    if some other thread locked the mutex already
+  * Method `.sleep(time)` will suspend the mutex lock and resume it
+    after `time` seconds
+
+
+## Processes
+
+* *Process* is a group of instructions (program) that is running
+* You can spawn (create) new processes by using method `system("cmd")`,
+  or write a shell command between backticks ` 
+* You can capture the shell command's output in a variable as a string
+  if you use the backticks to give the command; `system` can't do that
+* The exit code of the subprocess will be stored in global variable `$?`
+
+
+Unless otherwise noted, the texts and code are copyright © 2016 Rendered
+Text and Filip Dimovski. All rights reserved. Released under the GNU
+General Public License version 3 or greater. 
