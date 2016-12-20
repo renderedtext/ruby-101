@@ -2,10 +2,38 @@
 
 # Example of using sockets and network resources - client
 
-require 'socket'
+#!/usr/bin/env ruby -w
+require "socket"
+class Client
+  def initialize(server)
+    @server = server
+    @request = nil
+    @response = nil
+    listen
+    send
+    @request.join
+    @response.join
+  end
 
-server = TCPSocket.new 'localhost', 12345
+  def listen
+    @response = Thread.new do
+      loop {
+        msg = @server.gets.chomp
+        puts "#{msg}"
+      }
+    end
+  end
 
-loop do
-  puts server.gets
+  def send
+    puts "Enter a user name:"
+    @request = Thread.new do
+      loop {
+        msg = $stdin.gets.chomp
+        @server.puts(msg)
+      }
+    end
+  end
 end
+
+server = TCPSocket.open("localhost", 3000)
+Client.new(server)

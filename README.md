@@ -1922,7 +1922,42 @@ puts "The sentence in reverse: #{str_out.string}"
   data arrived at the other side or not
 * These classes have corresponding TCPServer, UNIXServer, and UDPServer
   classes that are used to implement the server side of communication
-* 
+  * Or you can bind a socket to a port using `.bind(port)`
+* Creating a TCP connection to a server can be done by creating a new
+  TCPSocket object, or by using its `.open(address, port)` method, e.g.:
+  `server_connection = TCPSocket.open('localhost', 12000)`
+* Since these Socket and Server classes are all subsets of IO class, you
+  can call the familiar input/output methods, such as `.puts`, `.gets`,
+  `.print`, `.write`, etc., just call them from the Socket object
+* When you're finished with the communication, close the socket using
+  method `.close`
+* Only one server can bind to a socket and listen on it for connections,
+  and one or more clients can connect to it
+* Handling more than one client connection is possible by using threads
+* A client cannot connect (i.e. it will fail) if the server is not bound
+  and listening on the port
+* The client and server can be on the same machine, or usually on
+  different machines and networks
+* Example server (make sure it is running before running client):
+```ruby
+require 'socket'
+server = TCPServer.new(12345)   # Server bound to port 12345
+
+loop do
+  client = server.accept        # Wait for a client to connect
+  client.puts "Hello from the server!"
+  client.close                  # Close connection
+end
+```
+* Example client:
+```ruby
+require 'socket'
+server = TCPSocket.open(localhost, 12345)
+
+while line = server.gets
+  puts line                     # Show on screen what the server sends
+end
+```
 
 
 Unless otherwise noted, the texts and code are copyright

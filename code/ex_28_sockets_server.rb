@@ -2,46 +2,48 @@
 
 # Example of using sockets and network resources - server
 
-require 'socket'
-port = 12345
-buff_max = 200
+require "socket"
 
-server = TCPServer.new(port)    # Server bound to port 2000
+class Server
+  def initialize( port, ip )
+    @server = TCPServer.open(ip, port)
+    @connections = {}
+    @rooms = {}
+    @clients = {}
+    @connections[:server] = @server
+    @connections[:clients] = @clients
+    run
+  end
 
-loop do
-  client = server.accept        # Wait for a client to connect
-  client.puts "Hello from the server!"
-  loop do
-    client.print "Command [bye/sing/dance]? "
-    msg, sender = client.recvfrom(buff_max)
-    case msg.downcase
-    when msg == "bye"
-      client.puts "Bye bye!"
-      break
-    when msg == "sing"
-      client.puts "I'm singing in the rain... :D"
-    when msg == "dance"
-      client.puts "I'm not really good at dancing, you know... :D"
-    end
+  def run
+    loop {
+      Thread.start(@server.accept) do |client|
+        # New thread for every client
+        nick_name = client.gets.chomp.to_sym
+        @connections[:clients].each do |other_name, other_client|
+          if nick_name == other_name || client == other_client
+            client.puts "Error: Username already exists. Closing connection."
+            Thread.kill self
+          end
+        end
+        puts "#{nick_name} connected, #{client}"
+        @connections[:clients][nick_name] = client
+        client.puts "Connection established, you may begin a conversation."
+        listen_user_messages(nick_name, client)
+      end
+    }.join
+  end
+
+  def listen_user_messages(username, client)
+    loop {
+      msg = client.gets.chomp
+      @connections[:clients].each do |other_name, other_client|
+        unless other_name == username
+          other_client.puts "#{username.to_s}: #{msg}"
+        end
+      end
+    }
   end
 end
 
-client.close
-  #~ msg, sender = socket.recvfrom(buff_max)
-  #~ break if msg == "bye"
-  #~ host = sender[3]
-  #~ puts "#{Time.now}: #{host} '#{msg}'"
-  #~ STDOUT.flush
-
-#~ loop do
-  #~     # Wait for a client to connect
-  #~ client.puts "Hello !"
-  #~ client.puts "Time is #{Time.now}"
-  #~ client.close
-#~ end
-
-# Simple logger prints messages received on UDP port 12121
-#~ require 'socket'
-#~ socket = UDPSocket.new
-#~ socket.bind("127.0.0.1", 12121)
-
+Server.new( 3000, "localhost" )
