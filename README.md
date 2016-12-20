@@ -1891,6 +1891,75 @@ puts "The sentence in reverse: #{str_out.string}"
 ```
 
 
+## Sockets and networking
+
+* Communicating over a network is done using a sockets interface, which
+  is defined in the Socket class, a subclass of IO class
+* *Sockets* are the endpoints of a bidirectional communications channel
+  * They may communicate within a process, between processes on the same
+    machine, or between processes on different continents
+* The library provides methods for working with TCP, UDP, Unix and other
+  kinds of sockets, as well as helping us implement servers
+* To use the sockets library, add `require 'sockets'` in your code
+* There parameters describe a socket:
+  * domain - family of protocols that areused as means of data transport
+  * type - type of communication between two endpoints, `SOCK_STREAM`
+    for connection-oriented protocols (very common), and `SOCK_DGRAM`
+    for connectionless protocols
+  * protocol - usually zero, used to identify a variant of a protocol
+    within a domain and type
+  * hostname - the identifier of a network interface: host name, e.g.
+   `semaphoreci.com`, or IP address (IPv4, IPv6), e.g. `127.0.0.1`
+  * port - servers listen to one or more ports where clients call, an
+    integer number or name of service, e.g. `telnet`, `web`, etc.
+* The *server* opens one or more ports and waits for a connection from
+  a *client*, then provides data to the client and performs computations
+  for it, and returns results
+* TCPSocket and UNIXSocket are classes that provide connection-oriented
+  sockets for clients - there is retransfer of data in case of mistakes
+  in communication, by acknowledging the receival of packet data, and
+  UDPSocket is a datagram-oriented protocol - it does not check whether
+  data arrived at the other side or not
+* These classes have corresponding TCPServer, UNIXServer, and UDPServer
+  classes that are used to implement the server side of communication
+  * Or you can bind a socket to a port using `.bind(port)`
+* Creating a TCP connection to a server can be done by creating a new
+  TCPSocket object, or by using its `.open(address, port)` method, e.g.:
+  `server_connection = TCPSocket.open('localhost', 12000)`
+* Since these Socket and Server classes are all subsets of IO class, you
+  can call the familiar input/output methods, such as `.puts`, `.gets`,
+  `.print`, `.write`, etc., just call them from the Socket object
+* When you're finished with the communication, close the socket using
+  method `.close`
+* Only one server can bind to a socket and listen on it for connections,
+  and one or more clients can connect to it
+* Handling more than one client connection is possible by using threads
+* A client cannot connect (i.e. it will fail) if the server is not bound
+  and listening on the port
+* The client and server can be on the same machine, or usually on
+  different machines and networks
+* Example server (make sure it is running before running client):
+```ruby
+require 'socket'
+server = TCPServer.new(12345)   # Server bound to port 12345
+
+loop do
+  client = server.accept        # Wait for a client to connect
+  client.puts "Hello from the server!"
+  client.close                  # Close connection
+end
+```
+* Example client:
+```ruby
+require 'socket'
+server = TCPSocket.open(localhost, 12345)
+
+while line = server.gets
+  puts line                     # Show on screen what the server sends
+end
+```
+
+
 Unless otherwise noted, the texts and code are copyright
 © 2016 Rendered Text and Filip Dimovski, released under the
 GNU General Public License version 3 or greater. All rights reserved.
