@@ -18,6 +18,8 @@ class TestComplexNumber < Test::Unit::TestCase
     case2 = ComplexNumber.new("0", "2i")
 
     assert_equal("-17.0-2.0i", (case1 + case2).to_s)
+    assert_equal("-17.0-6.0i", (case1 - case2).to_s)
     assert_equal("8.0-34.0i", (case1 * case2).to_s)
+    assert_equal("-2.0+8.5i", (case1 / case2).to_s)
   end
 end

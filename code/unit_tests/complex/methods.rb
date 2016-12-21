@@ -54,4 +54,24 @@ module ComplexNumberOperations
     @imaginary = (b * c) + (a * d)
     return self
   end
+
+
+  # Division that returns a new object
+  def /(other)
+    raise RuntimeError, "Parameter object must be of same class" unless other.class == self.class
+    a, b, c, d = @real, @imaginary, other.real, other.imaginary
+    r = ((a * c) + (b * d)) / ((c * c) + (d * d))
+    i = ((b * c) - (a * d)) / ((c * c) + (d * d))
+    return ComplexNumber.new(r, i)
+  end
+  alias_method :divide, :/
+
+  # Division that stores result in the calling object
+  def divide!(other)
+    raise RuntimeError, "Parameter object must be of same class" unless other.class == self.class
+    a, b, c, d = @real, @imaginary, other.real, other.imaginary
+    @real = ((a * c) + (b * d)) / ((c * c) + (d * d))
+    @imaginary = ((b * c) - (a * d)) / ((c * c) + (d * d))
+    return self
+  end
 end

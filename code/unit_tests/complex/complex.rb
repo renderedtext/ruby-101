@@ -5,6 +5,8 @@ require_relative 'methods.rb'
 # Complex number class
 
 class ComplexNumber
+
+  # Include module with operations methods
   include ComplexNumberOperations
 
   # Initialization with .new(real, imaginary)
