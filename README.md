@@ -113,7 +113,7 @@ hello('Alex')   # Prints: "Hello, Alex!"
   necessary parameters, otherwise error will occur
 * If you want to provide zero or more parameters, and you do not know
   their exact number, you can use an asterisk `*` before an argument's
-  name and then use `for` `in` to get each value from that array, e.g.:
+  name and then use `for` to get each value from that array, e.g.:
 ```ruby
 def say_hello(*names)
   # 'names' will be an array holding zero or more parameters
@@ -153,8 +153,9 @@ say_hello('Rex', 'Alex', 'Martha', 'Samanta')
 * Method whose name ends with an exclamation mark `!`, e.g.
   `String.downcase!`, modifies the state variables of the object and
   returns `nil`, be careful!
-* `alias` assigns another name for a method, e.g. `alias new old`, and
-  `undef` cancels a method's definition, e.g. `undef new`; these can be
+* `alias_method` assigns another name for a method, e.g.
+  `alias_method :new, :old`, so when you call `new` it'll refer to `old`
+* `undef` cancels a method's definition, e.g. `undef new`; these can be
   used only outside a method's code block
 * You can also use a hash to provide parameters to a method, and use
   double asterisk `**` for the last argument to collect any extra ones:
@@ -2140,6 +2141,59 @@ sleep(1)    # Some waiting is necessary to avoid premature termination
   about last terminated child process
 
 
+## Unit testing
+
+* *Unit testing* is testing focused on small units of code, such as
+  methods or code lines within methods
+* Writing tests is important, and unit tests allow us to check our code
+  well and ensure it works properly, so that when we use it in more
+  complex scenarios it will not cause hard-to-spot errors
+* Two libraries are used to provide unit testing facilities,
+  MiniTest::Unit and Test::Unit
+* Writing a test for a class:
+```ruby
+# Original class in a file called my_class.rb
+
+class Sugar
+  def initialize(sweet)
+    @sweet = sweet.to_s
+  end
+
+  def to_s
+    @sweet
+  end
+end
+```
+* The unit test is:
+```ruby
+# Unit test for class Sugar in a file called unit_test.rb
+
+require_relative 'my_class.rb'
+require 'test/unit'
+
+class TestSugar < Test::Unit::TestCase
+  def test_simple
+    # Will it return "candy"?
+    assert_equal("candy", Sugar.new("candy").to_s)
+  end
+end
+```
+* After running `unit_test.rb`, you will get the following:
+```
+Loaded suite unit_test
+Started
+.
+
+Finished in 0.000556456 seconds.
+------------------------------------------------------------------------------------------------------------------------
+1 tests, 1 assertions, 0 failures, 0 errors, 0 pendings, 0 omissions, 0 notifications
+100% passed
+------------------------------------------------------------------------------------------------------------------------
+1797.09 tests/s, 1797.09 assertions/s
+```
+* As we can see in the result, the test has passed, giving us confidence
+  that for the given use case, the code will perform correctly and
+  return the correct value (the one we expected)
 
 
 Unless otherwise noted, the texts and code are copyright © 2016 Rendered
