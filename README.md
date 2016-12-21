@@ -2084,9 +2084,62 @@ threads.each { |thread| thread.join }
 * *Process* is a group of instructions (program) that is running
 * You can spawn (create) new processes by using method `system("cmd")`,
   or write a shell command between backticks ` 
+* How are new processes created? By making a copy of the current process
+  and executing another code instead! This is called *forking*
 * You can capture the shell command's output in a variable as a string
-  if you use the backticks to give the command; `system` can't do that
-* The exit code of the subprocess will be stored in global variable `$?`
+  if you use the backticks to give the command
+  * Use `.chomp` to remove the new line at the end of the result
+* If you use `system`, the output is shown on screen, and it returns
+  `true` if the program is found and executed successfully, or `false`
+  if the program is found but did not execute successfully (the error
+  code is not 0); an exception will be raised if program is not found
+* These commands are useful if we only need to return status or capture
+  text program output, but if we want to establish a bidirectional
+  communication and send data to a program through a pipe, then we can
+  instance an IO object using the class method `.popen("cmd", "r|w+")`,
+  which allows us to write to a process's standard input and read from
+  its standard output (it will start and work in parallel with program)
+```ruby
+IO.popen("figlet", "r+") do |fig|
+  fig.write("Hello!")
+  fig.write(" How are you doing?")
+  fig.close_write
+  puts fig.read
+end
+```
+* You must use `.close_write` to flush the write buffers (unfortunately,
+  it will not let you write to the process again, no solution yet),
+  otherwise your program will hang as the system waits for you to close
+  the write channel
+* If the first parameter is `-`, it starts a Ruby interpreter instance
+* Method `exec("cmd")` will execute a program in a new process, and
+  method `fork` returns the ID of this new *child process*; the *parent 
+  process* will continue execution, e.g.:
+```ruby
+# Create a child process if in parent process
+# Children processes get nil from fork.nil?, parent processes
+# get the process ID of the child process
+exec("figlet", "abracadabra") if fork.nil?
+puts "Parent process here!"
+Process.wait
+```
+* To get the child process's ID, method `Process.wait` will return it
+  and also wait for the child process to finish execution
+* Method `trap("CLD")` can be used to trap (catch) when a child process
+  stops execution, if you do not want to wait for it to finish instead
+```ruby
+trap ("CLD") do
+  pid = Process.wait
+  print "\nChild PID: #{pid}: terminated\n"
+end
+
+fork { system("ls", "-l") }
+sleep(1)    # Some waiting is necessary to avoid premature termination
+```
+* Global variable `$$` returns child process's ID, and `$?` returns info
+  about last terminated child process
+
+
 
 
 Unless otherwise noted, the texts and code are copyright © 2016 Rendered
