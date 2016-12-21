@@ -113,7 +113,7 @@ hello('Alex')   # Prints: "Hello, Alex!"
   necessary parameters, otherwise error will occur
 * If you want to provide zero or more parameters, and you do not know
   their exact number, you can use an asterisk `*` before an argument's
-  name and then use `for` `in` to get each value from that array, e.g.:
+  name and then use `for` to get each value from that array, e.g.:
 ```ruby
 def say_hello(*names)
   # 'names' will be an array holding zero or more parameters
@@ -153,8 +153,9 @@ say_hello('Rex', 'Alex', 'Martha', 'Samanta')
 * Method whose name ends with an exclamation mark `!`, e.g.
   `String.downcase!`, modifies the state variables of the object and
   returns `nil`, be careful!
-* `alias` assigns another name for a method, e.g. `alias new old`, and
-  `undef` cancels a method's definition, e.g. `undef new`; these can be
+* `alias_method` assigns another name for a method, e.g.
+  `alias_method :new, :old`, so when you call `new` it'll refer to `old`
+* `undef` cancels a method's definition, e.g. `undef new`; these can be
   used only outside a method's code block
 * You can also use a hash to provide parameters to a method, and use
   double asterisk `**` for the last argument to collect any extra ones:
@@ -2139,6 +2140,15 @@ sleep(1)    # Some waiting is necessary to avoid premature termination
 * Global variable `$$` returns child process's ID, and `$?` returns info
   about last terminated child process
 
+
+## Unit testing
+
+* *Unit testing* is testing focused on small units of code, such as
+  methods or code lines within methods
+* Writing tests is important, and unit tests allow us to check our code
+  well and ensure it works properly, so that when we use it in more
+  complex scenarios it will not cause hard-to-spot errors
+* 
 
 
 
