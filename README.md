@@ -1120,7 +1120,7 @@ end
 ```
 
 
-## Command line arguments
+## Command line arguments and environmental variables
 
 * When we start a program from the command line, we can provide it with
   arguments (parameters) we can use in our Ruby program
@@ -1141,6 +1141,11 @@ puts "You provided #{ARGV.size} arguments from the command line."
 print "Those are: "
 p ARGV  # It means: 'ARGV.inspect ; puts'
 ```
+* The hash `ENV` allows you to access shell's environmental variables
+  * If you change any environmental variable, it will only reflect on
+    your program's environment and its children processes
+  * Setting an environmental variable to `nil` undeclares it
+* Name of your Ruby program is stored in `$PROGRAM_NAME` globar variable
 
 
 ## Classes and instantiation
@@ -2228,7 +2233,22 @@ Finished in 0.000556456 seconds.
     the tests it will perform the required ones as well
 
 
-## RSpec
+## Profiling
+
+* Ruby comes with a built-in profiler tool that will show you which
+  methods have been called throughout the runtime of the program, how
+  many times have been called, and how much time did the program spend
+  executing that code
+* Run your Ruby application in the command line like this:
+  `ruby -r profile my_program.rb` - calling Ruby with `-r profile` as an
+  argument will profile the application and give you statistics in the
+  standard output once the application exits
+* The profiler is a very helpful tool, to see what is your application
+  doing most of the time, so you can rewrite the methods that are
+  called the most and make them work faster and more efficient
+
+
+## RSpec and Shoulda
 
 * Behavior-driven development encourages people to write tests in terms
   of their expectations of program's behavior for given circumstances
@@ -2239,7 +2259,8 @@ Finished in 0.000556456 seconds.
   Rspec, and is focused on tests
 * Install RSpec by typing the following in your command line:
   `sudo gem install rspec`
-* 
+* Also, install Should by typing the following in your command line:
+  `sudo gem install shoulda`
 
 
 
