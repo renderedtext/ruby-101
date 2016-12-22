@@ -2228,9 +2228,19 @@ Finished in 0.000556456 seconds.
     the tests it will perform the required ones as well
 
 
-## Rspec
+## RSpec
 
+* Behavior-driven development encourages people to write tests in terms
+  of their expectations of program's behavior for given circumstances
+* Similar to testing according to users' stories, the focus is not on
+  assertions, but on the expectations of how your programs works
+* Two test methodologies are popular: RSpec, a testing framework focused
+  on design of code; and Shoulda, a component that can be mixed with
+  Rspec, and is focused on tests
+* Install RSpec by typing the following in your command line:
+  `sudo gem install rspec`
 * 
+
 
 
 ## Organizing source code and files
@@ -2253,6 +2263,8 @@ application/          <= Top-level directory containing the program
   test/               <= Unit tests
     unit_test.rb
 ```
+* Put all your classes and methods inside a module, to avoid any
+  namespace collisions
 * Running the program: `ruby -I lib bin/program_name.rb`
 
 
