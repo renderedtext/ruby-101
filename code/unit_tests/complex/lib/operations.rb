@@ -4,7 +4,6 @@
 # Module of complex number operations
 
 module Rex
-
   module ComplexOperations
 
     # Addition that returns a new object
@@ -133,6 +132,6 @@ module Rex
         end
       end
     end
-  end
 
+  end
 end
