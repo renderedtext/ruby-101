@@ -1120,7 +1120,7 @@ end
 ```
 
 
-## Command line arguments
+## Command line arguments and environmental variables
 
 * When we start a program from the command line, we can provide it with
   arguments (parameters) we can use in our Ruby program
@@ -1141,6 +1141,11 @@ puts "You provided #{ARGV.size} arguments from the command line."
 print "Those are: "
 p ARGV  # It means: 'ARGV.inspect ; puts'
 ```
+* The hash `ENV` allows you to access shell's environmental variables
+  * If you change any environmental variable, it will only reflect on
+    your program's environment and its children processes
+  * Setting an environmental variable to `nil` undeclares it
+* Name of your Ruby program is stored in `$PROGRAM_NAME` globar variable
 
 
 ## Classes and instantiation
