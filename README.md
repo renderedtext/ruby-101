@@ -2143,13 +2143,23 @@ sleep(1)    # Some waiting is necessary to avoid premature termination
 
 ## Unit testing
 
-* *Unit testing* is testing focused on small units of code, such as
-  methods or code lines within methods
+* *Unit testing* is testing focused on small units of code, methods or
+  code lines within methods, which are parts of a bigger program
 * Writing tests is important, and unit tests allow us to check our code
   well and ensure it works properly, so that when we use it in more
   complex scenarios it will not cause hard-to-spot errors
 * Two libraries are used to provide unit testing facilities,
   MiniTest::Unit and Test::Unit
+* For standard Unit Tests, use `require 'test/unit'`, and for raw
+  MiniTest, use `require 'minitest/unit'`
+* *Test cases* are the groups of tests that target a certain part of the
+  program, and what provides the tests are the test methods
+* We can group all these test into *test suites*, to be run as a group
+* Test classes must be subclasses of `Test::Unit::TestCase`, and every
+  method that will provide assertions or refutals must have a name that
+  starts with `test`
+* Unit tests are supposed to run fast, be independent of context, and
+  easy to set up
 * Writing a test for a class:
 ```ruby
 # Original class in a file called my_class.rb
@@ -2194,6 +2204,56 @@ Finished in 0.000556456 seconds.
 * As we can see in the result, the test has passed, giving us confidence
   that for the given use case, the code will perform correctly and
   return the correct value (the one we expected)
+* Within each test method, you can put methods for assertion to check
+  whether the output of a certain method is what we expect, e.g. the
+  `assert_equal("candy", Sugar.new("candy").to_s)` test will pass if and
+  only if the return value of the method call is string `"candy"`
+* Method `refute_equal("candy", Sugar.new("candy").to_s)` would do the
+  opposite, the test will pass if and only if the method call's return
+  value is NOT the string `"candy"`
+* Methods `assert_nil` and `refute_nil` test whether a method call will
+  return `nil` or not, and assert or refute this
+* Define method `setup` to prepare the testing environment (connect to a
+  database, for example), and define method `teardown` to close files
+  and settle everything after tests the way it was before them
+* To run a particular test, we can call the unit test Ruby program with
+  a parameter `-n test_name` and provide the name of the test method to
+  run, e.g. `ruby unit_test.rb -n test_simple`
+  * Instead of a test method name, provide a regular expression as an
+    argument, e.g. `ruby unit_test.rb -n /simple/` to perform all tests
+    whose names match the regular expression `/simple/`
+* Names of test programs should be `ts_xxx.rb` or `tc_xxx.rb`, or simply
+  `test_connectivity.rb`, `test_playback.rb`, etc.
+  * One test program may `require` the others, so that when you perform
+    the tests it will perform the required ones as well
+
+
+## Rspec
+
+* 
+
+
+## Organizing source code and files
+
+* To simplify code management, we should organize code and resources
+  in a certain hierarchy, and this one provides a good example:
+```
+application/          <= Top-level directory containing the program
+  bin/                <= Programs, command-line and/or GUI interfaces
+    program_name.rb
+  doc/                <= Documentation and help files
+    README.md
+    TODO.md
+  ext/                <= Extensions for C interface (optional)
+  lib/                <= Shareable modules, classes and methods
+    module_name/
+      sing.rb
+      dance.rb
+      play.rb
+  test/               <= Unit tests
+    unit_test.rb
+```
+* Running the program: `ruby -I lib bin/program_name.rb`
 
 
 Unless otherwise noted, the texts and code are copyright © 2016 Rendered
