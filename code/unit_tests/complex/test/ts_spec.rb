@@ -40,9 +40,9 @@ describe "RexTestComplexNumber", "perform advanced operations" do
     expect(results[0]).to eq(i.sqrt.to_s)
   end
   it "Conjugation of #{i} should be #{results[1]}" do
-    expect(results[1]).to eq(i.conjugate.to_s)
+    expect(results[1]).to eq(i.conj.to_s)
   end
   it "Reciprocal of #{i} should be #{results[2]}" do
-    expect(results[2]).to eq(i.reciprocal.to_s)
+    expect(results[2]).to eq(i.recp.to_s)
   end
 end

@@ -51,5 +51,6 @@ module Rex
     def imaginary=(imaginary)
       @imaginary = imaginary.to_f
     end
+
   end
 end
