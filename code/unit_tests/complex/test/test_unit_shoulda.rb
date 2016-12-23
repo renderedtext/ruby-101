@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-# Unit tests using RSpec and Shoulda
+# Unit tests using Test::Unit and Shoulda
 
 require_relative '../lib/complex.rb'
 require 'test/unit'
