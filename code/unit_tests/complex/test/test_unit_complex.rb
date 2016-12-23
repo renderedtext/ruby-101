@@ -27,7 +27,7 @@ class RexTestComplexNumber < Test::Unit::TestCase
     case1 = Rex::ComplexNumber.new("-17", "-4i")
 
     assert_equal("0.48179310734638936-4.151159428194307i", case1.sqrt.to_s)
-    assert_equal("-17.0+4.0i", case1.conjugate.to_s)
-    assert_equal("-0.05573770491803279-0.013114754098360656i", case1.reciprocal.to_s)
+    assert_equal("-17.0+4.0i", case1.conj.to_s)
+    assert_equal("-0.05573770491803279-0.013114754098360656i", case1.recp.to_s)
   end
 end

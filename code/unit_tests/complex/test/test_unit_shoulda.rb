@@ -42,8 +42,8 @@ class RexTestComplexNumber < Test::Unit::TestCase
     should "return correct result" do
       results2.each do |result|
         assert_equal result, i3.sqrt.to_s if j == 0
-        assert_equal result, i3.conjugate.to_s if j == 1
-        assert_equal result, i3.reciprocal.to_s if j == 2
+        assert_equal result, i3.conj.to_s if j == 1
+        assert_equal result, i3.recp.to_s if j == 2
         j += 1
       end
     end

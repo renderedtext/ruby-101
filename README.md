@@ -51,6 +51,11 @@ $ sudo apt update && sudo apt install vim
   separate Ruby files, then use `require_relative 'my_ruby_file'` to
   import them into our code (from the same directory where our code is),
   to ensure *code reuse* and *modularity*
+  * In case you use Ruby 1.9 or earlier, use this instead:
+```ruby
+$: << File.dirname(__FILE__)
+require 'other_file'
+```
 * To use Ruby-provided libraries, use `require`, e.g. `require 'csv'`
 * Keeping everything in one file may be convenient at first, but:
   * it severely limits flexibility
@@ -258,7 +263,7 @@ printf("Decimal number: %5.2f\nString: %s\n", 726.975, "doge")
 ```
   * As a *here document*:
 ```ruby
-story = <<END_OF_STRING
+story = <<-END_OF_STRING
   Everything between these two same words, the one after the '<<'
   and the one at the end, will be part of the string, without these
   two same words. You can use any word you like. By convention, they
@@ -2273,8 +2278,6 @@ application/          <= Top-level directory containing the program
   bin/                <= Programs, command-line and/or GUI interfaces
     program_name.rb
   doc/                <= Documentation and help files
-    README.md
-    TODO.md
   ext/                <= Extensions for C interface (optional)
   lib/                <= Shareable modules, classes and methods
     module_name/
@@ -2283,10 +2286,97 @@ application/          <= Top-level directory containing the program
       play.rb
   test/               <= Unit tests
     unit_test.rb
+  INSTALL
+  LICENSE
+  README
+  TODO
 ```
 * Put all your classes and methods inside a module, to avoid any
   namespace collisions
 * Running the program: `ruby -I lib bin/program_name.rb`
+
+
+## Ruby Gems
+
+* *Ruby Gems* is a standardized packaging and installation framework for
+  Ruby programs and libraries, which makes it easy to install, upgrade,
+  and remove Ruby packages
+* Packages are stored on a remote repository, just like packages in a
+  typical Linux distribution
+* Some typical commands:
+```bash
+# Install a gem
+$ sudo gem install nokogiri
+# To use it in your code, add:
+# require 'nokogiri'
+
+# Remove a gem
+$ sudo gem remove nokogiri
+
+# Get a list of all gems
+$ gem list
+
+# Search for a gem
+$ gem query --details --remote --name-matches
+
+# See where gems are stored
+$ gem environment gemdir
+
+# Get a web interface to see info about installed gems
+$ gem server
+
+# See all versions of a certain gem
+$ gem list --details --remote --all mokogiri
+
+# Install a specific version of a gem
+$ gem install builder --version '< 1'nokogiri
+# To use it in your code, add:
+# gem 'nokogiri, '< 1', '> 0.0.1'
+# require 'nokogiri'
+```
+* Making your own gems is done by writing a specification in a GemSpec
+  file, named e.g. `my_program.gemspec` and containing the following:
+```ruby
+
+```
+
+
+
+## Rake build tool
+* *Rake* is a tool that automates building your program and preparing it
+  for final production release, similar to the `make` tool
+* Rake works by writing a description of the task to be done, and then
+  writing the task in Ruby:
+```ruby
+desc "Remove files whose names end with a tilde"
+task :delete_unix_backups do
+  files = Dir['*~']
+  rm(files, verbose: true) unless files.empty?
+end
+
+desc "Remove files with a .bak extension"
+task :delete_windows_backups do
+files = Dir['*.bak']
+rm(files, verbose: true) unless files.empty?
+end
+
+desc "Remove Unix and Windows backup files"
+task :delete_backups => [ :delete_unix_backups, :delete_windows_backups ] do
+puts "All backups deleted"
+end
+```
+* All these instructions are stored in a file called `Rakefile`
+* The task names are symbols
+* To execute a task, in the same directory where the Rakefile and your
+  project are, type in the command line:
+  `rakefile delete_unix_backups`
+* You can compose tasks together in a group, where in `task` you write
+  the name of a task as a symbol and key, and the value is an array of
+  other tasks' names as symbols
+* Since a Rakefile is Ruby code, you can define your own methods and use
+  them throughout the tasks
+* See all tasks that have a description using `rake -T` in command line
+
 
 
 Unless otherwise noted, the texts and code are copyright © 2016 Rendered

@@ -27,10 +27,10 @@ module Rex
       raise RuntimeError, "Parameter object must be of same class" unless other.class == self.class
       return Rex::ComplexNumber.new(@real - other.real, @imaginary - other.imaginary)
     end
-    alias_method :subtract, :-
+    alias_method :sub, :-
 
     # Addition that stores result in the calling object
-    def subtract!(other)
+    def sub!(other)
       raise RuntimeError, "Parameter object must be of same class" unless other.class == self.class
       @real -= other.real
       @imaginary -= other.imaginary
@@ -46,10 +46,10 @@ module Rex
       i = (b * c) + (a * d)
       return Rex::ComplexNumber.new(r, i)
     end
-    alias_method :multiply, :*
+    alias_method :mul, :*
 
     # Multiplication that stores result in the calling object
-    def multiply!(other)
+    def mul!(other)
       raise RuntimeError, "Parameter object must be of same class" unless other.class == self.class
       a, b, c, d = @real, @imaginary, other.real, other.imaginary
       @real = (a * c) - (b * d)
@@ -66,10 +66,10 @@ module Rex
       i = ((b * c) - (a * d)) / ((c * c) + (d * d))
       return Rex::ComplexNumber.new(r, i)
     end
-    alias_method :divide, :/
+    alias_method :div, :/
 
     # Division that stores result in the calling object
-    def divide!(other)
+    def div!(other)
       raise RuntimeError, "Parameter object must be of same class" unless other.class == self.class
       a, b, c, d = @real, @imaginary, other.real, other.imaginary
       @real = ((a * c) + (b * d)) / ((c * c) + (d * d))
@@ -79,19 +79,19 @@ module Rex
 
 
     # Conjugate the complex number (imaginary part reflects on the x-axis)
-    def conjugate
+    def conj
       return Rex::ComplexNumber.new(@real, -@imaginary)
     end
 
     # Conjugate, but modify the calling object
-    def conjugate!
+    def conj!
       @imaginary = -@imaginary
       return self
     end
 
 
     # Reciprocal of a complex number
-    def reciprocal
+    def recp
       a = @real
       b = @imaginary
       m = ((a * a) + (b * b))
@@ -101,7 +101,7 @@ module Rex
     end
 
     # Reciprocal, but modify the calling object
-    def reciprocal!
+    def recp!
       a = @real
       b = @imaginary
       m = ((a * a) + (b * b))
@@ -121,7 +121,7 @@ module Rex
         end
       else
         if @imaginary < 0.0
-          return self.conjugate.sqrt.conjugate
+          return self.conj.sqrt.conj
         else
           a = @real
           b = @imaginary
