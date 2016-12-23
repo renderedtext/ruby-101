@@ -1,4 +1,4 @@
-Gem::Specification.new do |s| 
+Gem::Specification.new do |s|
   s.name         = "rex-complex"
   s.summary      = "Command-line tool to perform mathematical operation on complex numbers"
   s.description  = File.read(File.join(File.dirname(__FILE__), 'README'))
@@ -13,4 +13,5 @@ Gem::Specification.new do |s|
   s.executables = [ 'complex' ]
   s.test_files  = Dir["test/test*.rb"]
   s.has_rdoc    = false
+  s.license     = "GPL3"
 end

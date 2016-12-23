@@ -2338,13 +2338,13 @@ $ gem install builder --version '< 1'nokogiri
   file, named e.g. `my_program.gemspec` and containing the following:
 ```ruby
 Gem::Specification.new do |s| 
-  s.name         = "rex-complex"
+  s.name         = "my_program"
   s.summary      = "Command-line tool to perform mathematical operation on complex numbers"
   s.description  = File.read(File.join(File.dirname(__FILE__), 'README'))
   s.requirements = [ 'none' ]
   s.version     = "0.1"
   s.author      = "Filip Dimovski"
-  s.email       = "rexich@riseup.net"
+  s.email       = "blah@lol.net"
   s.homepage    = "https://github.com/renderedtext/ruby-101"
   s.platform    = Gem::Platform::RUBY
   s.required_ruby_version = '>=1.9'
@@ -2354,7 +2354,13 @@ Gem::Specification.new do |s|
   s.has_rdoc    = false
 end
 ```
-
+* The file must be located at the top-level directory of your project
+* Afterwards, run this in the command line in the top-level directory:
+  `gem build my_program.gemspec`
+* You will get a file called `my_program-0.1.gem` - congratulations! :)
+* Installing your gem: `sudo gem install my_program-0.1.gem`
+* Removing your gem: `sudo gem remove my_program`
+* Seeing info about your installed gem: `gem list my_program -d`
 
 
 ## Rake build tool
