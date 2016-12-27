@@ -10,8 +10,8 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.required_ruby_version = '>=1.9'
   s.files       = Dir['**/**']
-  s.executables = [ 'complex' ]
-  s.test_files  = Dir["test/test*.rb"]
+  s.executables = [ 'shapes' ]
+  s.test_files  = Dir["test/ts*.rb"]
   s.has_rdoc    = false
   s.license     = "GPL-3.0"
 end
