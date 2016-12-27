@@ -4,22 +4,21 @@
 
 module Shapes
   class Circle
-    attr_accessor :r
-
     def initialize(r: 0)
-      self.r = r
+      raise ArgumentError, "Radius cannot be negative or zero." if r.to_f <= 0
+      @r = r.to_f
+    end
+
+    def radius
+      @r
     end
 
     def area
-      r * r * Math::PI
+      @r * @r * Math::PI
     end
 
     def perimeter
-      2 * r * Math::PI
-    end
-
-    def sides
-      :no
+      2 * @r * Math::PI
     end
 
     def shape
@@ -27,7 +26,7 @@ module Shapes
     end
 
     def to_s
-      "Shape: #{shape} (#{sides} sides)\nPerimeter: #{perimeter}\nArea: #{area}"
+      "Shape: #{shape}\nRadius: #{@r}\nPerimeter: #{perimeter}\nArea: #{area}"
     end
   end
 end

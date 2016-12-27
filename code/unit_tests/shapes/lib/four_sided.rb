@@ -4,12 +4,17 @@
 
 module Shapes
   module FourSidedOperations
+    def check_params(*param)
+      param.each do |p|
+        raise ArgumentError, "Parameter(s) cannot be negative or zero." if p.to_f <= 0
+      end
+    end
     def area
-      self.a * self.b
+      @a * @b
     end
 
     def perimeter
-      2 * (self.a + self.b)
+      2 * (@a + @b)
     end
 
     def sides
@@ -21,17 +26,16 @@ module Shapes
     end
   end
 
-
   class Rectangle
     include FourSidedOperations
-    attr_accessor :a, :b
 
     def initialize(a: 0, b: 0)
-      self.a, self.b = a, b
+      check_params(a, b)
+      @a, @b = a.to_f, b.to_f
     end
 
     def diagonal
-      Math.sqrt((a * a) + (b * b))
+      Math.sqrt((@a * @a) + (@b * @b))
     end
 
     def shape
@@ -54,14 +58,14 @@ module Shapes
 
   class Parallelogram
     include FourSidedOperations
-    attr_accessor :a, :b, :h
 
     def initialize(a: 0, b: 0, h: 0)
-      self.a, self.b, self.h = a, b, h
+      check_params(a, b, h)
+      @a, @b, @h = a.to_f, b.to_f, h.to_f
     end
 
     def area
-      a * h
+      @a * @h
     end
 
     def shape
@@ -83,18 +87,18 @@ module Shapes
 
   class Trapezoid
     include FourSidedOperations
-    attr_accessor :a, :b, :c, :d, :h
 
     def initialize(a: 0, b: 0, c: 0, d: 0, h: 0)
-      self.a, self.b, self.c, self.d, self.h = a, b, c, d, h
+      check_params(a, b, c, d, h)
+      @a, @b, @c, @d, @h = a.to_f, b.to_f, c.to_f, d.to_f, h.to_f
     end
 
     def area
-      (a + b) / 2 * h
+      (@a + @b) / 2 * @h
     end
 
     def perimeter
-      a + b + c + d
+      @a + @b + @c + @d
     end
 
     def shape

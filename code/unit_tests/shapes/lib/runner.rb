@@ -3,7 +3,6 @@
 require_relative '../lib/circle.rb'
 require_relative '../lib/four_sided.rb'
 require_relative '../lib/polygon.rb'
-require_relative '../lib/runner.rb'
 require_relative '../lib/triangle.rb'
 
 
@@ -15,7 +14,10 @@ module Shapes
 
     def run
       show_usage_exit if @args.length < 2
-      shape = @args.shift.downcase.to_sym
+      shape = @args.shift.downcase.to_sym   # Get the shape
+
+      # Show error if any of the command line arguments are zero or negative
+      @args.each { |el| show_error_exit unless el.to_f > 0 }
 
       case @args.length
       when 1
@@ -29,7 +31,7 @@ module Shapes
         when :square
           puts Shapes::Square.new(a: @args.shift.to_f)
         else
-          show_usage_exit
+          show_error_exit
         end
         exit 0
       when 2
@@ -39,17 +41,22 @@ module Shapes
         when :rhombus
           puts Shapes::Rhombus.new(a: @args[0].to_f, h: @args[1].to_f)
         else
-          show_usage_exit
+          show_error_exit
         end
         exit 0
       when 3
         case shape
         when :triangle
-          puts Shapes::Triangle.new(a: @args[0].to_f, b: @args[1].to_f, c: @args[2].to_f)
+          a, b, c = @args[0].to_f, @args[1].to_f, @args[2].to_f
+          if a + b < c or a + c < b or b + c < a
+            puts "The sum of two sides cannot be less than or equal to third side. Impossible triangle."
+            exit 3
+          end
+          puts Shapes::Triangle.new(a: a, b: b, c: c)
         when :parallelogram
           puts Shapes::Parallelogram.new(a: @args[0].to_f, b: @args[1].to_f, h: @args[2].to_f)
         else
-          show_usage_exit
+          show_error_exit
         end
         exit 0
       when 5
@@ -59,6 +66,11 @@ module Shapes
         end
       end
       show_usage_exit
+    end
+
+    def show_error_exit
+      puts "The shape you entered and its parameters are incorrect."
+      exit 2
     end
 
     def show_usage_exit
@@ -84,6 +96,5 @@ r - radius, h - height, a, b, c, d - sides
 HELP
       exit 1
     end
-
   end
 end
