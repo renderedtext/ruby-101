@@ -13,5 +13,5 @@ Gem::Specification.new do |s|
   s.executables = [ 'complex' ]
   s.test_files  = Dir["test/test*.rb"]
   s.has_rdoc    = false
-  s.license     = "GPL3"
+  s.license     = "GPL-3.0"
 end
