@@ -24,7 +24,7 @@ end
 describe "PentagonTest", "calculate pentagon perimeter and area" do
   results = { 1.0   => { p: 5.0, a: 1.720477400588967 },
               7.14  => { p: 35.699999999999996, a: 87.7092496910653 },
-              99    => { p: 495.0, a: 16862.399003172464 } 
+              99    => { p: 495.0, a: 16862.399003172464 }
             }
 
   results.each do |param, output|
@@ -54,7 +54,7 @@ end
 describe "SquareTest", "calculate square perimeter and area" do
   results = { 1.0   => { p: 4.0, a: 1.0 },
               7.14  => { p: 28.56, a: 50.9796 },
-              99    => { p: 396.0, a: 9801.0 } 
+              99    => { p: 396.0, a: 9801.0 }
             }
 
   results.each do |param, output|
@@ -108,7 +108,7 @@ end
 describe "TriangleTest", "calculate triangle perimeter and area" do
   results = { [17, 24, 10]          => { p: 51.0, a: 70.98899562608278 },
               [3, 4, 5]             => { p: 12.0, a: 6.0 },
-              [46.7, 27.34, 52.78]  => { p: 292.08000000000004, a: 596.826 }
+              [46.7, 27.34, 52.78]  => { p: 126.82000000000001, a: 637.3922886610021 }
             }
 
   results.each do |param, output|
@@ -119,7 +119,7 @@ describe "TriangleTest", "calculate triangle perimeter and area" do
   end
 end
 
-describe "TrapezoidTest", "calculate triangle perimeter and area" do
+describe "TrapezoidTest", "calculate trapezoid perimeter and area" do
   results = { [17, 24, 10, 3, 11]                 => { p: 54.0, a: 225.5 },
               [46.7, 27.34, 52.78, 31.2, 27.33]   => { p: 158.02, a: 1011.7566 }
             }
