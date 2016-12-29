@@ -10,8 +10,6 @@ $binary_path = "../bin/shapes"
 
 class TestShapes < Test::Unit::TestCase
 
-$binary_path = "../bin/shapes"
-
   context "circle" do
     results = { 1.0   => { p: 6.283185307179586, a: 3.141592653589793 },
                 7.14  => { p: 44.86194309326224, a: 160.15713684294622 },

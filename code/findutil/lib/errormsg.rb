@@ -12,24 +12,24 @@ Copyright (c) 2016 Filip Dimovski. Licensed under GPLv3+.
 Usage: #{@prog_name} [path] [parameter(s)]...
 
 Parameters:
-    --version
-        Shows the version of this program
-    --help
-        Show this help text
-    -r, -R, --recursive
-        Search continues within subdirectories as well (default)
-    -nr, --no-recursive
-        Search happens only within current directory, do not recurse
-    -iregex REGEPX
-        Search for a file name using regular expression, case-insensitive
-    -regex REGEPX
-        Search for a file name using regular expression, case-sensitive
-    -iname NAME
-        Search for a file name using shell globs, case-insensitive
-    -name NAME
-        Search for a file name using shell globs, case-sensitive
-    --tux
-        Gives a blessing from our favorite Linux penguin :)
+  --version
+      Shows the version of this program
+  --help
+      Show this help text
+  -r, -R, --recursive
+      Search continues within subdirectories as well (default)
+  -nr, --no-recursive
+      Search happens only within current directory, do not recurse
+  -iregex REGEXP
+      Search for a file name using regular expression, case-insensitive
+  -regex REGEXP
+      Search for a file name using regular expression, case-sensitive
+  -iname NAME
+      Search for a file name using shell globs, case-insensitive
+  -name NAME
+      Search for a file name using shell globs, case-sensitive
+  --tux
+      Gives a blessing from our favorite Linux penguin :)
 HELP
       exit 0
     end

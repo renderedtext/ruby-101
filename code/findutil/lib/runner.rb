@@ -136,6 +136,7 @@ module FindUtility
       finder.find(@opts[:starting_point], @opts[:search_term])
       exit 0
     end
+
   end
 end
 
