@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-#  CLI interface for the Complex number calculator
+#  CLI interface for the file search utility
 #  
 #  Copyright 2016 Filip Dimovski <rexich@riseup.net>
 #  
@@ -21,5 +21,5 @@
 
 require_relative '../lib/runner.rb'
 
-runner = Rex::Runner.new(ARGV)
+runner = FindUtility::Runner.new(ARGV)
 runner.run
