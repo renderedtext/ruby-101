@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name         = "findutil"
   s.summary      = "Command-line tool to search for files throughout the file system"
-  s.description  = File.read(File.join(File.dirname(__FILE__), 'README'))
+  s.description  = File.read(File.join(File.dirname(__FILE__), 'README.md'))
   s.requirements = [ 'none' ]
   s.version     = "0.1"
   s.author      = "Filip Dimovski"
