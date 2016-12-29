@@ -6,7 +6,7 @@ FindUtil is a minimal implementation of GNU find tool, written in Ruby.
 
 ## Usage
 
-```sh
+```
 Usage: findutil [path] [parameter(s)]...
 
 Parameters:

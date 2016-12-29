@@ -15,6 +15,7 @@ class TestShapes < Test::Unit::TestCase
     output = <<-END
 /home/rex/work/ruby-101/code/findutil/bin
 /home/rex/work/ruby-101/code/findutil/bin/findutil
+/home/rex/work/ruby-101/code/findutil/README.md
 /home/rex/work/ruby-101/code/findutil/findutil.gemspec
 /home/rex/work/ruby-101/code/findutil/test
 /home/rex/work/ruby-101/code/findutil/test/ts_integration.rb
@@ -22,7 +23,6 @@ class TestShapes < Test::Unit::TestCase
 /home/rex/work/ruby-101/code/findutil/lib/finder.rb
 /home/rex/work/ruby-101/code/findutil/lib/errormsg.rb
 /home/rex/work/ruby-101/code/findutil/lib/runner.rb
-/home/rex/work/ruby-101/code/findutil/README
 END
     should "return all files and directories recursively" do
       assert_equal output, `#{$binary_path}`
@@ -79,10 +79,19 @@ END
 
   context "when . directory given and -regex \"R.*\"" do
     output = <<-END
-./README
+./README.md
 END
     should "return all files with name *.rb from . recursively" do
       assert_equal output, `#{$binary_path} . -regex "R.*"`
+    end
+  end
+
+  context "when no directory given and -iname" do
+    output = <<-END
+findutil: missing argument to `-iname'
+END
+    should "show error message about missing predicate" do
+      assert_equal output, `#{$binary_path} -iname`
     end
   end
 
