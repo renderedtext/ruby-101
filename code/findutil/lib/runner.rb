@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+# Command line swtiches parser
+
 require_relative '../lib/finder.rb'
 require_relative '../lib/errormsg.rb'
 
@@ -79,9 +81,6 @@ module FindUtility
 
         # Match the argument with the appropriate switch
         case arg
-        when '-v', '--verbose'
-          @opts[:verbose] = true
-          next
         when '--version'
           show_version
         when '--help'
@@ -92,6 +91,12 @@ module FindUtility
         when '-nr', '--no-recursive'
           @opts[:recursive] = false
           next
+        when '-iregex'
+          @opts[:regex] = true
+          @opts[:case_sensitive] = false
+          flag_get_search_term = true
+          current_switch = arg.dup
+          next
         when '-regex'
           @opts[:regex] = true
           @opts[:case_sensitive] = true
@@ -99,15 +104,19 @@ module FindUtility
           current_switch = arg.dup
           next
         when '-iname'
+          @opts[:regex] = false
           @opts[:case_sensitive] = false
           flag_get_search_term = true
           current_switch = arg.dup
           next
         when '-name'
+          @opts[:regex] = false
           @opts[:case_sensitive] = true
           flag_get_search_term = true
           current_switch = arg.dup
           next
+        when '--tux'
+          show_tux
         when nil
           # Break out of the loop if no more switches are left
           break
