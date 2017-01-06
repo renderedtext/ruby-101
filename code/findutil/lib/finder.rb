@@ -1,42 +1,36 @@
 #!/usr/bin/env ruby
 
-# File search methods using shell globbing or regular expressions
+# File search methods using shell globbing, regular expressions
 
 module FindUtility
-  class Finder
-
-    def initialize(opts)
-      @opts = opts
+  class FindRegexp
+    def initialize(path, pattern, case_sensitive, recursive)
+      @path, @pattern = path, pattern
+      @flags = ! case_sensitive ?
+        (Regexp::IGNORECASE | File::FNM_DOTMATCH) : File::FNM_DOTMATCH
+      @glob = recursive ? '**/*' : ''
     end
 
-    def find(path, pattern)
-      @opts[:regex] == true ? find_regex(path, pattern) : find_name(path, pattern)
+    def find
+      Dir.glob(File.join(@path, @glob), @flags)
+        .grep(Regexp.new(@pattern))
+        .sort
+        .each { |x| puts x }
+    end
+  end
+
+  class FindName
+    def initialize(path, name, case_sensitive, recursive)
+      @path, @name = path, name
+      @flags = ! case_sensitive ?
+        (Regexp::IGNORECASE | File::FNM_DOTMATCH) : File::FNM_DOTMATCH
+      @glob = recursive ? '**' : ''
     end
 
-    def find_regex(path, pattern)
-      # If recursive, glob directories using **/* to get all files
-      # and then perform grep on the array
-      asterisks = ''
-      asterisks = '**/*' if @opts[:recursive] == true
-
-      if @opts[:case_sensitive] == true
-        files = Dir.glob(File.join(path, asterisks)).grep(Regexp.new(pattern)).sort.each { |x| puts x }
-      else
-        files = Dir.glob(File.join(path, asterisks)).grep(Regexp.new(pattern, Regexp::IGNORECASE)).sort.each { |x| puts x }
-      end
+    def find
+      Dir.glob(File.join(@path, @glob, @name), @flags)
+        .sort
+        .each { |x| puts x }
     end
-
-    def find_name(path, pattern)
-      # If recursive, glob directories using **
-      asterisks = ''
-      asterisks = '**' if @opts[:recursive] == true
-
-      if @opts[:case_sensitive] == true
-        files = Dir.glob(File.join(path, asterisks, pattern)).each { |x| puts x }
-      else
-        files = Dir.glob(File.join(path, asterisks, pattern), File::FNM_CASEFOLD).each { |x| puts x }
-      end
-    end
-
   end
 end
