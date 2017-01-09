@@ -3,32 +3,33 @@
 # File search methods using shell globbing, regular expressions
 
 module FindUtility
-  class FindRegexp
+  class Find
     def initialize(path, pattern, case_sensitive, recursive)
       @path, @pattern = path, pattern
-      @flags = ! case_sensitive ?
-        (Regexp::IGNORECASE | File::FNM_DOTMATCH) : File::FNM_DOTMATCH
-      @glob = recursive ? '**/*' : ''
+      @flags =  if case_sensitive
+                  File::FNM_DOTMATCH
+                else
+                  File::FNM_CASEFOLD | File::FNM_DOTMATCH
+                end
+
+      @globs =  if recursive
+                  '**'
+                else
+                  ''
+                end
     end
 
-    def find
-      Dir.glob(File.join(@path, @glob), @flags)
+    def find_regexp
+      #~ puts "Debug regexp:\npath:#{@path},\npattern:#{@pattern},\nflags:#{@flags},\nglobs:#{@globs}"
+      Dir.glob(File.join(@path, @globs, "*"), @flags)
         .grep(Regexp.new(@pattern))
         .sort
         .each { |x| puts x }
     end
-  end
 
-  class FindName
-    def initialize(path, name, case_sensitive, recursive)
-      @path, @name = path, name
-      @flags = ! case_sensitive ?
-        (Regexp::IGNORECASE | File::FNM_DOTMATCH) : File::FNM_DOTMATCH
-      @glob = recursive ? '**' : ''
-    end
-
-    def find
-      Dir.glob(File.join(@path, @glob, @name), @flags)
+    def find_name
+      #~ puts "Debug name:\npath:#{@path},\npattern:#{@pattern},\nflags:#{@flags},\nglobs:#{@globs}"
+      Dir.glob(File.join(@path, @globs, @pattern), @flags)
         .sort
         .each { |x| puts x }
     end

@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-#  CLI interface for the file search utility
+#  CLI interface for the file finder utility
 #  
 #  Copyright 2016 Filip Dimovski <rexich@riseup.net>
 #  
