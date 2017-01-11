@@ -589,7 +589,15 @@ queue.shift         # => "mouse"
   * You can attach block code to this method, that will execute it if
     the object is not found, and return its value
 * Method `.uniq` returns the array with all duplicates removed
-
+* Method `.join('-')` returns a string where all the elements are
+  converted to string and joined with a separator given as an optional
+  method parameter
+* You can use `+` to join two arrays, or `-` to return the difference:
+```ruby
+a = [1, 2, 3, 4, 5, 6]
+b = [2, 4, 6]
+a - b                   # => [1, 3, 5]
+```
 
 
 ## Hashes
@@ -644,7 +652,7 @@ instruments = {
   key-value pairs for which the block code returns `true`
 * Method `.empty?` returns `true` if hash has no elements
 * Method `.each { |key, value| ... }` iterates over the hash elements,
-  giving their values to the code block
+  giving a key and value pair to the code block
   * Use `.each_key { |value| ... }` to work with the values only
 * Methods `.has_key?(key)`, `.include?(key)`, and `.member?(key)` return
   `true` if `key` is present in the hash, otherwise returns `false`
@@ -654,6 +662,8 @@ instruments = {
     if the one you're searching for is not found
 * Method `.value?(value)` returns `true` if `value` is present as a
   value in the hash, otherwise returns `false`
+* Method `.keys` returns an array containing the keys in the hash, and
+  method `.values` returns an array containing the values in the hash
 
 
 ## Symbols
@@ -888,10 +898,10 @@ end
   `/[a-z0-9]/` means match one lowercase letter or a digit
 * Use *anchors* `^word` to match only at the beginning, or `word$` to
   match only at the end of the string
-* To match a string against a regular expression, use operator `=~`
-  * It returns a number from where the string matches the regexp, and
-    `nil` if it does not match
-  * The operator `!~` returns `true` if the regexp does not match
+* To match a string against a regular expression, use operator `=~`, it
+  returns a number from the position where the string matches the
+  regular expression, and `nil` if it does not match; the operator `!~`
+  returns `true` if the regular expression does not match
 ```ruby
 line = gets.downcase
 
@@ -2268,7 +2278,6 @@ Finished in 0.000556456 seconds.
   `sudo gem install shoulda`
 
 
-
 ## Organizing source code and files
 
 * To simplify code management, we should organize code and resources
@@ -2398,6 +2407,42 @@ end
   them throughout the tasks
 * See all tasks that have a description using `rake -T` in command line
 
+
+## Bundler
+* Managing dependencies when using lots of gems in your projects can be
+  a hassle, luckily Bundler provides a facility to handle dependencies
+  recurisively and will install the necessary gems for your project
+* Install it by typing in the command line:
+```sh
+$ sudo gem install bundler
+```
+* Create a `Gemfile`, a manifest file that will contain description of
+  necessary gems, in the top-level directory of your project:
+```ruby
+source 'https://rubygems.org'
+
+gem 'thor', '=0.15.4'
+gem 'colorize'
+```
+* Another way of creating a Gemfile is by typing in the command line:
+```sh
+$ bundler init
+# or
+$ bundle init
+```
+* After you edit the Gemfile and specify the dependencies, you can:
+```sh
+$ bundle install
+```
+* Bundler will resolve dependencies and install gems necessary for your
+  project, provide your password for `sudo` when asked, if you do not
+  have rights to install software on your system
+* Bundler will always use the newest library available, which can be an
+  issue if your program requires a certain method or object found in an
+  older version of a gem, but not found in a recent one; in that case
+  you should run commands related to your project, such as `thor`, by
+  using `bundle exec thor`, for example, but bear in mind it is slower
+  than using just `thor`
 
 
 Unless otherwise noted, the texts and code are copyright © 2016 Rendered
