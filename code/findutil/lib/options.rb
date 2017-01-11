@@ -79,7 +79,7 @@ If path is missing, it will search in the current working directory.
 If name/regexp is missing, it will search for all file names.
 If no parameters are provided, it will show files in current directory.
 Search is not recursive by default, it doesn't search in subdirectories.
-Searches are not case sensitive by default, so 'A' is same as 'a'. 
+Searches are not case sensitive by default, so 'A' is same as 'a'.
 HELP
     end
 
