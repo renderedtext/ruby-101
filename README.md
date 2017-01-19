@@ -209,6 +209,13 @@ puts `date`.chomp!
   period `.`, e.g. `.method`, and prefix object method's name with an
   octothorpe `#`, e.g. `#method` - in real code though there are no
   such prefixes, but I'll use them here for our convenience
+* Boolean values in Ruby are a bit specific: only `false` and `nil` are
+  considered to be *false*, all other values and `true` are evaluated to
+  true, including zero
+  * If you put double negation `!!` in front of a value or variable, the
+    return value will be a Boolean `true` or `false`, so you can convert
+    an expression's value to a Boolean value
+  * `!!nil` returns `false`
 
 
 ## Input/output (I/O) methods
@@ -492,12 +499,13 @@ end
   * By simply providing zero or more elements between brackets `[]`,
     separated by commas `,`, e.g.
     `fruits = ['banana', 'orange', 'mango']`, `array = []`
-  * By using the `%w{ }` delimiter, e.g. `b = %w{ dog cat 27 342 673.99
-    just\ in\ case you\ noticed }`
+  * By using the `%w{ }` array whitespace delimiter, e.g.
+    `b = %w{ dog cat 27 342 673.99 just\ in\ case you\ noticed }`
+  * You can use `()` as delimiters, not just `{}`: `%w( 1 2 3 4 )`
   * Be careful with this one, spaces in strings must be escaped with
     a backslash `\` if you want them to be treated as one array element!
   * Avoid using '' and "" quotes to surround the string element, or they
-    will become part of it, or part of the first and last word
+    will become part of it, or part of the first and last element
 * Array elements can be accessed (indexed) using integers as keys put
   between the brackets, after the array's name:
   `a = [3.14, 2, "lol"] ; a[0] #=> 3.14`
